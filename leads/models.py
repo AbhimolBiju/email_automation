@@ -2,10 +2,6 @@ from django.db import models
 from django.conf import settings
 # Create your models here.
 
-
-
-
-
 class Lead(models.Model):
 
     STATUS_CHOICES = [
@@ -44,14 +40,12 @@ class Lead(models.Model):
     car_model = models.CharField(max_length=100, blank=True, null=True)
     car_plate_no = models.CharField(max_length=50, blank=True, null=True)
 
-    status = models.CharField(max_length=20, default='NEW')
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='NEW')
     current_stage = models.IntegerField(default=1)
 
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='NEW'
-    )
+    is_favorite = models.BooleanField(default=False)
+    progress_score = models.IntegerField(default=0)
+
 
     source = models.CharField(
         max_length=20,

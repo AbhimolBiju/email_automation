@@ -19,6 +19,6 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-   path('api/v1/leads/<int:lead_id>/', lead_details),
-   path('api/v1/leads/<int:lead_id>/activities/', lead_activities),
+   path('<int:lead_id>/', lead_details),
+   path('<int:lead_id>/activities/', lead_activities),
 ]

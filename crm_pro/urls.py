@@ -23,4 +23,6 @@ urlpatterns = [
     path("api/",include('api.urls')),
     path("leads/",include('leads.urls')),
     path("deals/",include('deals.urls')),
+    path("policys/",include('Policys.urls')),
+    path("task/",include('Task.urls')),
 ]

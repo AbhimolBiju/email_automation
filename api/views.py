@@ -18,9 +18,11 @@ from rest_framework.permissions import AllowAny
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
 def register_user(request):
+    print("working")
     serializer = RegisterSerializer(data=request.data)
-
+    print("working 2")
     if serializer.is_valid():
+        print("working 3")
         serializer.save()
         return Response({
             "message": "User registered successfully",

@@ -196,3 +196,166 @@ class LeadActivitySerializer(serializers.ModelSerializer):
             })
 
         return data
+    
+#akshayas code
+
+from rest_framework import serializers
+from .models import Lead
+
+class LeadSerializer(serializers.ModelSerializer):
+    assigned_to_name = serializers.CharField(source='assigned_to.username', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = Lead
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'source',
+            'source_description',
+            'source_url',
+            'status',
+            'status_display',
+            'assigned_to',
+            'assigned_to_name',
+            'created_at',
+            'updated_at'
+        ]
+
+
+
+class LeadTableSerializer(serializers.ModelSerializer):
+    # Mapping fields to match UI labels
+    start_date = serializers.DateTimeField(source='created_at')
+    modified = serializers.DateTimeField(source='updated_at')
+    responsible = serializers.CharField(source='assigned_to.get_full_name', default="Quality Manager")
+    stage = serializers.CharField(source='get_status_display')
+    
+    # Nested field for Lead Source column
+    lead_source = serializers.SerializerMethodField()
+    
+    # UI specific fields
+    progress = serializers.SerializerMethodField()
+    is_favorite = serializers.BooleanField(default=False) 
+
+    class Meta:
+        model = Lead
+        fields = [
+            'id', 'start_date', 'modified', 'first_name', 
+            'lead_source', 'responsible', 'phone', 
+            'stage', 'progress', 'is_favorite'
+        ]
+
+    def get_lead_source(self, obj):
+        # Combines source_description and source_url into one object
+        return {
+            "title": obj.source_description or obj.get_source_display(),
+            "url": obj.source_url or "www.insurancehub.ae"
+        }
+
+    def get_progress(self, obj):
+        # Maps status to the percentage bar seen in the UI
+        progress_map = {
+            'ASSIGNED': 25,
+            'CONTACTED': 50,
+            'QUALIFIED': 100,
+            'LOST': 0
+        }
+        return progress_map.get(obj.status, 10)
+    
+
+
+
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from .models import Lead
+
+User = get_user_model()
+
+class LeadTableSerializer(serializers.ModelSerializer):
+    # Map created_at/updated_at to start_date/modified
+    start_date = serializers.DateTimeField(source='created_at', format='%Y-%m-%dT%H:%M:%SZ', read_only=True)
+    modified = serializers.DateTimeField(source='updated_at', format='%Y-%m-%dT%H:%M:%SZ', read_only=True)
+    
+    # Custom nested object for Lead Source
+    lead_source = serializers.SerializerMethodField()
+    
+    # Get the display name for the Responsible column
+    responsible = serializers.CharField(source='assigned_to.get_full_name', default="Quality Manager")
+    
+    # Map the status choice to its human-readable label and a progress integer
+    stage = serializers.CharField(source='get_status_display', read_only=True)
+    progress = serializers.SerializerMethodField()
+    
+    # Assuming is_favorite logic (defaulting to false if not in model yet)
+    is_favorite = serializers.BooleanField(default=False, read_only=True)
+
+    class Meta:
+        model = Lead
+        fields = [
+            'id', 'start_date', 'modified', 'first_name', 
+            'lead_source', 'responsible', 'phone', 
+            'stage', 'progress', 'is_favorite'
+        ]
+
+    def get_lead_source(self, obj):
+        """Constructs the nested title and url object."""
+        return {
+            "title": f"{obj.get_source_display()} \"{obj.source_description}\"",
+            "url": obj.source_url
+        }
+
+    def get_progress(self, obj):
+        """Returns percentage based on the UI's progress bar logic."""
+        progress_map = {
+            'ASSIGNED': 25,
+            'CONTACTED': 50,
+            'QUALIFIED': 100,
+            'LOST': 0
+        }
+        return progress_map.get(obj.status, 0)
+    
+from .models import Note
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = [
+            "id",
+            "lead",
+            "content",
+            "is_internal",
+            "mentions",
+            "created_by",
+            "created_at",
+        ]
+        read_only_fields = ["lead", "created_by", "created_at"]
+
+# from .models import Task
+
+
+# class TaskSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = Task
+#         fields = "__all__"
+
+from .models import InsuranceInfo
+
+class InsuranceInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InsuranceInfo
+        fields = [
+            "type_of_health_insurance",
+            "gender",
+            "currently_insured",
+            "salary_band",
+            "emirates_id",
+            "preferred_hospitals_clinics",
+            "specific_benefits",
+            "basic_plan_type",
+            "co_payment",
+        ]

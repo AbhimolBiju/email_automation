@@ -343,19 +343,19 @@ class NoteSerializer(serializers.ModelSerializer):
 #         model = Task
 #         fields = "__all__"
 
-from .models import InsuranceInfo
+# from .models import InsuranceInfo
 
-class InsuranceInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = InsuranceInfo
-        fields = [
-            "type_of_health_insurance",
-            "gender",
-            "currently_insured",
-            "salary_band",
-            "emirates_id",
-            "preferred_hospitals_clinics",
-            "specific_benefits",
-            "basic_plan_type",
-            "co_payment",
-        ]
+# class InsuranceInfoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = InsuranceInfo
+#         fields = [
+#             "type_of_health_insurance",
+#             "gender",
+#             "currently_insured",
+#             "salary_band",
+#             "emirates_id",
+#             "preferred_hospitals_clinics",
+#             "specific_benefits",
+#             "basic_plan_type",
+#             "co_payment",
+#         ]

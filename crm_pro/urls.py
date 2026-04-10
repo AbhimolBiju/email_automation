@@ -25,4 +25,5 @@ urlpatterns = [
     path("deals/",include('deals.urls')),
     path("policys/",include('Policys.urls')),
     path("task/",include('Task.urls')),
+    path("insurance/",include('insurance.urls'))
 ]

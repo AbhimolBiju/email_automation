@@ -27,5 +27,5 @@ urlpatterns = [
     path('<int:lead_id>/activities/', lead_activities),
     path("<int:lead_id>/comments/",create_lead_comment),
     # path("<int:lead_id>/tasks/",create_task),
-    path("insurance/general-info/<int:lead_id>/",get_insurance_info),
+    # path("insurance/general-info/<int:lead_id>/",get_insurance_info),
 ]

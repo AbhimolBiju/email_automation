@@ -1,10 +1,17 @@
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models import Sum
+from rest_framework import status
+from django.db.models import Sum,Count
+from .models import Deal
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
+from .serializers import (
+    DealListSerializer,
+    DealStageUpdateSerializer,
+    DealExportSerializer
+)
+from django.utils.dateformat import DateFormat
 
-from .models import Deals
-from .serializers import DealSerializer
 
 
 
@@ -12,47 +19,212 @@ from .serializers import DealSerializer
 @permission_classes([AllowAny])
 def pipeline_summary(request):
 
-    stages = []
+    stages = dict(Deal.STAGE_CHOICES)
 
-    for stage_id, label in Deals.STAGE_CHOICES:
-        count = Deals.objects.filter(stage_id=stage_id).count()
+    stage_counts = (
+        Deal.objects.values('stage_id')
+        .annotate(count=Count('id'))
+    )
 
-        stages.append({
+    count_map = {item['stage_id']: item['count'] for item in stage_counts}
+
+    data = []
+
+    for stage_id, label in stages.items():
+        data.append({
             "id": stage_id,
             "label": label,
-            "count": count
+            "count": count_map.get(stage_id, 0)
         })
 
     return Response({
         "status": "success",
         "data": {
-            "stages": stages
+            "workflow_id": "insurance_v3",
+            "stages": data
         }
     })
+    
+    
+
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def deals_board(request):
 
+    stage_filter = request.GET.get('stages')
+
+    if stage_filter:
+        stage_ids = [int(s) for s in stage_filter.split(',')]
+        deals = Deal.objects.filter(stage_id__in=stage_ids)
+    else:
+        deals = Deal.objects.all()
+
+    stages = dict(Deal.STAGE_CHOICES)
+
     columns = []
+    total_board_value = 0
 
-    for stage_id, label in Deals.STAGE_CHOICES:
+    for stage_id, label in stages.items():
 
-        deals = Deals.objects.filter(stage_id=stage_id)
+        if stage_filter and stage_id not in stage_ids:
+            continue
 
-        total_value = deals.aggregate(total=Sum('premium_amount'))['total'] or 0
+        stage_deals = deals.filter(stage_id=stage_id)
 
-        deal_data = DealSerializer(deals, many=True).data
+        total_value = stage_deals.count()
+
+        total_board_value += total_value
+
+        deal_list = []
+
+        for deal in stage_deals:
+            deal_list.append({
+                "id": str(deal.id),
+                "title": f"Deal #{deal.id}",
+
+                "client": {
+                    "name": f"{deal.lead.first_name} {deal.lead.last_name}" if deal.lead else "",
+                    "last_contact": "N/A"
+                },
+
+                "responsible_person": {
+                    "id": str(deal.lead.responsible.id) if deal.lead and deal.lead.responsible else "",
+                    "name": str(deal.lead.responsible) if deal.lead and deal.lead.responsible else "",
+                    "avatar": ""
+                },
+
+                "source": deal.lead.delivery_channel if deal.lead else "",
+
+                "modified_at": DateFormat(deal.updated_at).format("Y-m-d\\TH:i:s\\Z"),
+
+                "activity_count": 0,
+                "is_favorite": False,
+                "actions": ["call", "email", "chat"]
+            })
 
         columns.append({
             "stage_id": stage_id,
             "label": label,
             "total_value": total_value,
-            "deal_count": deals.count(),
-            "deals": deal_data
+            "deal_count": stage_deals.count(),
+            "color_theme": "blue",
+            "deals": deal_list
         })
 
     return Response({
+        "total_board_value": total_board_value,
+        "currency": "AED",
         "columns": columns
     })
+    
+
+from django.db.models import Q
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def search_deals(request):
+
+    query = request.GET.get('q', '')
+
+    deals = Deal.objects.filter(
+        Q(lead__first_name__icontains=query) |
+        Q(lead__last_name__icontains=query) |
+        Q(reg_number__icontains=query) |
+        Q(emirates_id__icontains=query)
+    )
+
+    serializer = DealListSerializer(deals, many=True)
+
+    return Response({
+        "results": serializer.data
+    })
+
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def export_deals(request):
+
+    deals = Deal.objects.all()
+
+    serializer = DealExportSerializer(deals, many=True)
+
+    return Response({"data": serializer.data})
+    
+    
+    
+    
+
+@api_view(['PATCH'])
+@permission_classes([AllowAny])
+def update_deal_stage(request, id):
+
+    try:
+        deal = Deal.objects.get(id=id)
+    except Deal.DoesNotExist:
+        return Response(
+            {"message": "Deal not found"},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    serializer = DealStageUpdateSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    new_stage_id = serializer.validated_data["new_stage_id"]
+    reason = serializer.validated_data.get("reason", "")
+
+    old_stage_id = deal.stage_id
+    deal.stage_id = new_stage_id
+    deal.save(update_fields=["stage_id", "updated_at"])
+
+    stage_map = dict(Deal.STAGE_CHOICES)
+
+    return Response({
+        "message": "Deal stage updated successfully",
+        "deal_id": deal.id,
+        "from": {
+            "id": old_stage_id,
+            "name": stage_map.get(old_stage_id)
+        },
+        "to": {
+            "id": new_stage_id,
+            "name": stage_map.get(new_stage_id)
+        },
+        "reason": reason
+    }, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def deals_by_stage(request):
+
+    stage_id = request.GET.get('stage_id')
+
+    if not stage_id:
+        return Response({"message": "stage_id is required"}, status=400)
+
+    try:
+        stage_id = int(stage_id)
+    except ValueError:
+        return Response({"message": "Invalid stage_id"}, status=400)
+
+    deals = Deal.objects.filter(stage_id=stage_id)
+
+    serializer = DealListSerializer(deals, many=True)
+
+    stage_name = dict(Deal.STAGE_CHOICES).get(stage_id)
+
+    return Response({
+        "stage_id": stage_id,
+        "stage_name": stage_name,
+        "count": deals.count(),
+        "results": serializer.data
+    })
+    

@@ -19,7 +19,12 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('pipeline-summary/', pipeline_summary),
-    path('board/', deals_board),
+    path('pipeline-summary/', pipeline_summary, name='pipeline-summary'),
+    path('board/', deals_board, name='deals-board'),
+    path('search/', search_deals, name='search-deals'),
+    path('<int:id>/move/', update_deal_stage, name='update-deal-stage'),
+    path('export/', export_deals, name='export-deals'),
+    path('dashboard/stage-deals/', deals_by_stage, name='deals-by-stage'),
+    
 ]
 

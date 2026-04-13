@@ -19,9 +19,9 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('export/',lead_list,name='lead_list'),
-    path('',create_lead,name="create"),
-    path('<int:lead_id>/status/', update_lead_status, name='lead-status-update'),
+    path('export/', lead_list, name='lead_list'),
+    path('', create_lead, name="create"),
+    path('<int:lead_id>/status/', update_lead_status),
     path('<int:lead_id>/', lead_details),
     path('<int:lead_id>/activities/create/', create_activity),
     path('<int:lead_id>/activities/', lead_activities),

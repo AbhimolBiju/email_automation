@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'Policys',
     'Task',
     'insurance',
+    'documents',
+    'Quote',
 ]
 
 MIDDLEWARE = [

@@ -18,7 +18,6 @@ def get_insurance_info(request, lead_id):
             status=status.HTTP_404_NOT_FOUND
         )
 
-    # Use get_or_none pattern
     try:
         insurance_info = lead.insurance_info
     except InsuranceInfo.DoesNotExist:

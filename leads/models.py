@@ -1,58 +1,43 @@
 from django.db import models
 from django.conf import settings
 # Create your models here.
+from django.db import models
+from django.conf import settings
+
 
 class Lead(models.Model):
 
-    STATUS_CHOICES = [
-        ('NEW', 'New'),
-        ('CONTACTED', 'Contacted'),
-        ('QUALIFIED', 'Qualified'),
-        ('LOST', 'Lost'),
+    YES_NO_CHOICES = [
+        ('Y', 'Yes'),
+        ('N', 'No'),
     ]
+    # lead_id = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=255)
+    
+    address = models.TextField(blank=True, null=True)
 
-    SOURCE_CHOICES = [
-        ('WEBSITE', 'Website'),
-        ('REFERRAL', 'Referral'),
-        ('DIRECT', 'Direct'),
-        ('AD', 'Ad'),
-    ]
+    # Occupation (string)
+    occupation = models.CharField(max_length=100, blank=True, null=True)
 
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    # Mobile Number (string)
+    mobile_number = models.CharField(max_length=20)
 
+    # Phone Number (string)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+
+    # Email (string)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=20)
-    whatsapp_number = models.CharField(max_length=20, blank=True, null=True)
 
-    gender = models.CharField(max_length=10, blank=True, null=True)
-    is_uae_resident = models.BooleanField(default=False)
-    visa_status = models.CharField(max_length=50, blank=True, null=True)
-    emirates_of_visa = models.CharField(max_length=50, blank=True, null=True)
+    # Product Type (string)
+    product_type = models.CharField(max_length=100)
 
-    salary_scale = models.CharField(max_length=50, blank=True, null=True)
-    available_to_everyone = models.BooleanField(default=True)
+    # Delivery Channel / Lead Source (string)
+    lead_source = models.CharField(max_length=100, blank=True, null=True)
 
-    source_form = models.CharField(max_length=100, blank=True, null=True)
-    need_car_insurance = models.BooleanField(default=False)
+    # PEP (Y/N)
+    pep = models.CharField(max_length=1, choices=YES_NO_CHOICES, default='N')
 
-    car_year = models.IntegerField(blank=True, null=True)
-    car_model = models.CharField(max_length=100, blank=True, null=True)
-    car_plate_no = models.CharField(max_length=50, blank=True, null=True)
-
-    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='NEW')
-    current_stage = models.IntegerField(default=1)
-
-    is_favorite = models.BooleanField(default=False)
-    progress_score = models.IntegerField(default=0)
-
-
-    source = models.CharField(
-        max_length=20,
-        choices=SOURCE_CHOICES
-    )
-
-
+    # Responsible (assigned to whom)
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -60,13 +45,17 @@ class Lead(models.Model):
         blank=True
     )
 
-    notes = models.TextField(blank=True, null=True)
+    # Stage (Lead Stages)
+    stage = models.CharField(max_length=50)
 
+    # Creation Date
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # Modified Date
     updated_at = models.DateTimeField(auto_now=True)
 
-
-
+    def __str__(self):
+        return f"{self.lead_id} - {self.name}"
 
 class LeadActivity(models.Model):
     lead = models.ForeignKey(Lead, on_delete=models.CASCADE)

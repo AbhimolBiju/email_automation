@@ -10,7 +10,6 @@ class Insurer(models.Model):
     def __str__(self):
         return self.name
 
-
 class QuoteRequest(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -36,17 +35,18 @@ class QuoteRequest(models.Model):
         return f"{self.customer_name} - {self.product_type}"
     
 
+from django.db import models
+
 class Quote(models.Model):
-    quote_request = models.ForeignKey(QuoteRequest, on_delete=models.CASCADE, related_name='quotes')
-    insurer = models.ForeignKey(Insurer, on_delete=models.CASCADE)
+    quote_request = models.ForeignKey(
+        "QuoteRequest",
+        on_delete=models.CASCADE,
+        related_name="quotes"
+    )
 
-    premium = models.DecimalField(max_digits=12, decimal_places=2)
-    coverage = models.IntegerField()
-    deductible = models.IntegerField()
+    response_json = models.JSONField(default=dict)
 
-    benefits = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.insurer.name} - {self.premium}"
-
-
+        return f"Quote {self.id}"

@@ -7,7 +7,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from .models import QuoteRequest, Insurer
-from .serializers import QuoteRequestSerializer
+from .serializers import QuoteRequestSerializer,ProviderSerializer
 
 
 class QuoteRequestCreateView(APIView):
@@ -61,41 +61,87 @@ from django.shortcuts import get_object_or_404
 from .models import QuoteRequest,Quote
 
 
+# class QuoteComparisonView(APIView):
+
+#     def get(self, request, quote_id):
+#         quote_request = get_object_or_404(QuoteRequest, id=quote_id)
+
+#         insurers = quote_request.insurers.all()
+
+#         # remove insurers without premium
+#         insurers = insurers.exclude(premium__isnull=True)
+
+#         if not insurers.exists():
+#             return Response({
+#                 "best_quote": None,
+#                 "quotes": []
+#             })
+
+#         # ✅ Find best (lowest premium)
+#         best_insurer = min(insurers, key=lambda i: i.premium)
+
+#         return Response({
+#             "lead_id": quote_request.lead_id,
+#             "customer_name": quote_request.customer_name,
+
+#             "best_quote": {
+#                 "insurer": best_insurer.name,
+#                 "premium": best_insurer.premium
+#             },
+
+#             "quotes": [
+#                 {
+#                     "insurer": i.name,
+#                     "premium": i.premium
+#                 }
+#                 for i in insurers
+#             ]
+#         })
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+
 class QuoteComparisonView(APIView):
 
     def get(self, request, quote_id):
         quote_request = get_object_or_404(QuoteRequest, id=quote_id)
 
-        insurers = quote_request.insurers.all()
+        insurers = Insurer.objects.all()  # or filter if needed
 
-        # remove insurers without premium
-        insurers = insurers.exclude(premium__isnull=True)
+        providers = []
 
-        if not insurers.exists():
-            return Response({
-                "best_quote": None,
-                "quotes": []
+        for insurer in insurers:
+            providers.append({
+                "provider_name": insurer.name,
+                "logo": "",
+                "plan_name": "Sample Plan",
+                "premium": float(insurer.premium or 0),
+                "base_price": float(insurer.premium or 0),
+                "vat": 0,
+                "currency": "AED",
+                "badge": "Best Value",
+                "buy_now_url": f"http://localhost:8000/api/quotes/{quote_id}/select-scheme/",
+                "vehicle_details": {
+                    "excess": "TBA",
+                    "ancillary_excess": "TBA",
+                    "vehicle_value": "N/A"
+                },
+                "benefits": {
+                    "third_party_liability": "Included"
+                },
+                "optional_covers": {
+                    "driver_cover": "Optional"
+                }
             })
 
-        # ✅ Find best (lowest premium)
-        best_insurer = min(insurers, key=lambda i: i.premium)
-
         return Response({
-            "lead_id": quote_request.lead_id,
-            "customer_name": quote_request.customer_name,
-
-            "best_quote": {
-                "insurer": best_insurer.name,
-                "premium": best_insurer.premium
+            "customer": {
+                "name": quote_request.customer_name,
+                "product": quote_request.product_type,
+                "created_at": quote_request.created_at
             },
-
-            "quotes": [
-                {
-                    "insurer": i.name,
-                    "premium": i.premium
-                }
-                for i in insurers
-            ]
+            "providers": providers
         })
     
 
@@ -130,7 +176,6 @@ class QuoteStatsView(APIView):
 
         queryset = QuoteRequest.objects.filter(created_at__gte=start_date)
 
-        # ✅ Counts
         total_quotes = queryset.count()
         pending_count = queryset.filter(status='pending').count()
         sent_count = queryset.filter(status='sent').count()

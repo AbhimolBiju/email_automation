@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'insurance',
     'documents',
     'Quote',
+    'invoice'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Static files (CSS, JavaScript, Images)

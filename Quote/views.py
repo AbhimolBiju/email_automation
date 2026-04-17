@@ -77,7 +77,7 @@ from .models import QuoteRequest,Quote
 #                 "quotes": []
 #             })
 
-#         # ✅ Find best (lowest premium)
+#         #Find best (lowest premium)
 #         best_insurer = min(insurers, key=lambda i: i.premium)
 
 #         return Response({
@@ -162,7 +162,6 @@ class QuoteStatsView(APIView):
 
         now = timezone.now()
 
-        # 🔥 Filter based on period
         if period == '7days':
             start_date = now - timedelta(days=7)
         elif period == '30days':

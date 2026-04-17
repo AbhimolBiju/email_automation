@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from leads.models import Lead
 
 
 
@@ -79,9 +80,17 @@ class Deal(models.Model):
         choices=STAGE_CHOICES,
         default=1
     )
+    additional_field = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Deal {self.id} - {self.reg_number or 'No Reg'}"
+    
+    
+class DealDocument(models.Model):
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE, related_name='documents')
+    file = models.FileField(upload_to='deal_documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    

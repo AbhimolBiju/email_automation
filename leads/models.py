@@ -11,8 +11,7 @@ class Lead(models.Model):
         ('LOST', 'Lost'),
     ]
     
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     address = models.TextField(blank=True, null=True)
     occupation = models.CharField(max_length=150, blank=True, null=True)
     mobile_number = models.CharField(max_length=20, blank=True, null=True)
@@ -36,7 +35,7 @@ class Lead(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.name}"
 
 
 class LeadActivity(models.Model):

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from .models import Lead
-
 class LeadListSerializer(serializers.ModelSerializer):
 
     contact = serializers.SerializerMethodField()
@@ -22,7 +21,7 @@ class LeadListSerializer(serializers.ModelSerializer):
 
     def get_contact(self, obj):
         return {
-            "full_name": f"{obj.first_name} {obj.last_name}".strip(),
+            "full_name": f"{obj.name}",
             "phone": obj.mobile_number,
         }
 
@@ -52,8 +51,7 @@ class CreateLeadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lead
         fields = [
-            "first_name",
-            "last_name",
+            "name",
             "address",
             "occupation",
             "mobile_number",
@@ -94,10 +92,10 @@ class LeadDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lead
-        fields = "__all__"
+        fields = "_all_"
 
     def get_full_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
+        return f"{obj.name}"
 
     def to_representation(self, instance):
         return {

@@ -11,6 +11,24 @@ class Lead(models.Model):
         ('QUALIFIED', 'Qualified'),
         ('LOST', 'Lost'),
     ]
+    STAGE_CHOICES = [
+        ("new_lead", "New Lead"),
+        ("assigned", "Assigned"),
+        ("non_contactable_1", "Non Contactable 1"),
+        ("non_contactable_2", "Non Contactable 2"),
+        ("non_contactable_3", "Non Contactable 3"),
+        ("contactable", "Contactable"),
+        ("requirement_gathering", "Requirement Gathering"),
+        ("sales_qualified_lead", "Sales Qualified Lead"),
+    ]
+    PEP_STATUS_CHOICES = [
+        ("yes", "Yes"),
+        ("no", "No"),
+    ]
+    DELIVERY_CHANNEL_CHOICES = [
+        ("agent", "Agent"),
+        ("broker", "Broker"),
+    ]
     
     name = models.CharField(max_length=100)
     address = models.TextField(blank=True, null=True)
@@ -19,10 +37,10 @@ class Lead(models.Model):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(unique=True)
     product_type = models.CharField(max_length=100, blank=True, null=True)
-    delivery_channel = models.CharField(max_length=255,blank=True,null=True, verbose_name="Lead Source")
-    is_pep = models.BooleanField(default=False, verbose_name="PEP Status")
+    delivery_channel = models.CharField(max_length=255,blank=True,null=True,choices=DELIVERY_CHANNEL_CHOICES, verbose_name="Lead Source")
+    is_pep = models.BooleanField(default=False,choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
     responsible = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="assigned_leads")
-    stage = models.CharField(max_length=100,default='Assigned', help_text="Current pipeline stage")
+    stage = models.CharField(max_length=100,default='Assigned',choices=STAGE_CHOICES, help_text="Current pipeline stage")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creation Date")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Modified")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='NEW')

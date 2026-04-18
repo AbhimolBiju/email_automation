@@ -61,43 +61,6 @@ from django.shortcuts import get_object_or_404
 from .models import QuoteRequest,Quote
 
 
-# class QuoteComparisonView(APIView):
-
-#     def get(self, request, quote_id):
-#         quote_request = get_object_or_404(QuoteRequest, id=quote_id)
-
-#         insurers = quote_request.insurers.all()
-
-#         # remove insurers without premium
-#         insurers = insurers.exclude(premium__isnull=True)
-
-#         if not insurers.exists():
-#             return Response({
-#                 "best_quote": None,
-#                 "quotes": []
-#             })
-
-#         #Find best (lowest premium)
-#         best_insurer = min(insurers, key=lambda i: i.premium)
-
-#         return Response({
-#             "lead_id": quote_request.lead_id,
-#             "customer_name": quote_request.customer_name,
-
-#             "best_quote": {
-#                 "insurer": best_insurer.name,
-#                 "premium": best_insurer.premium
-#             },
-
-#             "quotes": [
-#                 {
-#                     "insurer": i.name,
-#                     "premium": i.premium
-#                 }
-#                 for i in insurers
-#             ]
-#         })
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404

@@ -159,3 +159,18 @@ class LeadActivitySerializer(serializers.ModelSerializer):
             })
 
         return data
+    
+
+class LeadstageUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Lead
+        fields = ["stage"]
+
+    def validate_status(self, value):
+        allowed_status = [choice[0] for choice in Lead.STAGE_CHOICES]
+
+        if value not in allowed_status:
+            raise serializers.ValidationError("Invalid stage")
+
+        return value

@@ -4,7 +4,7 @@ from .models import Lead, LeadActivity
 from .serializers import (LeadListSerializer,LeadStatusUpdateSerializer,CreateLeadSerializer)
 from rest_framework import status,viewsets
 from django.shortcuts import render
-from .serializers import LeadDetailsSerializer, LeadActivitySerializer
+from .serializers import LeadDetailsSerializer, LeadActivitySerializer,LeadstageUpdateSerializer
 
 
 @api_view(['GET'])
@@ -121,3 +121,27 @@ class ToggleFavoriteView(APIView):
             "is_favorite": lead.is_favorite,
             "message": "Favorite status updated successfully"
         }, status=status.HTTP_200_OK)
+    
+
+
+@api_view(['PATCH'])
+def update_lead_status(request, lead_id):
+    try:
+        lead = Lead.objects.get(id=lead_id)
+    except Lead.DoesNotExist:
+        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = LeadstageUpdateSerializer(
+        lead,
+        data=request.data,
+        partial=True  
+    )
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            "message": "Lead status updated successfully",
+            "id": lead.id,
+            "status": lead.stage
+        })
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

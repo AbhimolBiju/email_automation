@@ -3,7 +3,6 @@ from .models import Lead
 
 
 class LeadListSerializer(serializers.ModelSerializer):
-
     contact = serializers.SerializerMethodField()
     timestamps = serializers.SerializerMethodField()
     source_info = serializers.SerializerMethodField()
@@ -11,37 +10,33 @@ class LeadListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lead
-        fields = [
-            "id",
-            "contact",
-            "timestamps",
-            "source_info",
-            "assignment",
-            "is_favorite",
-        ]
+        fields = "__all__"  # include all fields
 
     def get_contact(self, obj):
         return {
-            "full_name": f"{obj.name}",
+            "full_name": obj.name,
             "phone": obj.mobile_number,
+            "email": obj.email,
         }
 
     def get_source_info(self, obj):
         return {
             "source": obj.delivery_channel,
+            "product_type": obj.product_type,
         }
 
     def get_timestamps(self, obj):
         return {
             "created_at": obj.created_at,
-            "modified_at": obj.updated_at,
+            "updated_at": obj.updated_at,
         }
 
     def get_assignment(self, obj):
         return {
             "status": obj.status,
+            "stage": obj.stage,
             "progress_score": obj.progress_score,
-            "responsible": obj.responsible.id if obj.responsible else None
+            "responsible": obj.responsible.id if obj.responsible else None,
         }
     
 from rest_framework import serializers

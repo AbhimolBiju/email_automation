@@ -10,14 +10,12 @@ from .serializers import LeadDetailsSerializer, LeadActivitySerializer,Leadstage
 @api_view(['GET'])
 def lead_list(request):
     leads = Lead.objects.all().order_by('-created_at')
-
     serializer = LeadListSerializer(leads, many=True)
 
     return Response({
         "total_count": leads.count(),
         "results": serializer.data
     })
-
 
 @api_view(['POST'])
 def create_lead(request):

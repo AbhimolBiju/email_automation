@@ -38,7 +38,7 @@ class Lead(models.Model):
     email = models.EmailField(unique=True)
     product_type = models.CharField(max_length=100, blank=True, null=True)
     delivery_channel = models.CharField(max_length=255,blank=True,null=True,choices=DELIVERY_CHANNEL_CHOICES, verbose_name="Lead Source")
-    is_pep = models.BooleanField(default=False,choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
+    is_pep = models.CharField(default=False,choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
     responsible = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="assigned_leads")
     stage = models.CharField(max_length=100,default='Assigned',choices=STAGE_CHOICES, help_text="Current pipeline stage")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creation Date")

@@ -140,7 +140,7 @@ def update_lead_status(request, lead_id):
     if serializer.is_valid():
         serializer.save()
         return Response({
-            "message": "Lead status updated successfully",
+            "message": "Lead stage updated successfully",
             "id": lead.id,
             "status": lead.stage
         })

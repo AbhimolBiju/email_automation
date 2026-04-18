@@ -43,7 +43,7 @@ class Lead(models.Model):
     mobile_number = models.CharField(max_length=20, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(unique=True)
-    product_type = models.CharField(max_length=100, choice=PRODUCT_TYPE_CHOICES,blank=True, null=True)
+    product_type = models.CharField(max_length=100, choices=PRODUCT_TYPE_CHOICES,blank=True, null=True)
     delivery_channel = models.CharField(max_length=255,blank=True,null=True,choices=DELIVERY_CHANNEL_CHOICES, verbose_name="Lead Source")
     is_pep = models.CharField(default=False,choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
     responsible = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="assigned_leads")

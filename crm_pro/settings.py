@@ -133,6 +133,8 @@ STATIC_URL = "static/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+
 #FIXED REST_FRAMEWORK setting
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -143,18 +145,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-#Keep only ONE AUTHENTICATION_BACKENDS (remove the first duplicate)
-#FIXED REST_FRAMEWORK setting
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # moved here
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # sensible default
-    ]
-}
-
-#Keep only ONE AUTHENTICATION_BACKENDS (remove the first duplicate)
+#Keep only ONE AUTHENTICATION_BACKENDS 
 AUTHENTICATION_BACKENDS = [
     'api.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',

@@ -439,7 +439,7 @@ def create_deal(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def deal_general_information(request, deal_id):
+def deal_underwriter_information(request, deal_id):
     try:
         deal = Deal.objects.get(id=deal_id)
     except Deal.DoesNotExist:

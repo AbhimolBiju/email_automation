@@ -4,8 +4,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db import models
 
+
+
+
 class CustomUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
+    mobile = models.CharField(max_length=15, null=True, unique=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.user.email

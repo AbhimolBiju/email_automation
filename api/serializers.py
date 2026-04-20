@@ -2,28 +2,38 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import CustomUser, Profile, Role
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
 
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'password']
+class RegisterStep1Serializer(serializers.Serializer):
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    mobile = serializers.CharField()
+    date_of_birth = serializers.DateField()
+    gender = serializers.CharField()
 
-    #Email uniqueness validation
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already exists")
         return value
 
-    #Create User + CustomUser
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['email'],  # required
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        CustomUser.objects.create(user=user)
-        return user
+    def validate_mobile(self, value):
+        if CustomUser.objects.filter(mobile=value).exists():
+            raise serializers.ValidationError("Mobile already exists")
+        return value
+
+
+
+
+
+class RegisterStep2Serializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match")
+        return data
+
 
 
 

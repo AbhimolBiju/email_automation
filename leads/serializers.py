@@ -3,7 +3,6 @@ from .models import Lead
 
 
 class LeadListSerializer(serializers.ModelSerializer):
-
     contact = serializers.SerializerMethodField()
     timestamps = serializers.SerializerMethodField()
     source_info = serializers.SerializerMethodField()
@@ -11,74 +10,59 @@ class LeadListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lead
-        fields = [
-            "id",
-            "contact",
-            "timestamps",
-            "source_info",
-            "assignment",
-            "is_favorite",
-        ]
+        fields = "__all__"  # include all fields
 
-    # ---- CONTACT ----
     def get_contact(self, obj):
         return {
-            "first_name": f"{obj.first_name} {obj.last_name or ''}".strip(),
-            "phone": obj.phone,
+            "full_name": obj.name,
+            "phone": obj.mobile_number,
+            "email": obj.email,
         }
-    
+
     def get_source_info(self, obj):
         return {
-            "source": obj.source,
-            "source_form": obj.source_form,
+            "source": obj.delivery_channel,
+            "product_type": obj.product_type,
         }
 
     def get_timestamps(self, obj):
         return {
             "created_at": obj.created_at,
-            "modified_at": obj.updated_at,
+            "updated_at": obj.updated_at,
         }
+
     def get_assignment(self, obj):
         return {
-            # "role": obj.assigned_to.role.name if obj.assigned_to else None,
             "status": obj.status,
+            "stage": obj.stage,
             "progress_score": obj.progress_score,
+            "responsible": obj.responsible.id if obj.responsible else None,
         }
     
 from rest_framework import serializers
 from .models import Lead
 
-
 class CreateLeadSerializer(serializers.ModelSerializer):
-
-    source_platform = serializers.CharField(write_only=True)
-    source_form = serializers.CharField(write_only=True, required=False)
-    source_url = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Lead
         fields = [
-            "first_name",
-            "last_name",
-            "phone",
+            "name",
+            "address",
+            "occupation",
+            "mobile_number",
+            "phone_number",
             "email",
-            "source_platform",
-            "source_form",
-            "source_url",
-            "assigned_to",
+            "product_type",
+            "delivery_channel",
+            "is_pep",
+            "responsible",
+            "stage",
             "status",
             "progress_score",
             "is_favorite",
             "notes",
         ]
-
-    def create(self, validated_data):
-    
-        platform = validated_data.pop("source_platform")
-
-        validated_data["source"] = platform
-
-        return Lead.objects.create(**validated_data)
 
 
 class LeadStatusUpdateSerializer(serializers.ModelSerializer):
@@ -98,64 +82,38 @@ class LeadStatusUpdateSerializer(serializers.ModelSerializer):
 
 from .models import Lead, LeadActivity
 
+
 class LeadDetailsSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
-    phone_numbers = serializers.SerializerMethodField()
 
     class Meta:
         model = Lead
-        fields = []
+        fields = "__all__"
 
     def get_full_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
-    def get_phone_numbers(self, obj):
-        phones = [obj.phone]
-        if obj.whatsapp_number:
-            phones.append(obj.whatsapp_number)
-        return phones
+        return f"{obj.name}"
 
     def to_representation(self, instance):
         return {
             "lead_id": instance.id,
-            "status": {
-                "current_stage": instance.current_stage,
-                "label": instance.status,
-                "workflow_steps": [
-                    "New Lead",
-                    "Assigned",
-                    "Non Contactable-1",
-                    "Non Contactable-2",
-                    "Non Contactable-3",
-                    "Contactable",
-                    "Requirement Gathering",
-                    "Sales Qualified Lead"
-                ]
-            },
-            "personal_info": {
-                "full_name": self.get_full_name(instance),
-                "email": instance.email,
-                "phone_numbers": self.get_phone_numbers(instance),
-                "whatsapp_number": instance.whatsapp_number,
-                "gender": instance.gender,
-                "is_uae_resident": instance.is_uae_resident,
-                "visa_status": instance.visa_status,
-                "emirates_of_visa": instance.emirates_of_visa
-            },
-            "financial_info": {
-                "salary_scale": instance.salary_scale,
-                "available_to_everyone": instance.available_to_everyone
-            },
-            "insurance_intent": {
-                "source_form": instance.source_form,
-                "need_car_insurance": instance.need_car_insurance,
-                "car_details": {
-                    "year": instance.car_year,
-                    "model": instance.car_model,
-                    "plate_no": instance.car_plate_no
-                }
-            }
+            "full_name": self.get_full_name(instance),
+            "email": instance.email,
+            "mobile_number": instance.mobile_number,
+            "phone_number": instance.phone_number,
+            "address": instance.address,
+            "occupation": instance.occupation,
+            "product_type": instance.product_type,
+            "delivery_channel": instance.delivery_channel,
+            "is_pep": instance.is_pep,
+            "status": instance.status,
+            "stage": instance.stage,
+            "progress_score": instance.progress_score,
+            "responsible": instance.responsible.id if instance.responsible else None,
+            "created_at": instance.created_at,
+            "updated_at": instance.updated_at,
+            "notes": instance.notes,
         }
+
 
 
 
@@ -196,3 +154,18 @@ class LeadActivitySerializer(serializers.ModelSerializer):
             })
 
         return data
+    
+
+class LeadstageUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Lead
+        fields = ["stage"]
+
+    def validate_status(self, value):
+        allowed_status = [choice[0] for choice in Lead.STAGE_CHOICES]
+
+        if value not in allowed_status:
+            raise serializers.ValidationError("Invalid stage")
+
+        return value

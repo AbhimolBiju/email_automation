@@ -65,7 +65,7 @@ class Lead(models.Model):
     product_type = models.CharField(max_length=100, choices=PRODUCT_TYPE_CHOICES,blank=True, null=True)
     delivery_channel = models.CharField(max_length=255,blank=True,null=True,choices=DELIVERY_CHANNEL_CHOICES, verbose_name="Lead Source")
     insurance_type=models.CharField(max_length=255,blank=True,null=True,choices=INSURANCE_TYPE, verbose_name="Insurance_type")
-    is_pep = models.CharField(default=False,choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
+    is_pep = models.CharField(max_length=100, default=False, choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
     responsible = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="assigned_leads")
     stage = models.CharField(max_length=100,default='Assigned',choices=STAGE_CHOICES, help_text="Current pipeline stage")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creation Date")

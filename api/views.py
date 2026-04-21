@@ -76,6 +76,62 @@ def register_step2(request):
 
         # Clear session
         del request.session['registration_data']
+        
+        
+
+@api_view(['POST'])
+@permission_classes([AllowAny]) 
+def login_user(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    #using your EmailBackend
+    user = authenticate(username=email, password=password)
+
+    if user is not None:
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "message": "Login successful",
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+        })
+
+    return Response({
+        "error": "Invalid credentials"
+    }, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])   
+def logout_user(request):
+    try:
+        refresh_token = request.data.get("refresh")
+        if not refresh_token:
+            return Response({"error": "Refresh token required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({"message": "Logout successful"})
+    except Exception as e:
+        return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  #Protected
+def protected_view(request):
+    return Response({
+        "message": "Access granted",
+        "user": request.user.username
+    })
+
+
+
 
 def user_profile(request):
     try:
@@ -113,7 +169,7 @@ from rest_framework.response import Response
 
 # from .models import Renewal
 from leads.models import Lead
-from deals.models import Deals
+from deals.models import Deal
 from Quote.models import QuoteRequest
 from Task.models import Task
 from invoice.models import Transaction
@@ -128,7 +184,7 @@ class DashboardStatsView(APIView):
 
         active_leads = Lead.objects.filter(created_at__gte=start_date).count()
 
-        active_deals = Deals.objects.filter(status="active").count()
+        active_deals = Deal.objects.filter(status="active").count()
 
         pending_quotes = QuoteRequest.objects.filter(status="pending").count()
 
@@ -141,7 +197,7 @@ class DashboardStatsView(APIView):
         pending_renewals = Transaction.objects.filter(policy_end_date__lte=now().date() + timedelta(days=30),policy_end_date__gte=now().date()).count()
 
         total_leads = Lead.objects.count()
-        total_deals = Deals.objects.filter(status="closed").count()
+        total_deals = Deal.objects.filter(status="closed").count()
 
         conversion_ratio = (
             f"{round(total_deals / total_leads, 2)}:1"

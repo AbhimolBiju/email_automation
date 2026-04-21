@@ -28,7 +28,6 @@ urlpatterns = [
     path('user_profile/', user_profile),
 
   
-    path('manager-dashboard/', manager_dashboard),
      path("dashboard/stats/", DashboardStatsView.as_view()),
      path("dashboard/sales-trend/", SalesTrendView.as_view()),
     path("dashboard/product-mix/", ProductMixView.as_view()),

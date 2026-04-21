@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('leads', '0014_delete_insuranceinfo'),
+        ('leads', '0001_initial'),
     ]
 
     operations = [

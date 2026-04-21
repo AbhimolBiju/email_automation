@@ -134,7 +134,7 @@ class QuoteStatsView(APIView):
         elif period == 'this_year':
             start_date = now.replace(month=1, day=1)
         else:
-            return Response({"error": "Invalid period"}, status=400)
+            return Response({"error": "Invalid period"}, status=status.HTTP_400_BAD_REQUEST)
 
         queryset = QuoteRequest.objects.filter(created_at__gte=start_date)
 
@@ -148,4 +148,4 @@ class QuoteStatsView(APIView):
             "pending_count": pending_count,
             "sent_count": sent_count,
             "accepted_count": accepted_count
-        })
+        },status=status.HTTP_200_OK)

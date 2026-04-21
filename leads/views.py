@@ -76,15 +76,18 @@ def create_activity(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
     except Lead.DoesNotExist:
-        return Response({"error": "Lead not found"}, status=404)
+        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = LeadActivitySerializer(data=request.data)
 
     if serializer.is_valid():
         serializer.save(lead=lead) 
-        return Response({"message": "Activity created successfully"})
+        return Response(
+    {"message": "Activity created successfully"},
+    status=status.HTTP_201_CREATED
+)
     
-    return Response(serializer.errors, status=400)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def lead_activities(request, lead_id):

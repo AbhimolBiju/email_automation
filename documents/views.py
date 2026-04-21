@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .models import OCRDocument
 from .utils import get_date_filter
 from django.core.paginator import Paginator
+from rest_framework import status
 # Create your views here.
 
 @api_view(['GET'])
@@ -68,7 +69,7 @@ def document_list(request):
     return Response({
         "results_found": paginator.count,
         "documents": serializer.data,
-    })
+    },status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
@@ -76,7 +77,7 @@ def document_detail(request, id):
     try:
         document = OCRDocument.objects.get(id=id)
     except OCRDocument.DoesNotExist:
-        return Response({"error": "Document not found"}, status=404)
+        return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = OCRDocumentDetailSerializer(document)
     return Response(serializer.data)
@@ -86,7 +87,7 @@ def verify_document(request, id):
     try:
         document = OCRDocument.objects.get(id=id)
     except OCRDocument.DoesNotExist:
-        return Response({"error": "Document not found"}, status=404)
+        return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
 
     # update status
     document.status = "VERIFIED"
@@ -96,14 +97,14 @@ def verify_document(request, id):
         "message": "Document verified successfully",
         "document_id": document.document_id,
         "status": document.status
-    }, status=200)
+    },status=status.HTTP_200_OK)
 
 @api_view(["PATCH"])
 def reject_document(request, id):
     try:
         document = OCRDocument.objects.get(id=id)
     except OCRDocument.DoesNotExist:
-        return Response({"error": "Document not found"}, status=404)
+        return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
 
     # update status
     document.status = "REJECTED"
@@ -113,4 +114,4 @@ def reject_document(request, id):
         "message": "Document Rejected",
         "document_id": document.document_id,
         "status": document.status
-    }, status=200)
+    }, status=status.HTTP_200_OK)

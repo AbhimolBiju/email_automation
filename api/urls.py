@@ -17,8 +17,10 @@ Including another URLconf
 
 from django.urls import path
 from .views import *
+from .token_views import CookieTokenRefreshView
 
 urlpatterns = [
+    path("auth/token/refresh/", CookieTokenRefreshView.as_view(), name="token_refresh"),
     path("test/",test_api),
     path('register/step1/', register_step1),
     path('register/step2/', register_step2),

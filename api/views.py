@@ -1,19 +1,19 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from .cookie_auth import clear_refresh_cookie, set_refresh_cookie, refresh_cookie_name
 from .serializers import RegisterStep1Serializer,RegisterStep2Serializer,UserProfileSerializer
 from .models import CustomUser,User
 # Create your views here.
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def test_api(request):
     return Response({"message":"API working"})
-
-from rest_framework.permissions import AllowAny
 
 
 
@@ -76,8 +76,14 @@ def register_step2(request):
 
         # Clear session
         del request.session['registration_data']
-        
-        
+
+        return Response(
+            {"message": "Registration successful"},
+            status=status.HTTP_201_CREATED,
+        )
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny]) 
@@ -90,12 +96,21 @@ def login_user(request):
 
     if user is not None:
         refresh = RefreshToken.for_user(user)
+        access = str(refresh.access_token)
+        refresh_str = str(refresh)
 
-        return Response({
+        response = Response({
             "message": "Login successful",
-            "access": str(refresh.access_token),
-            "refresh": str(refresh),
+            "access": access,
+            "user": {
+                "id": user.id,
+                "email": getattr(user, "email", None),
+                "username": user.username,
+            },
         })
+        # Refresh token only via HttpOnly cookie (not in JSON).
+        set_refresh_cookie(response, refresh_str)
+        return response
 
     return Response({
         "error": "Invalid credentials"
@@ -104,22 +119,25 @@ def login_user(request):
 
 
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])   
+@permission_classes([AllowAny])
 def logout_user(request):
-    try:
-        refresh_token = request.data.get("refresh")
-        if not refresh_token:
-            return Response({"error": "Refresh token required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        token = RefreshToken(refresh_token)
-        token.blacklist()
-        return Response({"message": "Logout successful"})
-    except Exception as e:
-        return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+    """
+    Blacklist refresh token (from HttpOnly cookie or legacy JSON body) and clear cookie.
+    AllowAny so a client can log out even if the access token is already expired.
+    """
+    refresh_token = request.COOKIES.get(refresh_cookie_name()) or request.data.get(
+        "refresh"
+    )
+    response = Response({"message": "Logout successful"})
+    if refresh_token:
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception:
+            pass
+    clear_refresh_cookie(response)
+    return response
 
 
 @api_view(['GET'])
@@ -133,6 +151,8 @@ def protected_view(request):
 
 
 
+@api_view(['GET', 'PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
 def user_profile(request):
     try:
         profile = request.user.user_profile

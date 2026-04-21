@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegisterStep1Serializer,RegisterStep2Serializer
-from .models import CustomUser
+from .serializers import RegisterStep1Serializer,RegisterStep2Serializer,UserProfileSerializer
+from .models import CustomUser,User
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -32,7 +32,7 @@ def register_step1(request):
 
         return Response({
             "message": "Step 1 completed. Proceed to set password."
-        })
+        }, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=400)
 
@@ -50,12 +50,12 @@ def register_step2(request):
     if serializer.is_valid():
 
         reg_data = request.session.get('registration_data')
-
-        reg_data['date_of_birth'] = date.fromisoformat(reg_data['date_of_birth'])
         
         
         if not reg_data:
             return Response({"error": "Session expired. Start again."}, status=400)
+        
+        reg_data['date_of_birth'] = date.fromisoformat(reg_data['date_of_birth'])
 
         # Create User
         user = User.objects.create_user(
@@ -138,43 +138,34 @@ def protected_view(request):
         "user": request.user.username
     })
 
-from .permissions import IsAdminUser
-from .serializers import UserSerializer
-from django.contrib.auth.models import User
 
 
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated, IsAdminUser])   # Only admin can access
-def update_user_role(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    
-    serializer = UserSerializer(user, data=request.data, partial=True, context={'request': request})
-    
-    if serializer.is_valid():
-        serializer.save()
-        return Response({
-            "message": "User updated successfully",
-            "data": serializer.data
-        })
-    
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-from .permissions import IsManagerUser
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated, IsManagerUser])
-def manager_dashboard(request):
-    return Response({
-        "message": "Manager access granted"
-    })
-
-from .models import Role
 from rest_framework.permissions import IsAuthenticated
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
-def list_roles(request):
-    roles = Role.objects.all()
-    data = [{"id": r.id, "name": r.name} for r in roles]
+def user_profile(request):
+    try:
+        profile = request.user.user_profile
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Profile not found"}, status=404)
 
-    return Response({"roles": data})
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
+
+    if request.method in ['PUT', 'PATCH']:
+        serializer = UserProfileSerializer(
+            profile,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "Profile updated successfully",
+                "data": serializer.data
+            })
+
+        return Response(serializer.errors, status=400)

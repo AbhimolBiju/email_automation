@@ -47,7 +47,7 @@ def pipeline_summary(request):
             "workflow_id": "insurance_v3",
             "stages": data
         }
-    })
+    }, status=status.HTTP_200_OK)
     
     
 
@@ -118,11 +118,16 @@ def deals_board(request):
         })
 
     return Response({
+    "success": True,
+    "data": {
         "total_board_value": total_board_value,
         "currency": "AED",
         "columns": columns
-    })
+            }
+    }, status=status.HTTP_200_OK)
     
+
+
 
 from django.db.models import Q
 
@@ -141,8 +146,11 @@ def search_deals(request):
     serializer = DealListSerializer(deals, many=True)
 
     return Response({
-        "results": serializer.data
-    })
+        "success": True,
+        "data": serializer.data
+    }, status=status.HTTP_200_OK)
+
+
 
 
 
@@ -154,7 +162,10 @@ def export_deals(request):
 
     serializer = DealExportSerializer(deals, many=True)
 
-    return Response({"data": serializer.data})
+    return Response({
+        "success": True,
+        "data": serializer.data
+        }, status=status.HTTP_200_OK)
     
     
     
@@ -225,11 +236,16 @@ def deals_by_stage(request):
     stage_name = dict(Deal.STAGE_CHOICES).get(stage_id)
 
     return Response({
+    "success": True,
+    "data": {
         "stage_id": stage_id,
         "stage_name": stage_name,
         "count": deals.count(),
         "results": serializer.data
-    })
+        }
+    }, status=status.HTTP_200_OK)
+    
+    
     
     
     
@@ -267,9 +283,9 @@ def deal_filter_options(request):
     serializer.is_valid(raise_exception=True)
 
     return Response({
-        "status": "success",
-        "data": serializer.data
-    })
+    "success": True,
+    "data": serializer.data
+    }, status=status.HTTP_200_OK)
 
 
 
@@ -304,10 +320,13 @@ def deal_list(request):
     serializer = DealListSerializer(deals, many=True)
 
     return Response({
+    "success": True,
+    "data": {
         "view": view,
         "count": deals.count(),
         "results": serializer.data
-    })
+        }
+    }, status=status.HTTP_200_OK)
     
     
     
@@ -367,11 +386,14 @@ def deals_board_paginated(request):
         })
 
     return Response({
+    "success": True,
+    "data": {
         "offset_stage": offset_stage,
         "limit_columns": limit_columns,
         "columns_returned": len(columns),
         "columns": columns
-    })
+        }
+    }, status=status.HTTP_200_OK)
     
     
     
@@ -412,10 +434,13 @@ def grouped_deals(request):
         })
 
     return Response({
+    "success": True,
+    "data": {
         "total_stages": len(stage_ids),
         "limit_per_stage": limit,
         "data": response_data
-    })
+        }
+    }, status=status.HTTP_200_OK)
     
     
     
@@ -428,9 +453,12 @@ def create_deal(request):
     if serializer.is_valid():
         deal = serializer.save()
         return Response({
-            "message": "Deal created successfully",
-            "deal_id": deal.id
-        }, status=status.HTTP_201_CREATED)
+        "success": True,
+        "message": "Deal created successfully",
+        "data": {
+        "deal_id": deal.id
+        }
+    }, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -449,7 +477,10 @@ def deal_underwriter_information(request, deal_id):
         )
 
     serializer = DealGeneralInfoSerializer(deal)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({
+    "success": True,
+    "data": serializer.data
+    }, status=status.HTTP_200_OK)
 
 
 
@@ -476,6 +507,7 @@ def update_additional_field(request, deal_id):
     if serializer.is_valid():
         serializer.save()
         return Response({
+            "success": True,
             "message": "Additional field updated successfully",
             "data": serializer.data
         }, status=status.HTTP_200_OK)

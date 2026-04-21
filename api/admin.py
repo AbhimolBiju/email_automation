@@ -1,11 +1,9 @@
 from django.contrib import admin
-from .models import Profile, Role
-
+from .models import CustomUser
 # Register your models here.
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'role']
-    list_editable = ['role']   # allows inline editing
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'mobile', 'role']
+    list_editable = ['mobile', 'role']
 
 
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Role)
+admin.site.register(CustomUser, CustomUserAdmin)

@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import CustomUser
+
+from invoice.models import Transaction,Invoice
 # Register your models here.
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'mobile', 'role']
@@ -7,3 +9,5 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Transaction)
+admin.site.register(Invoice)

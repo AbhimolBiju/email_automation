@@ -23,4 +23,9 @@ urlpatterns = [
     path("api/",include('api.urls')),
     path("leads/",include('leads.urls')),
     path("deals/",include('deals.urls')),
+    path("policys/",include('Policys.urls')),
+    path("task/",include('Task.urls')),
+    path("insurance/",include('insurance.urls')),
+    path("ocr/",include('documents.urls')),
+    path("quote/",include('Quote.urls')),
 ]

@@ -19,11 +19,15 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('export/', lead_list, name='lead_list'),
-    path('create_lead/', create_lead, name="create"),
+     path('export/', lead_list, name='lead_list'),
+    path('', create_lead, name="create"),
     path('<int:lead_id>/status/', update_lead_status),
     path('<int:lead_id>/', lead_details),
+    path('<int:lead_id>/stage/',update_lead_status),
     path('<int:lead_id>/activities/create/', create_activity),
     path('<int:lead_id>/activities/', lead_activities),
+    path('<int:id>/favorite', ToggleFavoriteView.as_view(), name='toggle-favorite'),
+    # path("<int:lead_id>/tasks/",create_task),
+    # path("insurance/general-info/<int:lead_id>/",get_insurance_info),
 ]
 

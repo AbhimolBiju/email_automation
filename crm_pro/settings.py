@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
+    'Policys',
+    'Task',
+    'insurance',
+    'documents',
+    'Quote',
+    'invoice'
 ]
 
 MIDDLEWARE = [
@@ -120,6 +126,8 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Static files (CSS, JavaScript, Images)

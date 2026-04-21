@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from .models import Lead
 class LeadListSerializer(serializers.ModelSerializer):
-
     contact = serializers.SerializerMethodField()
     timestamps = serializers.SerializerMethodField()
     source_info = serializers.SerializerMethodField()
@@ -10,37 +9,33 @@ class LeadListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lead
-        fields = [
-            "id",
-            "contact",
-            "timestamps",
-            "source_info",
-            "assignment",
-            "is_favorite",
-        ]
+        fields = "__all__"  # include all fields
 
     def get_contact(self, obj):
         return {
-            "full_name": f"{obj.name}",
+            "full_name": obj.name,
             "phone": obj.mobile_number,
+            "email": obj.email,
         }
 
     def get_source_info(self, obj):
         return {
             "source": obj.delivery_channel,
+            "product_type": obj.product_type,
         }
 
     def get_timestamps(self, obj):
         return {
             "created_at": obj.created_at,
-            "modified_at": obj.updated_at,
+            "updated_at": obj.updated_at,
         }
 
     def get_assignment(self, obj):
         return {
             "status": obj.status,
+            "stage": obj.stage,
             "progress_score": obj.progress_score,
-            "responsible": obj.responsible.id if obj.responsible else None
+            "responsible": obj.responsible.id if obj.responsible else None,
         }
     
 from rest_framework import serializers
@@ -92,7 +87,7 @@ class LeadDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lead
-        fields = "_all_"
+        fields = "__all__"
 
     def get_full_name(self, obj):
         return f"{obj.name}"
@@ -158,3 +153,18 @@ class LeadActivitySerializer(serializers.ModelSerializer):
             })
 
         return data
+    
+
+class LeadstageUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Lead
+        fields = ["stage"]
+
+    def validate_status(self, value):
+        allowed_status = [choice[0] for choice in Lead.STAGE_CHOICES]
+
+        if value not in allowed_status:
+            raise serializers.ValidationError("Invalid stage")
+
+        return value

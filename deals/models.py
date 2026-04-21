@@ -1,21 +1,11 @@
 from django.db import models
 from django.conf import settings
+from leads.models import Lead
 
 
-class Lead(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15, blank=True, null=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
+class Deal(models.Model):
 
-    def __str__(self):
-        return self.name
-
-
-class Deals(models.Model):
-
-   
     STAGE_CHOICES = [
         (1, "Potential Customer"),
         (2, "Awaiting Additional Documents"),
@@ -34,76 +24,73 @@ class Deals(models.Model):
         (15, "Lost Cases & Future Prospects"),
     ]
 
-    POLICY_TYPE_CHOICES = [
-        ('AUTO', 'Auto'),
-        ('HOME', 'Home'),
-        ('HEALTH', 'Health'),
-        ('LIFE', 'Life'),
-        ('BUSINESS', 'Business'),
-    ]
-
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('UNDERWRITING', 'Underwriting'),
-        ('APPROVED', 'Approved'),
-        ('REJECTED', 'Rejected'),
-        ('ACTIVE', 'Active'),
-        ('CANCELLED', 'Cancelled'),
-    ]
-
+    document_lists = models.TextField(blank=True, null=True)
 
     lead = models.ForeignKey(
         Lead,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
-        related_name='policies'
+        related_name='deals'
     )
 
-    customer = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='customer_policies'
-    )
+    nationality = models.CharField(max_length=100, blank=True, null=True)
+    emirates_id = models.CharField(max_length=100, blank=True, null=True)
 
-    agent = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='agent_policies'
-    )
+    id_expiry_dt = models.DateField(blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
 
-  
+    gender = models.CharField(max_length=20, blank=True, null=True)
+    emirate = models.CharField(max_length=100, blank=True, null=True)
+
+    license_no = models.CharField(max_length=100, blank=True, null=True)
+    license_from_dt = models.DateField(blank=True, null=True)
+    license_to_dt = models.DateField(blank=True, null=True)
+
+    chassis_number = models.CharField(max_length=100, blank=True, null=True)  # VIN
+    reg_number = models.CharField(max_length=50, blank=True, null=True)
+    reg_dt = models.DateField(blank=True, null=True)
+
+    plate_code = models.CharField(max_length=50, blank=True, null=True)
+    plate_source = models.CharField(max_length=100, blank=True, null=True)
+
+    tcf_number = models.CharField(max_length=100, blank=True, null=True)
+    ncd_years = models.IntegerField(blank=True, null=True)
+    traffic_tran_type = models.CharField(max_length=100, blank=True, null=True)
+
+    is_veh_brand_new = models.BooleanField(default=False)
+    agency_repair = models.BooleanField(default=False)
+
+    model_year = models.IntegerField(blank=True, null=True)
+
+    make_id = models.CharField(max_length=100, blank=True, null=True)
+    model_id = models.CharField(max_length=100, blank=True, null=True)
+    trim_id = models.CharField(max_length=100, blank=True, null=True)
+
+    body_type_id = models.CharField(max_length=100, blank=True, null=True)
+    engine_capacity_id = models.CharField(max_length=100, blank=True, null=True)
+    transmission_id = models.CharField(max_length=100, blank=True, null=True)
+
+    is_gcc_spec = models.BooleanField(default=False)
+
+    mileage = models.IntegerField(blank=True, null=True)
+
+    valuation_date = models.DateField(blank=True, null=True)
+
     stage_id = models.IntegerField(
         choices=STAGE_CHOICES,
         default=1
     )
-
-    policy_type = models.CharField(
-        max_length=20,
-        choices=POLICY_TYPE_CHOICES
-    )
-
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='PENDING'
-    )
-
-    premium_amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
-    )
-
-    coverage_amount = models.DecimalField(
-        max_digits=12,
-        decimal_places=2
-    )
-
-    effective_date = models.DateField()
-    expiry_date = models.DateField()
+    additional_field = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Policy #{self.id} - {self.policy_type}"
+        return f"Deal {self.id} - {self.reg_number or 'No Reg'}"
+    
+    
+class DealDocument(models.Model):
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE, related_name='documents')
+    file = models.FileField(upload_to='deal_documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    

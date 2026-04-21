@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-from pathlib import Path
+from pathlib import Path,os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -135,6 +135,14 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 STATIC_URL = "static/"
 
+
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
 #FIXED REST_FRAMEWORK setting
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -145,18 +153,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-#Keep only ONE AUTHENTICATION_BACKENDS (remove the first duplicate)
-#FIXED REST_FRAMEWORK setting
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # moved here
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # sensible default
-    ]
-}
-
-#Keep only ONE AUTHENTICATION_BACKENDS (remove the first duplicate)
+#Keep only ONE AUTHENTICATION_BACKENDS 
 AUTHENTICATION_BACKENDS = [
     'api.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',

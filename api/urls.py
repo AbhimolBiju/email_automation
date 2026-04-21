@@ -20,12 +20,14 @@ from .views import *
 
 urlpatterns = [
     path("test/",test_api),
-    path('register/', register_user),
+    path('register/step1/', register_step1),
+    path('register/step2/', register_step2),
     path('login/', login_user),
     path('logout/', logout_user),
     path('protected/', protected_view),
-    path('update-user/<int:user_id>/', update_user_role),
-    path('roles/',list_roles),
+    path('user_profile/', user_profile),
+
+  
     path('manager-dashboard/', manager_dashboard),
      path("dashboard/stats/", DashboardStatsView.as_view()),
      path("dashboard/sales-trend/", SalesTrendView.as_view()),

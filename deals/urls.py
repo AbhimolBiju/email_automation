@@ -19,7 +19,21 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('pipeline-summary/', pipeline_summary),
-    path('board/', deals_board),
+    path('create_deal/', create_deal, name='create-deal'),
+    path('pipeline-summary/', pipeline_summary, name='pipeline-summary'),
+    path('board/', deals_board, name='deals-board'),
+    path('search/', search_deals, name='search-deals'),
+    path('<int:id>/move/', update_deal_stage, name='update-deal-stage'),
+    path('export/', export_deals, name='export-deals'),
+    path('dashboard/stage-deals/', deals_by_stage, name='deals-by-stage'),
+    path('filter-options/', deal_filter_options, name='deal-filter-options'),
+    path('list/', deal_list, name='deal-list'),
+    path('deals_board_paginated/', deals_board_paginated, name='deals-board-paginated'),
+    path('grouped_deals/', grouped_deals, name='grouped-deals'),
+    path('<int:deal_id>/deal_underwriter_information/', deal_underwriter_information, name='deal-general-info'),
+    path('<int:deal_id>/update-additional-field/', update_additional_field, name='update-additional-field'),
+    
+    
 ]
+
 

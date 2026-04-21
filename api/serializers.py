@@ -1,70 +1,79 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import CustomUser, Profile, Role
+from .models import CustomUser
 
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
 
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'password']
+class RegisterStep1Serializer(serializers.Serializer):
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    mobile = serializers.CharField()
+    date_of_birth = serializers.DateField()
+    gender = serializers.CharField()
 
-    #Email uniqueness validation
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already exists")
         return value
 
-    #Create User + CustomUser
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['email'],  # required
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        CustomUser.objects.create(user=user)
-        return user
+    def validate_mobile(self, value):
+        if CustomUser.objects.filter(mobile=value).exists():
+            raise serializers.ValidationError("Mobile already exists")
+        return value
 
 
 
-# ---------------- NEW: ROLE + PROFILE SERIALIZER ----------------
-class ProfileSerializer(serializers.ModelSerializer):
-    role = serializers.SlugRelatedField(
-        slug_field='name',
-        queryset=Role.objects.all()
-    )
+
+
+class RegisterStep2Serializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match")
+        return data
+
+
+
+
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+
+    role = serializers.CharField(read_only=True)  # 👈 IMPORTANT
 
     class Meta:
-        model = Profile
-        fields = ['name', 'bio', 'profile_pic', 'role']
-
-
-# ---------------- NEW: USER SERIALIZER (FOR UPDATE) ----------------
-class UserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'profile']
+        model = CustomUser
+        fields = [
+            'email',
+            'first_name',
+            'last_name',
+            'mobile',
+            'date_of_birth',
+            'gender',
+            'address',
+            'city',
+            'zip_code',
+            'country',
+            'role'  # visible but not editable
+        ]
 
     def update(self, instance, validated_data):
-        request = self.context.get('request')   # ADD THIS
-        profile_data = validated_data.pop('profile', None)
+        user_data = validated_data.pop('user', {})
 
-    # Update user fields
-        instance.username = validated_data.get('username', instance.username)
-        instance.email = validated_data.get('email', instance.email)
+        # Update User model fields
+        user = instance.user
+        user.first_name = user_data.get('first_name', user.first_name)
+        user.last_name = user_data.get('last_name', user.last_name)
+        user.save()
+
+        # Update CustomUser fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
         instance.save()
-
-        if profile_data:
-            if request and request.user.is_staff:
-                role_name = profile_data.get('role')
-                role = Role.objects.get(name=role_name)
-                instance.profile.role = role
-
-    #  Update other profile fields (for all users)
-            instance.profile.name = profile_data.get('name', instance.profile.name)
-            instance.profile.bio = profile_data.get('bio', instance.profile.bio)
-            instance.profile.save()
-
         return instance

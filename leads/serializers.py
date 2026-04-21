@@ -1,7 +1,6 @@
 from rest_framework import serializers
+
 from .models import Lead
-
-
 class LeadListSerializer(serializers.ModelSerializer):
     contact = serializers.SerializerMethodField()
     timestamps = serializers.SerializerMethodField()

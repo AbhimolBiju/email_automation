@@ -30,3 +30,4 @@ urlpatterns = [
     # path("<int:lead_id>/tasks/",create_task),
     # path("insurance/general-info/<int:lead_id>/",get_insurance_info),
 ]
+

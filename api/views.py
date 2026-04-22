@@ -199,20 +199,30 @@ class DashboardStatsView(APIView):
     def get(self, request):
         days = int(request.GET.get("days", 7))  # 7 / 30 / 90 / 180
         start_date = now() - timedelta(days=days)
+        prev_start_date = start_date - timedelta(days=days)
 
         active_leads = Lead.objects.filter(created_at__gte=start_date).count()
+        prev_active_leads = Lead.objects.filter(
+            created_at__gte=prev_start_date, created_at__lt=start_date
+        ).count()
 
         active_deals = Deal.objects.filter(stage_id__lt=12).count()
+        prev_active_deals = Deal.objects.filter(stage_id__lt=12, created_at__gte=prev_start_date, created_at__lt=start_date).count()
 
         pending_quotes = QuoteRequest.objects.filter(status="pending").count()
+        prev_pending_quotes = QuoteRequest.objects.filter(status="pending", created_at__gte=prev_start_date, created_at__lt=start_date).count()
 
         pending_tasks = Task.objects.filter(status="pending").count()
+        prev_pending_tasks = Task.objects.filter(status="pending", created_at__gte=prev_start_date, created_at__lt=start_date).count()
 
         policies_issued = Transaction.objects.filter(invoice_date__isnull=False).count()
+        prev_policies_issued = Transaction.objects.filter(invoice_date__gte=prev_start_date, invoice_date__lt=start_date).count()
 
         revenue = Transaction.objects.filter(invoice_date__gte=start_date).aggregate(total=Sum("total_premium"))["total"] or 0
+        prev_revenue = Transaction.objects.filter(invoice_date__gte=prev_start_date, invoice_date__lt=start_date).aggregate(total=Sum("total_premium"))["total"] or 0
 
         pending_renewals = Transaction.objects.filter(policy_end_date__lte=now().date() + timedelta(days=30),policy_end_date__gte=now().date()).count()
+        prev_pending_renewals = Transaction.objects.filter(policy_end_date__lte=(now().date() - timedelta(days=days)), policy_end_date__gte=(now().date() - timedelta(days=days+30))).count()
 
         total_leads = Lead.objects.count()
         total_deals = Deal.objects.filter(stage_id__gte=12).count()
@@ -225,15 +235,25 @@ class DashboardStatsView(APIView):
             if total_leads > 0 else "0:1"
         )
 
+        def pct(curr: float, prev: float) -> int:
+            if prev == 0:
+                return 0 if curr == 0 else 100
+            return int(round(((curr - prev) / prev) * 100))
+
+        label = f"vs last {days} days"
+
         data = {
-            "active_leads": active_leads,
-            "active_deals": active_deals,
-            "pending_quotations": pending_quotes,
-            "pending_tasks": pending_tasks,
-            "policies_issued": policies_issued,
-            "conversion_ratio": conversion_ratio,
-            "revenue": revenue,
-            "pending_renewals": pending_renewals,
+            "cards": [
+                {"id": "1", "title": "Active Leads", "value": str(active_leads), "trend": pct(active_leads, prev_active_leads), "label": label},
+                {"id": "2", "title": "Active Deals", "value": str(active_deals), "trend": pct(active_deals, prev_active_deals), "label": label},
+                {"id": "3", "title": "Pending Quotations", "value": str(pending_quotes), "trend": pct(pending_quotes, prev_pending_quotes), "label": label},
+                {"id": "4", "title": "Pending Tasks", "value": str(pending_tasks), "trend": pct(pending_tasks, prev_pending_tasks), "label": label},
+                {"id": "5", "title": "Policies Issued", "value": str(policies_issued), "trend": pct(policies_issued, prev_policies_issued), "label": label},
+                {"id": "6", "title": "Conversion Ratio", "value": conversion_ratio, "trend": 0, "label": label},
+                {"id": "7", "title": "Revenue", "value": f"AED {round(float(revenue), 2)}", "trend": pct(float(revenue), float(prev_revenue)), "label": label},
+                {"id": "8", "title": "Pending Renewals", "value": str(pending_renewals), "trend": pct(pending_renewals, prev_pending_renewals), "label": label},
+            ],
+            "days": days,
         }
 
         return success_response(message="Dashboard stats fetched successfully", data=data)

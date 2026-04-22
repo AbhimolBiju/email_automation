@@ -1,8 +1,5 @@
-from django.db import models
 from django.conf import settings
-# Create your models here.
 from django.db import models
-from django.conf import settings
 
 class Lead(models.Model):
     STATUS_CHOICES = [
@@ -25,36 +22,35 @@ class Lead(models.Model):
         ("yes", "Yes"),
         ("no", "No"),
     ]
-    DELIVERY_CHANNEL_CHOICES = [
-    ("whatsapp", "WhatsApp"),
-    ("email", "Email"),
-    ("call", "Call"),
+    # Backend choices used by the frontend Create Lead screen.
+    PREFERRED_CONTACT_METHODS = [
+        ("whatsapp", "WhatsApp"),
+        ("email", "Email"),
+        ("call", "Call"),
     ]
-    PRODUCT_TYPE_CHOICES = [
-        # ("life", "Life"),
-        ("general", "General"),
-        ("motor", "Motor"),
-        ("medical","Medical")
-        # ("travel", "Travel"),
-        # ("property", "Property"),
-    ]
-    INSURANCE_TYPE = [
-    ("car_insurance_new", "Car Insurance New"),
-    ("car_insance_renewal", "Car Insurance Renewal"),
-    ("fleet_new", "Fleet New"),
-    ("fleet_renewal", "Fleet Renewal"),
-]
-
-    SUB_TYPE_CHOICES = [
-    ("comprehensive_agency", "Comprehensive - Agency"),
-    ("comprehensive_non_agency", "Comprehensive - Non Agency"),
-    ("third_party", "Third Party"),
-]
 
     SOURCE_CHOICES = [
-    ("agent", "Agent"),
-    ("direct", "Direct"),
-]
+        ("lead_source", "Lead Source"),
+        ("website", "Website"),
+        ("referral", "Referral"),
+    ]
+    PRODUCT_TYPE_CHOICES = [
+        ("general", "General"),
+        ("motor", "Motor"),
+        ("medical", "Medical"),
+    ]
+    INSURANCE_TYPE = [
+        ("car_insurance_new", "Car Insurance New"),
+        ("car_insance_renewal", "Car Insurance Renewal"),
+        ("fleet_new", "Fleet New"),
+        ("fleet_renewal", "Fleet Renewal"),
+    ]
+
+    SUB_TYPE_CHOICES = [
+        ("comprehensive_agency", "Comprehensive - Agency"),
+        ("comprehensive_non_agency", "Comprehensive - Non Agency"),
+        ("third_party", "Third Party"),
+    ]
     
     name = models.CharField(max_length=100)
     address = models.TextField(blank=True, null=True)
@@ -62,9 +58,24 @@ class Lead(models.Model):
     mobile_number = models.CharField(max_length=20, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(unique=True)
-    product_type = models.CharField(max_length=100, choices=PRODUCT_TYPE_CHOICES,blank=True, null=True)
-    delivery_channel = models.CharField(max_length=255,blank=True,null=True,choices=DELIVERY_CHANNEL_CHOICES, verbose_name="Lead Source")
-    insurance_type=models.CharField(max_length=255,blank=True,null=True,choices=INSURANCE_TYPE, verbose_name="Insurance_type")
+    product_type = models.CharField(
+        max_length=100, choices=PRODUCT_TYPE_CHOICES, blank=True, null=True
+    )
+    # NOTE: This field is used as preferred contact method in the current UI.
+    delivery_channel = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=PREFERRED_CONTACT_METHODS,
+        verbose_name="Preferred Contact Method",
+    )
+    insurance_type = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=INSURANCE_TYPE,
+        verbose_name="Insurance_type",
+    )
     is_pep = models.CharField(max_length=100, default=False, choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
     responsible = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="assigned_leads")
     stage = models.CharField(max_length=100,default='Assigned',choices=STAGE_CHOICES, help_text="Current pipeline stage")
@@ -74,8 +85,21 @@ class Lead(models.Model):
     is_favorite = models.BooleanField(default=False)
     progress_score = models.IntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
-    source=models.CharField(max_length=255,blank=True,null=True,choices=SOURCE_CHOICES, verbose_name="Lead Source")
-    sub_type=models.CharField(max_length=255,blank=True,null=True,choices=SUB_TYPE_CHOICES, verbose_name="subtype")
+    source = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=SOURCE_CHOICES,
+        verbose_name="Lead Source",
+    )
+    sub_type = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=SUB_TYPE_CHOICES,
+        verbose_name="subtype",
+    )
+
     class Meta:
         verbose_name = "Lead"
         verbose_name_plural = "Leads"

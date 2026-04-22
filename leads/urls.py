@@ -19,8 +19,10 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-     path('export/', lead_list, name='lead_list'),
-    path('', create_lead, name="create"),
+    # POST create — must be before "" so "" is not mistaken for "create"
+    path("create/", create_lead, name="create"),
+    # GET list all leads at GET /leads/ (was incorrectly only under /leads/export/)
+    path("export/", lead_list, name="lead_list_export"),
     path('<int:lead_id>/status/', update_lead_status),
     path('<int:lead_id>/', lead_details),
     path('<int:lead_id>/stage/',update_lead_status),
@@ -29,5 +31,7 @@ urlpatterns = [
     path('<int:id>/favorite', ToggleFavoriteView.as_view(), name='toggle-favorite'),
     # path("<int:lead_id>/tasks/",create_task),
     # path("insurance/general-info/<int:lead_id>/",get_insurance_info),
+    # GET list (keep last so "" does not capture numeric paths)
+    path("", lead_list, name="lead_list"),
 ]
 

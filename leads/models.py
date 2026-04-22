@@ -29,7 +29,12 @@ class Lead(models.Model):
         ("call", "Call"),
     ]
 
+    # Lead source (how the lead came in). Kept backward-compatible with older values.
     SOURCE_CHOICES = [
+        ("lead_source", "Lead Source"),
+        ("website", "Website"),
+        ("referral", "Referral"),
+        # legacy
         ("agent", "Agent"),
         ("direct", "Direct"),
     ]

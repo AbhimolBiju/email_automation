@@ -204,7 +204,7 @@ class DashboardStatsView(APIView):
 
         active_leads = Lead.objects.filter(created_at__gte=start_date).count()
 
-        active_deals = Deal.objects.filter(status="active").count()
+        active_deals = Deal.objects.filter(stage_id__lt=12).count()
 
         pending_quotes = QuoteRequest.objects.filter(status="pending").count()
 
@@ -217,7 +217,10 @@ class DashboardStatsView(APIView):
         pending_renewals = Transaction.objects.filter(policy_end_date__lte=now().date() + timedelta(days=30),policy_end_date__gte=now().date()).count()
 
         total_leads = Lead.objects.count()
-        total_deals = Deal.objects.filter(status="closed").count()
+        total_deals = Deal.objects.filter(stage_id__gte=12).count()
+        
+
+
 
         conversion_ratio = (
             f"{round(total_deals / total_leads, 2)}:1"

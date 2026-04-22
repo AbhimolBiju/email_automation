@@ -126,7 +126,7 @@ class ToggleFavoriteView(APIView):
 
 
 @api_view(['PATCH'])
-def update_lead_status(request, lead_id):
+def update_lead_stage(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
     except Lead.DoesNotExist:

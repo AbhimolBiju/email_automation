@@ -26,14 +26,15 @@ class Lead(models.Model):
         ("no", "No"),
     ]
     DELIVERY_CHANNEL_CHOICES = [
-        ("agent", "Agent"),
-        ("direct", "Direct"),
+    ("whatsapp", "WhatsApp"),
+    ("email", "Email"),
+    ("call", "Call"),
     ]
     PRODUCT_TYPE_CHOICES = [
         # ("life", "Life"),
         ("general", "General"),
         ("motor", "Motor"),
-        ("health","Health")
+        ("medical","Medical")
         # ("travel", "Travel"),
         # ("property", "Property"),
     ]
@@ -51,9 +52,8 @@ class Lead(models.Model):
 ]
 
     SOURCE_CHOICES = [
-    ("whatsapp", "WhatsApp"),
-    ("email", "Email"),
-    ("call", "Call"),
+    ("agent", "Agent"),
+    ("direct", "Direct"),
 ]
     
     name = models.CharField(max_length=100)

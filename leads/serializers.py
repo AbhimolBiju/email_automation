@@ -40,7 +40,6 @@ class LeadListSerializer(serializers.ModelSerializer):
     
 from rest_framework import serializers
 from .models import Lead
-
 class CreateLeadSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -53,13 +52,16 @@ class CreateLeadSerializer(serializers.ModelSerializer):
             "phone_number",
             "email",
             "product_type",
+            "insurance_type",
+            "sub_type",
             "delivery_channel",
             "is_pep",
             "responsible",
             "stage",
             "status",
             "progress_score",
-            "is_favorite",
+            "is_favorite",    
+            "source",
             "notes",
         ]
 

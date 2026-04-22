@@ -3,17 +3,18 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegisterStep1Serializer,RegisterStep2Serializer,UserProfileSerializer
+from .serializers import RegisterStep1Serializer,RegisterStep2Serializer,UserProfileSerializer,ChangePasswordSerializer
 from .models import CustomUser,User
 # Create your views here.
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
 def test_api(request):
     return Response({"message":"API working"})
 
-from rest_framework.permissions import AllowAny
+
 
 
 
@@ -313,3 +314,20 @@ class ConversionFunnelView(APIView):
             "invoices": total_invoices,
             "converted": total_transactions
         })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    serializer = ChangePasswordSerializer(
+        data=request.data,
+        context={'request': request}
+    )
+
+    if serializer.is_valid():
+        user = request.user
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+
+        return Response({"message": "Password updated successfully"}, status=200)
+
+    return Response(serializer.errors, status=400)

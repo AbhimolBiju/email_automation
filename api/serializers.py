@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import CustomUser
+from django.contrib.auth.password_validation import validate_password
 
 
 class RegisterStep1Serializer(serializers.Serializer):
@@ -77,3 +78,32 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+class ChangePasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+
+    def validate(self, data):
+        user = self.context['request'].user
+
+        # 1. Check password match
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError({
+                "confirm_password": "Passwords do not match"
+            })
+
+        # 2. Prevent same password reuse
+        if user.check_password(data['new_password']):
+            raise serializers.ValidationError({
+                "new_password": "New password cannot be same as old password"
+            })
+
+        # 3. Strong password validation (Django)
+        try:
+            validate_password(data['new_password'], user)
+        except Exception as e:
+            raise serializers.ValidationError({
+                "new_password": list(e.messages)
+            })
+
+        return data    

@@ -12,6 +12,9 @@ from invoice.serializer import BillingSummarySerializer, ImportStatementSerializ
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils.timezone import now
+from rest_framework.exceptions import ValidationError
+from api.responses import success_response
+from api.responses import error_response
 
 from invoice.serializer import InvoiceSerializer
 
@@ -20,15 +23,16 @@ def create_invoice(request):
     print("DATA:", request.data)
     serializer = InvoiceSerializer(data=request.data)
 
-    if serializer.is_valid():
-        invoice = serializer.save()
-        return Response({
-            "message": "Invoice Created Successfully ",
-            "invoice_id": invoice.id
-        })
+    serializer.is_valid(raise_exception=True)
+    invoice = serializer.save()
+    return success_response(
+        message="Invoice created successfully",
+        data={"id": invoice.id},
+        status_code=201,
+    )
     print("ERROR:", serializer.errors)
 
-    return Response(serializer.errors, status=400)
+    # unreachable (raise_exception=True)
 
 
 
@@ -116,10 +120,16 @@ def invoice_list(request):
             "available_actions": item["available_actions"],
         })
 
-    return Response({
-        "results_found": paginator.count,
-        "data": table_data
-    })
+    return success_response(
+        message="Invoices fetched successfully",
+        data=table_data,
+        meta={
+            "page": int(page_obj.number),
+            "limit": int(paginator.per_page),
+            "total": int(paginator.count),
+            "pages": int(paginator.num_pages),
+        },
+    )
 
 
 @api_view(['GET'])
@@ -174,14 +184,16 @@ def billing_summary(request):
 
     serializer = BillingSummarySerializer(data)
 
-    return Response(serializer.data)
+    return success_response(
+        message="Billing summary fetched successfully",
+        data=serializer.data,
+    )
 
 @api_view(['POST'])
 def import_statement(request):
     serializer = ImportStatementSerializer(data=request.data)
 
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=400)
+    serializer.is_valid(raise_exception=True)
 
     file = serializer.validated_data['file']
 
@@ -192,17 +204,16 @@ def import_statement(request):
         elif file.name.endswith('.xlsx') or file.name.endswith('.xls'):
             df = pd.read_excel(file)
         else:
-            return Response({"error": "Unsupported file format"}, status=400)
+            raise ValidationError({"file": ["Unsupported file format"]})
 
         # 🔹 Convert data to list (optional)
         data = df.to_dict(orient="records")
 
         # 🔹 Example: just return count
-        return Response({
-            "message": "File uploaded successfully",
-            "total_records": len(data),
-            "preview": data[:5]   # first 5 rows
-        })
+        return success_response(
+            message="File uploaded successfully",
+            data={"total_records": len(data), "preview": data[:5]},
+        )
 
     except Exception as e:
-        return Response({"error": str(e)}, status=500)
+        return error_response(message="Something went wrong", code=500)

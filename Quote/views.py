@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 
 from .models import QuoteRequest, Insurer
 from .serializers import QuoteRequestSerializer,ProviderSerializer
+from rest_framework.exceptions import ValidationError
+from api.responses import success_response
 
 
 class QuoteRequestCreateView(APIView):
@@ -18,14 +20,13 @@ class QuoteRequestCreateView(APIView):
     def post(self, request):
         serializer = QuoteRequestSerializer(data=request.data)
 
-        if serializer.is_valid():
-            quote_request = serializer.save()
-            return Response({
-                "message": "Quote request created successfully",
-                "data": QuoteRequestSerializer(quote_request).data
-            }, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        quote_request = serializer.save()
+        return success_response(
+            message="Quote request created successfully",
+            data=QuoteRequestSerializer(quote_request).data,
+            status_code=status.HTTP_201_CREATED,
+        )
 
 
 class QuoteRequestListView(APIView):
@@ -37,10 +38,12 @@ class QuoteRequestListView(APIView):
         queryset = QuoteRequest.objects.all().order_by('-created_at')
         serializer = QuoteRequestSerializer(queryset, many=True)
 
-        return Response({
-            "count": queryset.count(),
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
+        return success_response(
+            message="Quote requests fetched successfully",
+            data=serializer.data,
+            meta={"total": queryset.count()},
+            status_code=status.HTTP_200_OK,
+        )
 
 class QuoteRequestDetailView(APIView):
     """
@@ -51,7 +54,11 @@ class QuoteRequestDetailView(APIView):
         quote = get_object_or_404(QuoteRequest, id=quote_id)  # or quote_id field if exists
         serializer = QuoteRequestSerializer(quote)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)    
+        return success_response(
+            message="Quote request fetched successfully",
+            data=serializer.data,
+            status_code=status.HTTP_200_OK,
+        )
 
 
 from rest_framework.views import APIView
@@ -98,14 +105,18 @@ class QuoteComparisonView(APIView):
                 }
             })
 
-        return Response({
-            "customer": {
-                "name": quote_request.customer_name,
-                "product": quote_request.product_type,
-                "created_at": quote_request.created_at
+        return success_response(
+            message="Quote comparison fetched successfully",
+            data={
+                "customer": {
+                    "name": quote_request.customer_name,
+                    "product": quote_request.product_type,
+                    "created_at": quote_request.created_at,
+                },
+                "providers": providers,
             },
-            "providers": providers
-        })
+            status_code=status.HTTP_200_OK,
+        )
     
 
 from rest_framework.views import APIView
@@ -134,7 +145,7 @@ class QuoteStatsView(APIView):
         elif period == 'this_year':
             start_date = now.replace(month=1, day=1)
         else:
-            return Response({"error": "Invalid period"}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError({"period": ["Invalid period"]})
 
         queryset = QuoteRequest.objects.filter(created_at__gte=start_date)
 
@@ -143,9 +154,13 @@ class QuoteStatsView(APIView):
         sent_count = queryset.filter(status='sent').count()
         accepted_count = queryset.filter(status='accepted').count()
 
-        return Response({
-            "total_quotes": total_quotes,
-            "pending_count": pending_count,
-            "sent_count": sent_count,
-            "accepted_count": accepted_count
-        },status=status.HTTP_200_OK)
+        return success_response(
+            message="Quote stats fetched successfully",
+            data={
+                "total_quotes": total_quotes,
+                "pending_count": pending_count,
+                "sent_count": sent_count,
+                "accepted_count": accepted_count,
+            },
+            status_code=status.HTTP_200_OK,
+        )

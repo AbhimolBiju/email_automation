@@ -4,7 +4,6 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import timedelta
@@ -13,6 +12,8 @@ from .models import  Task
 from leads.models import Lead
 from rest_framework import status,viewsets
 from .serializers import LeadListSerializer, TaskSerializer, WorkflowStatsSerializer
+from rest_framework.exceptions import ValidationError
+from api.responses import success_response
 
 @api_view(['GET'])
 def get_workflow_stats(request):
@@ -53,7 +54,11 @@ def get_workflow_stats(request):
 
     # 4. Serialize and Respond
     serializer = WorkflowStatsSerializer(stats)
-    return Response(serializer.data)
+    return success_response(
+        message="Workflow stats fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
 
 @api_view(['POST'])
 def create_task(request, lead_id=None):  # <--- accept lead_id
@@ -62,14 +67,13 @@ def create_task(request, lead_id=None):  # <--- accept lead_id
         data['lead'] = lead_id  # attach lead_id to request data
 
     serializer = TaskSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(
-            {"message": "Task created successfully", "data": serializer.data},
-            status=201
-        )
-
-    return Response(serializer.errors, status=400)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return success_response(
+        message="Task created successfully",
+        data=serializer.data,
+        status_code=status.HTTP_201_CREATED,
+    )
 
 @api_view(['GET'])
 def list_task(request):
@@ -81,12 +85,11 @@ def list_task(request):
 
     serializer = TaskSerializer(tasks, many=True)
 
-    return Response(
-        {
-            "message": "Tasks fetched successfully",
-            "data": serializer.data
-        },
-        status=200
+    return success_response(
+        message="Tasks fetched successfully",
+        data=serializer.data,
+        meta={"total": tasks.count()},
+        status_code=status.HTTP_200_OK,
     )
 
 @api_view(['GET'])
@@ -96,12 +99,11 @@ def completed_tasks(request):
 
     serializer = TaskSerializer(tasks, many=True)
 
-    return Response(
-        {
-            "message": "Completed tasks fetched successfully",
-            "data": serializer.data
-        },
-        status=200
+    return success_response(
+        message="Completed tasks fetched successfully",
+        data=serializer.data,
+        meta={"total": tasks.count()},
+        status_code=status.HTTP_200_OK,
     )
 @api_view(['GET'])
 def lead_list(request):
@@ -109,10 +111,12 @@ def lead_list(request):
 
     serializer = LeadListSerializer(leads, many=True)
 
-    return Response({
-        "total_count": leads.count(),
-        "results": serializer.data
-    })
+    return success_response(
+        message="Leads fetched successfully",
+        data=serializer.data,
+        meta={"total": leads.count()},
+        status_code=status.HTTP_200_OK,
+    )
 
 
 

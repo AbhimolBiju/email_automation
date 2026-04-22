@@ -1,10 +1,12 @@
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from .models import Lead, LeadActivity
 from .serializers import (LeadListSerializer,LeadStatusUpdateSerializer,CreateLeadSerializer)
 from rest_framework import status,viewsets
 from django.shortcuts import render
 from .serializers import LeadDetailsSerializer, LeadActivitySerializer,LeadstageUpdateSerializer
+from rest_framework.exceptions import NotFound
+
+from api.responses import success_response
 
 
 @api_view(['GET'])
@@ -12,27 +14,24 @@ def lead_list(request):
     leads = Lead.objects.all().order_by('-created_at')
     serializer = LeadListSerializer(leads, many=True)
 
-    return Response({
-        "total_count": leads.count(),
-        "results": serializer.data
-    })
+    return success_response(
+        message="Leads fetched successfully",
+        data=serializer.data,
+        meta={"total": leads.count()},
+        status_code=status.HTTP_200_OK,
+    )
 
 @api_view(['POST'])
 def create_lead(request):
     serializer = CreateLeadSerializer(data=request.data)
 
-    if serializer.is_valid():
-        lead = serializer.save()
-
-        return Response(
-            {
-                "message": "Lead created successfully",
-                "lead_id": lead.id
-            },
-            status=status.HTTP_201_CREATED
-        )
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    lead = serializer.save()
+    return success_response(
+        message="Lead created successfully",
+        data={"id": lead.id},
+        status_code=status.HTTP_201_CREATED,
+    )
 
 
 @api_view(['PATCH'])
@@ -40,7 +39,7 @@ def update_lead_status(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
     except Lead.DoesNotExist:
-        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+        raise NotFound("Lead not found")
 
     serializer = LeadStatusUpdateSerializer(
         lead,
@@ -48,14 +47,13 @@ def update_lead_status(request, lead_id):
         partial=True  
     )
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response({
-            "message": "Lead status updated successfully",
-            "id": lead.id,
-            "status": lead.status
-        })
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return success_response(
+        message="Lead status updated successfully",
+        data={"id": lead.id, "status": lead.status},
+        status_code=status.HTTP_200_OK,
+    )
 
 
 
@@ -65,10 +63,14 @@ def lead_details(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
     except Lead.DoesNotExist:
-        return Response({"error": "Lead not found"}, status=404)
+        raise NotFound("Lead not found")
 
     serializer = LeadDetailsSerializer(lead)
-    return Response(serializer.data)
+    return success_response(
+        message="Lead fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
 
 
 @api_view(['POST'])
@@ -76,18 +78,17 @@ def create_activity(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
     except Lead.DoesNotExist:
-        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+        raise NotFound("Lead not found")
 
     serializer = LeadActivitySerializer(data=request.data)
 
-    if serializer.is_valid():
-        serializer.save(lead=lead) 
-        return Response(
-    {"message": "Activity created successfully"},
-    status=status.HTTP_201_CREATED
-)
-    
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    serializer.save(lead=lead)
+    return success_response(
+        message="Activity created successfully",
+        data=None,
+        status_code=status.HTTP_201_CREATED,
+    )
 
 @api_view(['GET'])
 def lead_activities(request, lead_id):
@@ -95,13 +96,15 @@ def lead_activities(request, lead_id):
 
     serializer = LeadActivitySerializer(activities, many=True)
 
-    return Response({
-        "timeline": serializer.data
-    })
+    return success_response(
+        message="Lead activities fetched successfully",
+        data=serializer.data,
+        meta={"total": activities.count()},
+        status_code=status.HTTP_200_OK,
+    )
 
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
@@ -117,11 +120,11 @@ class ToggleFavoriteView(APIView):
         lead.is_favorite = not lead.is_favorite
         lead.save()
 
-        return Response({
-            "id": lead.id,
-            "is_favorite": lead.is_favorite,
-            "message": "Favorite status updated successfully"
-        }, status=status.HTTP_200_OK)
+        return success_response(
+            message="Favorite status updated successfully",
+            data={"id": lead.id, "is_favorite": lead.is_favorite},
+            status_code=status.HTTP_200_OK,
+        )
     
 
 
@@ -130,7 +133,7 @@ def update_lead_stage(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
     except Lead.DoesNotExist:
-        return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+        raise NotFound("Lead not found")
 
     serializer = LeadstageUpdateSerializer(
         lead,
@@ -138,11 +141,10 @@ def update_lead_stage(request, lead_id):
         partial=True  
     )
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response({
-            "message": "Lead stage updated successfully",
-            "id": lead.id,
-            "status": lead.stage
-        })
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return success_response(
+        message="Lead stage updated successfully",
+        data={"id": lead.id, "stage": lead.stage},
+        status_code=status.HTTP_200_OK,
+    )

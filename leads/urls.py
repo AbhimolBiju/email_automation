@@ -25,7 +25,7 @@ urlpatterns = [
     path("export/", lead_list, name="lead_list_export"),
     path('<int:lead_id>/status/', update_lead_status),
     path('<int:lead_id>/', lead_details),
-    path('<int:lead_id>/stage/',update_lead_stage),
+    path('<int:lead_id>/stage/', update_lead_stage),
     path('<int:lead_id>/activities/create/', create_activity),
     path('<int:lead_id>/activities/', lead_activities),
     path('<int:id>/favorite/', ToggleFavoriteView.as_view(), name='toggle-favorite'),

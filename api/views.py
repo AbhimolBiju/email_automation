@@ -58,12 +58,15 @@ def register_step2(request):
         reg_data['date_of_birth'] = date.fromisoformat(reg_data['date_of_birth'])
 
         # Create User
+        if User.objects.filter(username=reg_data['email']).exists():
+            return Response({"error": "User already registered"}, status=400)
+
         user = User.objects.create_user(
-            username=reg_data['email'],
-            email=reg_data['email'],
-            password=serializer.validated_data['password'],
-            first_name=reg_data['first_name'],
-            last_name=reg_data['last_name']
+        username=reg_data['email'],
+        email=reg_data['email'],
+        password=serializer.validated_data['password'],
+        first_name=reg_data['first_name'],
+        last_name=reg_data['last_name']
         )
 
         # Create CustomUser

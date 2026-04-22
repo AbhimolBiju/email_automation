@@ -5,15 +5,17 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .cookie_auth import clear_refresh_cookie, set_refresh_cookie, refresh_cookie_name
+from .responses import success_response
 from .serializers import RegisterStep1Serializer,RegisterStep2Serializer,UserProfileSerializer
 from .models import CustomUser,User
 # Create your views here.
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound, ValidationError, AuthenticationFailed
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def test_api(request):
-    return Response({"message":"API working"})
+    return success_response(message="API working", data={"status": "ok"})
 
 
 
@@ -22,19 +24,19 @@ def test_api(request):
 def register_step1(request):
     serializer = RegisterStep1Serializer(data=request.data)
 
-    if serializer.is_valid():
-        data = serializer.validated_data.copy()
+    serializer.is_valid(raise_exception=True)
+    data = serializer.validated_data.copy()
 
     
-        data['date_of_birth'] = data['date_of_birth'].isoformat()
+    data['date_of_birth'] = data['date_of_birth'].isoformat()
 
-        request.session['registration_data'] = data
+    request.session['registration_data'] = data
 
-        return Response({
-            "message": "Step 1 completed. Proceed to set password."
-        }, status=status.HTTP_200_OK)
-
-    return Response(serializer.errors, status=400)
+    return success_response(
+        message="Step 1 completed. Proceed to set password.",
+        data=None,
+        status_code=status.HTTP_200_OK,
+    )
 
 
 
@@ -47,42 +49,40 @@ from datetime import date
 def register_step2(request):
     serializer = RegisterStep2Serializer(data=request.data)
 
-    if serializer.is_valid():
-
-        reg_data = request.session.get('registration_data')
+    serializer.is_valid(raise_exception=True)
+    reg_data = request.session.get('registration_data')
         
         
-        if not reg_data:
-            return Response({"error": "Session expired. Start again."}, status=400)
+    if not reg_data:
+        raise ValidationError({"registration": ["Session expired. Start again."]})
         
-        reg_data['date_of_birth'] = date.fromisoformat(reg_data['date_of_birth'])
+    reg_data['date_of_birth'] = date.fromisoformat(reg_data['date_of_birth'])
 
-        # Create User
-        user = User.objects.create_user(
-            username=reg_data['email'],
-            email=reg_data['email'],
-            password=serializer.validated_data['password'],
-            first_name=reg_data['first_name'],
-            last_name=reg_data['last_name']
-        )
+    # Create User
+    user = User.objects.create_user(
+        username=reg_data['email'],
+        email=reg_data['email'],
+        password=serializer.validated_data['password'],
+        first_name=reg_data['first_name'],
+        last_name=reg_data['last_name']
+    )
 
-        # Create CustomUser
-        CustomUser.objects.create(
-            user=user,
-            mobile=reg_data['mobile'],
-            date_of_birth=reg_data['date_of_birth'],
-            gender=reg_data['gender']
-        )
+    # Create CustomUser
+    CustomUser.objects.create(
+        user=user,
+        mobile=reg_data['mobile'],
+        date_of_birth=reg_data['date_of_birth'],
+        gender=reg_data['gender']
+    )
 
-        # Clear session
-        del request.session['registration_data']
+    # Clear session
+    del request.session['registration_data']
 
-        return Response(
-            {"message": "Registration successful"},
-            status=status.HTTP_201_CREATED,
-        )
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return success_response(
+        message="Registration successful",
+        data={"user_id": user.id},
+        status_code=status.HTTP_201_CREATED,
+    )
 
 
 @api_view(['POST'])
@@ -99,22 +99,23 @@ def login_user(request):
         access = str(refresh.access_token)
         refresh_str = str(refresh)
 
-        response = Response({
-            "message": "Login successful",
-            "access": access,
-            "user": {
-                "id": user.id,
-                "email": getattr(user, "email", None),
-                "username": user.username,
+        response = success_response(
+            message="Login successful",
+            data={
+                "access": access,
+                "user": {
+                    "id": user.id,
+                    "email": getattr(user, "email", None),
+                    "username": user.username,
+                },
             },
-        })
+            status_code=status.HTTP_200_OK,
+        )
         # Refresh token only via HttpOnly cookie (not in JSON).
         set_refresh_cookie(response, refresh_str)
         return response
 
-    return Response({
-        "error": "Invalid credentials"
-    }, status=status.HTTP_401_UNAUTHORIZED)
+    raise AuthenticationFailed("Unauthorized")
 
 
 
@@ -129,7 +130,7 @@ def logout_user(request):
     refresh_token = request.COOKIES.get(refresh_cookie_name()) or request.data.get(
         "refresh"
     )
-    response = Response({"message": "Logout successful"})
+    response = success_response(message="Logout successful", data=None)
     if refresh_token:
         try:
             token = RefreshToken(refresh_token)
@@ -143,10 +144,10 @@ def logout_user(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])  #Protected
 def protected_view(request):
-    return Response({
-        "message": "Access granted",
-        "user": request.user.username
-    })
+    return success_response(
+        message="Access granted",
+        data={"user": request.user.username},
+    )
 
 
 
@@ -157,11 +158,11 @@ def user_profile(request):
     try:
         profile = request.user.user_profile
     except CustomUser.DoesNotExist:
-        return Response({"error": "Profile not found"}, status=404)
+        raise NotFound("Profile not found")
 
     if request.method == 'GET':
         serializer = UserProfileSerializer(profile)
-        return Response(serializer.data)
+        return success_response(message="Profile fetched successfully", data=serializer.data)
 
     if request.method in ['PUT', 'PATCH']:
         serializer = UserProfileSerializer(
@@ -172,12 +173,9 @@ def user_profile(request):
 
         if serializer.is_valid():
             serializer.save()
-            return Response({
-                "message": "Profile updated successfully",
-                "data": serializer.data
-            })
+            return success_response(message="Profile updated successfully", data=serializer.data)
 
-        return Response(serializer.errors, status=400)
+        serializer.is_valid(raise_exception=True)
 
 
 
@@ -238,7 +236,7 @@ class DashboardStatsView(APIView):
             "pending_renewals": pending_renewals,
         }
 
-        return Response(data)
+        return success_response(message="Dashboard stats fetched successfully", data=data)
 
 
 
@@ -246,7 +244,7 @@ class DashboardStatsView(APIView):
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from rest_framework.views import APIView
-from rest_framework.response import Response
+from api.responses import success_response
 
 from invoice.models import Transaction
 
@@ -274,7 +272,7 @@ class SalesTrendView(APIView):
 
             result[month][policy] = total
 
-        return Response(result)
+        return success_response(message="Sales trend fetched successfully", data=result)
     
 class ProductMixView(APIView):
     def get(self, request):
@@ -297,7 +295,7 @@ class ProductMixView(APIView):
                 "value": round(percentage, 2)
             })
 
-        return Response(result)
+        return success_response(message="Product mix fetched successfully", data=result)
     
 class RevenueTrendView(APIView):
     def get(self, request):
@@ -318,7 +316,7 @@ class RevenueTrendView(APIView):
             for item in data
         ]
 
-        return Response(result)
+        return success_response(message="Revenue trend fetched successfully", data=result)
     
 
 from django.db.models import Count
@@ -329,7 +327,7 @@ class ConversionFunnelView(APIView):
         total_invoices = Transaction.objects.count()
         total_transactions = Transaction.objects.count()
 
-        return Response({
-            "invoices": total_invoices,
-            "converted": total_transactions
-        })
+        return success_response(
+            message="Conversion funnel fetched successfully",
+            data={"invoices": total_invoices, "converted": total_transactions},
+        )

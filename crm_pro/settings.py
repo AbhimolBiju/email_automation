@@ -165,7 +165,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',  # sensible default
-    ]
+    ],
+    'EXCEPTION_HANDLER': 'api.exception_handler.custom_exception_handler',
 }
 
 #Keep only ONE AUTHENTICATION_BACKENDS 

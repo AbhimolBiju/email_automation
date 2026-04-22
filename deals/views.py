@@ -1,5 +1,4 @@
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Sum,Count
 from .models import Deal
@@ -15,6 +14,8 @@ from .serializers import (
     DealAdditionalFieldSerializer
 )
 from django.utils.dateformat import DateFormat
+from rest_framework.exceptions import NotFound, ValidationError
+from api.responses import success_response
 
 
 
@@ -41,13 +42,11 @@ def pipeline_summary(request):
             "count": count_map.get(stage_id, 0)
         })
 
-    return Response({
-        "status": "success",
-        "data": {
-            "workflow_id": "insurance_v3",
-            "stages": data
-        }
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Pipeline summary fetched successfully",
+        data={"workflow_id": "insurance_v3", "stages": data},
+        status_code=status.HTTP_200_OK,
+    )
     
     
 
@@ -117,14 +116,15 @@ def deals_board(request):
             "deals": deal_list
         })
 
-    return Response({
-    "success": True,
-    "data": {
-        "total_board_value": total_board_value,
-        "currency": "AED",
-        "columns": columns
-            }
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals board fetched successfully",
+        data={
+            "total_board_value": total_board_value,
+            "currency": "AED",
+            "columns": columns,
+        },
+        status_code=status.HTTP_200_OK,
+    )
     
 
 
@@ -145,10 +145,12 @@ def search_deals(request):
 
     serializer = DealListSerializer(deals, many=True)
 
-    return Response({
-        "success": True,
-        "data": serializer.data
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals fetched successfully",
+        data=serializer.data,
+        meta={"total": deals.count()},
+        status_code=status.HTTP_200_OK,
+    )
 
 
 
@@ -162,10 +164,12 @@ def export_deals(request):
 
     serializer = DealExportSerializer(deals, many=True)
 
-    return Response({
-        "success": True,
-        "data": serializer.data
-        }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals exported successfully",
+        data=serializer.data,
+        meta={"total": deals.count()},
+        status_code=status.HTTP_200_OK,
+    )
     
     
     
@@ -178,10 +182,7 @@ def update_deal_stage(request, id):
     try:
         deal = Deal.objects.get(id=id)
     except Deal.DoesNotExist:
-        return Response(
-            {"message": "Deal not found"},
-            status=status.HTTP_404_NOT_FOUND
-        )
+        raise NotFound("Deal not found")
 
     serializer = DealStageUpdateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -195,19 +196,16 @@ def update_deal_stage(request, id):
 
     stage_map = dict(Deal.STAGE_CHOICES)
 
-    return Response({
-        "message": "Deal stage updated successfully",
-        "deal_id": deal.id,
-        "from": {
-            "id": old_stage_id,
-            "name": stage_map.get(old_stage_id)
+    return success_response(
+        message="Deal stage updated successfully",
+        data={
+            "deal_id": deal.id,
+            "from": {"id": old_stage_id, "name": stage_map.get(old_stage_id)},
+            "to": {"id": new_stage_id, "name": stage_map.get(new_stage_id)},
+            "reason": reason,
         },
-        "to": {
-            "id": new_stage_id,
-            "name": stage_map.get(new_stage_id)
-        },
-        "reason": reason
-    }, status=status.HTTP_200_OK)
+        status_code=status.HTTP_200_OK,
+    )
 
 
 
@@ -222,12 +220,12 @@ def deals_by_stage(request):
     stage_id = request.GET.get('stage_id')
 
     if not stage_id:
-        return Response({"message": "stage_id is required"}, status=400)
+        raise ValidationError({"stage_id": ["stage_id is required"]})
 
     try:
         stage_id = int(stage_id)
     except ValueError:
-        return Response({"message": "Invalid stage_id"}, status=400)
+        raise ValidationError({"stage_id": ["Invalid stage_id"]})
 
     deals = Deal.objects.filter(stage_id=stage_id)
 
@@ -235,15 +233,16 @@ def deals_by_stage(request):
 
     stage_name = dict(Deal.STAGE_CHOICES).get(stage_id)
 
-    return Response({
-    "success": True,
-    "data": {
-        "stage_id": stage_id,
-        "stage_name": stage_name,
-        "count": deals.count(),
-        "results": serializer.data
-        }
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals fetched successfully",
+        data=serializer.data,
+        meta={
+            "stage_id": stage_id,
+            "stage_name": stage_name,
+            "total": deals.count(),
+        },
+        status_code=status.HTTP_200_OK,
+    )
     
     
     
@@ -282,10 +281,11 @@ def deal_filter_options(request):
     serializer = FilterOptionsResponseSerializer(data=data)
     serializer.is_valid(raise_exception=True)
 
-    return Response({
-    "success": True,
-    "data": serializer.data
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deal filter options fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
 
 
 
@@ -319,14 +319,12 @@ def deal_list(request):
 
     serializer = DealListSerializer(deals, many=True)
 
-    return Response({
-    "success": True,
-    "data": {
-        "view": view,
-        "count": deals.count(),
-        "results": serializer.data
-        }
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals fetched successfully",
+        data=serializer.data,
+        meta={"view": view, "total": deals.count()},
+        status_code=status.HTTP_200_OK,
+    )
     
     
     
@@ -385,15 +383,16 @@ def deals_board_paginated(request):
             "deals": deal_list
         })
 
-    return Response({
-    "success": True,
-    "data": {
-        "offset_stage": offset_stage,
-        "limit_columns": limit_columns,
-        "columns_returned": len(columns),
-        "columns": columns
-        }
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals board fetched successfully",
+        data={"columns": columns},
+        meta={
+            "offset_stage": offset_stage,
+            "limit_columns": limit_columns,
+            "columns_returned": len(columns),
+        },
+        status_code=status.HTTP_200_OK,
+    )
     
     
     
@@ -409,12 +408,12 @@ def grouped_deals(request):
 
    
     if not stages_param:
-        return Response({"message": "stages param is required"}, status=400)
+        raise ValidationError({"stages": ["stages param is required"]})
 
     try:
         stage_ids = [int(s) for s in stages_param.split(',')]
     except:
-        return Response({"message": "Invalid stages format"}, status=400)
+        raise ValidationError({"stages": ["Invalid stages format"]})
 
     stage_map = dict(Deal.STAGE_CHOICES)
 
@@ -433,14 +432,12 @@ def grouped_deals(request):
             "results": serializer.data
         })
 
-    return Response({
-    "success": True,
-    "data": {
-        "total_stages": len(stage_ids),
-        "limit_per_stage": limit,
-        "data": response_data
-        }
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deals fetched successfully",
+        data=response_data,
+        meta={"total_stages": len(stage_ids), "limit_per_stage": limit},
+        status_code=status.HTTP_200_OK,
+    )
     
     
     
@@ -450,17 +447,13 @@ def grouped_deals(request):
 def create_deal(request):
     serializer = DealCreateSerializer(data=request.data)
 
-    if serializer.is_valid():
-        deal = serializer.save()
-        return Response({
-        "success": True,
-        "message": "Deal created successfully",
-        "data": {
-        "deal_id": deal.id
-        }
-    }, status=status.HTTP_201_CREATED)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    deal = serializer.save()
+    return success_response(
+        message="Deal created successfully",
+        data={"id": deal.id},
+        status_code=status.HTTP_201_CREATED,
+    )
 
 
 
@@ -471,16 +464,14 @@ def deal_underwriter_information(request, deal_id):
     try:
         deal = Deal.objects.get(id=deal_id)
     except Deal.DoesNotExist:
-        return Response(
-            {"message": "Deal not found"},
-            status=status.HTTP_404_NOT_FOUND
-        )
+        raise NotFound("Deal not found")
 
     serializer = DealGeneralInfoSerializer(deal)
-    return Response({
-    "success": True,
-    "data": serializer.data
-    }, status=status.HTTP_200_OK)
+    return success_response(
+        message="Deal information fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
 
 
 
@@ -493,10 +484,7 @@ def update_additional_field(request, deal_id):
     try:
         deal = Deal.objects.get(id=deal_id)
     except Deal.DoesNotExist:
-        return Response(
-            {"message": "Deal not found"},
-            status=status.HTTP_404_NOT_FOUND
-        )
+        raise NotFound("Deal not found")
 
     serializer = DealAdditionalFieldSerializer(
         deal,
@@ -504,12 +492,10 @@ def update_additional_field(request, deal_id):
         partial=True 
     )
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response({
-            "success": True,
-            "message": "Additional field updated successfully",
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return success_response(
+        message="Additional field updated successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )

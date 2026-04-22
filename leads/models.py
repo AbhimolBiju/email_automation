@@ -30,9 +30,8 @@ class Lead(models.Model):
     ]
 
     SOURCE_CHOICES = [
-        ("lead_source", "Lead Source"),
-        ("website", "Website"),
-        ("referral", "Referral"),
+        ("agent", "Agent"),
+        ("direct", "Direct"),
     ]
     PRODUCT_TYPE_CHOICES = [
         ("general", "General"),

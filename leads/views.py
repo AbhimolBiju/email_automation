@@ -293,4 +293,4 @@ class StatsView(APIView):
             },
         ]
 
-        return Response(data)
+        return Response({"success": True, "message": "Stats fetched successfully", "data": data}, status=status.HTTP_200_OK)

@@ -1,3 +1,4 @@
+from requests import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from django.db.models import Sum,Count
@@ -49,7 +50,9 @@ def pipeline_summary(request):
     )
     
     
-
+    
+from rest_framework.response import Response
+from rest_framework import status
 
 
 @api_view(['GET'])
@@ -66,66 +69,42 @@ def deals_board(request):
 
     stages = dict(Deal.STAGE_CHOICES)
 
-    columns = []
-    total_board_value = 0
+    response_data = []
 
     for stage_id, label in stages.items():
 
         if stage_filter and stage_id not in stage_ids:
             continue
 
-        stage_deals = deals.filter(stage_id=stage_id)
-
-        total_value = stage_deals.count()
-
-        total_board_value += total_value
+        stage_deals = deals.filter(stage_id=stage_id).select_related('lead')
 
         deal_list = []
 
         for deal in stage_deals:
+            lead = deal.lead
+
             deal_list.append({
-                "id": str(deal.id),
-                "title": f"Deal #{deal.id}",
-
-                "client": {
-                    "name": deal.lead.name if deal.lead else "",
-                    "last_contact": "N/A"
-                },
-
-                "responsible_person": {
-                    "id": str(deal.lead.responsible.id) if deal.lead and deal.lead.responsible else "",
-                    "name": str(deal.lead.responsible) if deal.lead and deal.lead.responsible else "",
-                    "avatar": ""
-                },
-
-                "source": deal.lead.delivery_channel if deal.lead else "",
-
-                "modified_at": DateFormat(deal.updated_at).format("Y-m-d\\TH:i:s\\Z"),
-
-                "activity_count": 0,
-                "is_favorite": False,
-                "actions": ["call", "email", "chat"]
+                "deal_id": deal.id,
+                "lead": {
+                    "id": lead.id if lead else None,
+                    "name": lead.name if lead else "",
+                    "email": lead.email if lead else "",
+                    "status": lead.status if lead else "",
+                    "mobile_number": lead.mobile_number if lead else "",
+                    "updated_at": DateFormat(lead.updated_at).format('Y-m-d H:i') if lead else ""
+                    
+                } if lead else None
             })
 
-        columns.append({
+        response_data.append({
             "stage_id": stage_id,
             "label": label,
-            "total_value": total_value,
             "deal_count": stage_deals.count(),
-            "color_theme": "blue",
             "deals": deal_list
         })
 
-    return success_response(
-        message="Deals board fetched successfully",
-        data={
-            "total_board_value": total_board_value,
-            "currency": "AED",
-            "columns": columns,
-        },
-        status_code=status.HTTP_200_OK,
-    )
-    
+    return Response(response_data, status=status.HTTP_200_OK)
+
 
 
 

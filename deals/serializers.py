@@ -105,12 +105,12 @@ class DealSerializer(serializers.ModelSerializer):
 
 
 
-from .models import  DealDocument
+from .models import DealDocument
 
 class DealDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DealDocument
-        fields = ['id', 'file', 'uploaded_at']
+        fields = ["id", "document_type", "file", "uploaded_at"]
 
 
 class DealCreateSerializer(serializers.ModelSerializer):
@@ -119,18 +119,38 @@ class DealCreateSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
+    driving_license_front = serializers.FileField(write_only=True, required=False)
+    driving_license_back = serializers.FileField(write_only=True, required=False)
+    emirates_id_front = serializers.FileField(write_only=True, required=False)
+    emirates_id_back = serializers.FileField(write_only=True, required=False)
+    mulkiya_id_front = serializers.FileField(write_only=True, required=False)
+    mulkiya_id_back = serializers.FileField(write_only=True, required=False)
 
     class Meta:
         model = Deal
-        fields = '__all__'   # includes all Deal fields + documents
+        fields = "__all__"   # includes all Deal fields + upload fields
 
     def create(self, validated_data):
         documents = validated_data.pop('documents', [])
+        typed_docs = {
+            "driving_license_front": validated_data.pop("driving_license_front", None),
+            "driving_license_back": validated_data.pop("driving_license_back", None),
+            "emirates_id_front": validated_data.pop("emirates_id_front", None),
+            "emirates_id_back": validated_data.pop("emirates_id_back", None),
+            "mulkiya_id_front": validated_data.pop("mulkiya_id_front", None),
+            "mulkiya_id_back": validated_data.pop("mulkiya_id_back", None),
+        }
 
         deal = Deal.objects.create(**validated_data)
 
+        for doc_type, file in typed_docs.items():
+            if file:
+                DealDocument.objects.create(
+                    deal=deal, document_type=doc_type, file=file
+                )
+
         for file in documents:
-            DealDocument.objects.create(deal=deal, file=file)
+            DealDocument.objects.create(deal=deal, document_type="other", file=file)
 
         return deal
     

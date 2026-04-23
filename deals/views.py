@@ -454,7 +454,58 @@ def grouped_deals(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_deal(request):
-    serializer = DealCreateSerializer(data=request.data)
+    data = request.data.copy()
+
+    lead_id = data.get("lead") or data.get("lead_id")
+    if not lead_id:
+        # Create (or reuse) Lead from payload when lead id isn't provided.
+        lead_name = (
+            data.get("lead_name")
+            or data.get("name")
+            or data.get("customer_name")
+            or data.get("full_name")
+        )
+        lead_email = data.get("lead_email") or data.get("email")
+        lead_mobile = data.get("mobile_number") or data.get("phone_number") or data.get(
+            "mobile"
+        )
+
+        if not lead_name or not lead_email:
+            raise ValidationError(
+                {
+                    "lead": [
+                        "Missing lead info. Provide lead_id/lead, or include name & email in payload."
+                    ]
+                }
+            )
+
+        lead_defaults = {
+            "mobile_number": lead_mobile,
+            "phone_number": lead_mobile,
+            # Reasonable defaults for deals created from a qualified lead flow
+            "stage": data.get("lead_stage") or "sales_qualified_lead",
+            "status": data.get("lead_status") or "QUALIFIED",
+        }
+
+        lead, _created = Lead.objects.get_or_create(
+            email=lead_email, defaults={"name": lead_name, **lead_defaults}
+        )
+
+        # Keep name/mobile in sync if the request provides them.
+        changed = False
+        if lead_name and lead.name != lead_name:
+            lead.name = lead_name
+            changed = True
+        if lead_mobile and (lead.mobile_number != lead_mobile):
+            lead.mobile_number = lead_mobile
+            lead.phone_number = lead_mobile
+            changed = True
+        if changed:
+            lead.save(update_fields=["name", "mobile_number", "phone_number", "updated_at"])
+
+        data["lead"] = str(lead.id)
+
+    serializer = DealCreateSerializer(data=data)
 
     serializer.is_valid(raise_exception=True)
     deal = serializer.save()

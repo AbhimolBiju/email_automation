@@ -90,7 +90,19 @@ class Deal(models.Model):
     
     
 class DealDocument(models.Model):
+    DOCUMENT_TYPES = [
+        ("driving_license_front", "Driving License (Front)"),
+        ("driving_license_back", "Driving License (Back)"),
+        ("emirates_id_front", "Emirates ID (Front)"),
+        ("emirates_id_back", "Emirates ID (Back)"),
+        ("mulkiya_id_front", "Mulkiya ID (Front)"),
+        ("mulkiya_id_back", "Mulkiya ID (Back)"),
+        ("other", "Other"),
+    ]
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE, related_name='documents')
+    document_type = models.CharField(
+        max_length=50, choices=DOCUMENT_TYPES, default="other"
+    )
     file = models.FileField(upload_to='deal_documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     

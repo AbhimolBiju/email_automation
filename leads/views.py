@@ -19,7 +19,9 @@ from api.responses import success_response
 
 @api_view(['GET'])
 def lead_list(request):
-    leads = Lead.objects.all().order_by('-created_at')
+    leads = (
+        Lead.objects.exclude(stage="sales_qualified_lead").order_by("-created_at")
+    )
     serializer = LeadListSerializer(leads, many=True)
 
     return success_response(

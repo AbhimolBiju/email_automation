@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.db.models import Sum,Count
 from .models import Deal
+from leads.models import Lead
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from .serializers import (
@@ -71,6 +72,16 @@ def deals_board(request):
 
     response_data = []
 
+    # For stage_id=1 ("Potential Customer"), we want to show Leads that have
+    # reached Lead.stage == "sales_qualified_lead" even if a Deal record doesn't exist yet.
+    sales_qualified_leads = None
+    if not stage_filter or 1 in (stage_ids if stage_filter else []):
+        sales_qualified_leads = (
+            Lead.objects.filter(stage="sales_qualified_lead")
+            .exclude(deals__isnull=False)  # only those not already linked to a Deal
+            .order_by("-updated_at")
+        )
+
     for stage_id, label in stages.items():
 
         if stage_filter and stage_id not in stage_ids:
@@ -79,6 +90,25 @@ def deals_board(request):
         stage_deals = deals.filter(stage_id=stage_id).select_related('lead')
 
         deal_list = []
+
+        if stage_id == 1 and sales_qualified_leads is not None:
+            for lead in sales_qualified_leads:
+                deal_list.append(
+                    {
+                        # No Deal exists yet; use a stable synthetic id for UI
+                        "deal_id": int(lead.id),
+                        "lead": {
+                            "id": lead.id,
+                            "name": lead.name or "",
+                            "email": lead.email or "",
+                            "status": lead.status or "",
+                            "mobile_number": lead.mobile_number or "",
+                            "updated_at": DateFormat(lead.updated_at).format(
+                                "Y-m-d H:i"
+                            ),
+                        },
+                    }
+                )
 
         for deal in stage_deals:
             lead = deal.lead
@@ -99,7 +129,7 @@ def deals_board(request):
         response_data.append({
             "stage_id": stage_id,
             "label": label,
-            "deal_count": stage_deals.count(),
+            "deal_count": len(deal_list),
             "deals": deal_list
         })
 

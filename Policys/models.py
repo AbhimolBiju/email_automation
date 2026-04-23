@@ -1,48 +1,52 @@
 from django.db import models
-
+from Quote.models import Insurer,QuoteRequest
 # Create your models here.
-from django.db import models
+# models.py
 
 class Policy(models.Model):
-    # --- Identification & Primary Key ---
-    i_policy_id = models.IntegerField(primary_key=True)  # The link for other tables
-    pol_no = models.IntegerField(null=True, blank=True)
-    on_poi_no = models.IntegerField(null=True, blank=True)
-    ion_poi_no = models.IntegerField(null=True, blank=True)
-    
-    # --- Status Flags ---
-    open_pol = models.BooleanField(default=False)
-    no_renewal = models.BooleanField(default=False)
-    partial_refund_del = models.BooleanField(default=False)
-    
-    # --- Client & Policy Info ---
-    name_1a = models.CharField(max_length=255, null=True, blank=True)
-    address_1a = models.TextField(null=True, blank=True)
-    cover_type = models.CharField(max_length=100, null=True, blank=True)
-    ins_name = models.CharField(max_length=255, null=True, blank=True)
-    ins_grp = models.CharField(max_length=100, null=True, blank=True)
-    cust_grp = models.CharField(max_length=100, null=True, blank=True)
-    
-    # --- Dates ---
-    to_date = models.DateTimeField(null=True, blank=True)
-    exp_date = models.DateTimeField(null=True, blank=True)
-    due_date = models.DateTimeField(null=True, blank=True)
-    diff_date = models.DateTimeField(null=True, blank=True)
-    self_billing_date = models.DateTimeField(null=True, blank=True)
-    
-    # --- Payment & Accounting ---
-    mode_of_payment = models.IntegerField(null=True, blank=True)
-    mode_of_payment_code = models.IntegerField(null=True, blank=True)
-    pay_inst_years = models.IntegerField(null=True, blank=True)
-    self_billing = models.CharField(max_length=100, null=True, blank=True)
-    self_billing_no = models.IntegerField(null=True, blank=True)
-    cti_amt = models.CharField(max_length=100, null=True, blank=True)
-    
-    # --- Metadata ---
-    usr_name = models.CharField(max_length=100, null=True, blank=True)
-    t_remark = models.TextField(null=True, blank=True)
-    user_ref = models.CharField(max_length=100, null=True, blank=True)
+    policy_id = models.CharField(max_length=50)
+    customer_name = models.CharField(max_length=255)
+    product_type = models.CharField(max_length=100)
+    issue_date = models.DateField()
 
-    class Meta:
-        db_table = 'policy'
-        verbose_name_plural = "Policies"
+    def __str__(self):
+        return self.policy_id
+
+
+class PolicyInsurer(models.Model):
+    PAYMENT_STATUS_CHOICES = [
+        ('paid', 'Paid'),
+        ('pending', 'Pending'),
+        ('not_initiated', 'Not Initiated'),
+    ]
+
+    POLICY_STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('issued', 'Issued'),
+        ('payment_pending', 'Payment Pending'),
+        ('email_flow', 'Email Flow'),
+        ('pending', 'Pending'),
+    ]
+
+    METHOD_CHOICES = [
+        ('api', 'API'),
+        ('email', 'Email'),
+    ]
+
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name='insurers')
+    insurer = models.ForeignKey(Insurer, on_delete=models.CASCADE)
+
+    premium = models.DecimalField(max_digits=10, decimal_places=2)
+    quote_request = models.ForeignKey(
+        QuoteRequest,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES)
+    status = models.CharField(max_length=30, choices=POLICY_STATUS_CHOICES)
+    method = models.CharField(max_length=10, choices=METHOD_CHOICES)
+
+    def __str__(self):
+        return f"{self.policy.policy_id} - {self.insurer}"

@@ -33,7 +33,7 @@ urlpatterns = [
     # path("insurance/general-info/<int:lead_id>/",get_insurance_info),
     # GET list (keep last so "" does not capture numeric paths)
     path("", lead_list, name="lead_list"),
-    path("StatsView/",StatsView.as_view(), name="StatsView"),
+    path("status_view/",StatsView.as_view(), name="StatsView"),
 ]
 
 

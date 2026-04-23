@@ -32,6 +32,7 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").sp
 # CORS: cannot use CORS_ALLOW_ALL_ORIGINS=True with credentials (cookies).
 _cors_default = (
     "http://localhost:5173,http://127.0.0.1:5173,"
+    "http://localhost:5174,http://127.0.0.1:5174,"
     "http://localhost:3000,http://127.0.0.1:3000"
 )
 CORS_ALLOWED_ORIGINS = [

@@ -115,3 +115,31 @@ def view_quote(request, pk):
         "success": True,
         "data": serializer.data
     })
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import AdditionalDocument
+from .serializers import AdditionalDocumentSerializer
+
+class PolicyAdditionalDocumentView(APIView):
+
+    def get(self, request, policy_id):
+        docs = AdditionalDocument.objects.filter(policy_id=policy_id)
+        serializer = AdditionalDocumentSerializer(docs, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, policy_id):
+        data = request.data.copy()
+        data['policy'] = policy_id
+
+        serializer = AdditionalDocumentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "Document uploaded successfully",
+                "data": serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

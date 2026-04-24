@@ -28,3 +28,15 @@ class OCRDocumentDetailSerializer(serializers.ModelSerializer):
             "confidence_score",
             "status",
         ]
+
+
+from rest_framework import serializers
+from .models import Document
+from .validators import validate_file_size
+
+class OCRDocumentSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(validators=[validate_file_size])
+
+    class Meta:
+        model = Document
+        fields = '__all__'

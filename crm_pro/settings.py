@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from datetime import timedelta
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

@@ -39,3 +39,23 @@ class PolicyListSerializer(serializers.ModelSerializer):
             'issue_date',
             'insurers'
         ]
+
+from rest_framework import serializers
+from .models import AdditionalDocument
+
+from rest_framework import serializers
+from .models import AdditionalDocument
+
+def validate_file_size(value):
+    max_size = 2 * 1024 * 1024  # 2MB
+    if value.size > max_size:
+        raise serializers.ValidationError("File size should not exceed 2MB")
+    return value
+
+class AdditionalDocumentSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(validators=[validate_file_size])
+
+    class Meta:
+        model = AdditionalDocument
+        fields = '__all__'
+        read_only_fields = ['id', 'uploaded_at']

@@ -50,3 +50,31 @@ class PolicyInsurer(models.Model):
 
     def __str__(self):
         return f"{self.policy.policy_id} - {self.insurer}"
+    from django.db import models
+
+class AdditionalDocument(models.Model):
+
+    # STATUS_CHOICES = [
+    #     ('PENDING', 'Pending'),
+    #     ('SUBMITTED', 'Submitted'),
+    #     ('VERIFIED', 'Verified'),
+    #     ('REJECTED', 'Rejected'),
+    # ]
+
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name='policy_additional_doc')
+
+
+    document_name = models.CharField(max_length=255)
+    document_type = models.CharField(max_length=100)
+
+    file = models.FileField(upload_to='additional_documents/')
+
+    # remarks = models.TextField(blank=True, null=True)
+
+    # status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    # verified_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.id} - {self.document_name}"

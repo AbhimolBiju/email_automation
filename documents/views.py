@@ -131,3 +131,21 @@ def reject_document(request, id):
         data={"document_id": document.document_id, "status": document.status},
         status_code=status.HTTP_200_OK,
     )
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import OCRDocumentSerializer
+
+@api_view(['POST'])
+def upload_ocr_document(request):
+    serializer = OCRDocumentSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            "message": "Document uploaded successfully",
+            "data": serializer.data
+        }, status=status.HTTP_201_CREATED)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

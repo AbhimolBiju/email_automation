@@ -82,11 +82,30 @@ class Deal(models.Model):
     )
     additional_field = models.TextField(blank=True, null=True)
 
+    # Motor-specific lead fields moved from leads_lead.
+    insurance_type = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=Lead.INSURANCE_TYPE,
+        verbose_name="Insurance_type",
+    )
+    sub_type = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=Lead.SUB_TYPE_CHOICES,
+        verbose_name="subtype",
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Deal {self.id} - {self.reg_number or 'No Reg'}"
+
+    class Meta:
+        db_table = "motor_details"
     
     
 class DealDocument(models.Model):

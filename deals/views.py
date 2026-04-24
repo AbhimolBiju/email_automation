@@ -454,9 +454,12 @@ def grouped_deals(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_deal(request):
-    data = request.data.copy()
+    # NOTE: Do NOT call request.data.copy() for multipart requests.
+    # Django's QueryDict deepcopy will try to pickle uploaded file objects and crash.
+    data = request.data
 
     lead_id = data.get("lead") or data.get("lead_id")
+    lead = None
     if not lead_id:
         # Create (or reuse) Lead from payload when lead id isn't provided.
         lead_name = (
@@ -502,13 +505,16 @@ def create_deal(request):
             changed = True
         if changed:
             lead.save(update_fields=["name", "mobile_number", "phone_number", "updated_at"])
-
-        data["lead"] = str(lead.id)
+    else:
+        try:
+            lead = Lead.objects.get(id=lead_id)
+        except Lead.DoesNotExist:
+            raise ValidationError({"lead": ["Lead not found"]})
 
     serializer = DealCreateSerializer(data=data)
 
     serializer.is_valid(raise_exception=True)
-    deal = serializer.save()
+    deal = serializer.save(**({"lead": lead} if lead is not None else {}))
     return success_response(
         message="Deal created successfully",
         data={"id": deal.id},

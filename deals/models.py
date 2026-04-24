@@ -106,7 +106,8 @@ class DealDocument(models.Model):
     file = models.FileField(upload_to='deal_documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     ocr_response = models.JSONField(blank=True, null=True)
+    source = models.CharField(max_length=100, blank=True, null=True)
+    score = models.FloatField(blank=True, null=True)
     ocr_status = models.BooleanField(default=None, null=True)
     status = models.BooleanField(default=None, null=True)
-
     

@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from deals.models import Deal, DealDocument
-import pytesseract
 from PIL import Image
 import json
 from django.core.files.storage import default_storage
@@ -12,6 +11,23 @@ import os
 
 @api_view(['POST'])
 def upload_document(request):
+    try:
+        import pytesseract  # optional dependency
+    except ModuleNotFoundError:
+        return Response(
+            {
+                "success": False,
+                "message": "OCR dependency not installed (pytesseract).",
+                "errors": {
+                    "ocr": [
+                        "Install pytesseract (pip) and Tesseract OCR (system package) to enable OCR."
+                    ]
+                },
+                "code": 501,
+            },
+            status=status.HTTP_501_NOT_IMPLEMENTED,
+        )
+
     deal_id = request.data.get('deal_id')
     file = request.FILES.get('file')
     document_type = request.data.get('document_type', 'other')

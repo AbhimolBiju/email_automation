@@ -31,10 +31,10 @@ def policy_stats(request):
     return success_response(
         message="Policy stats fetched successfully",
         data={
-            "total_documents": total,
-            "verified_count": active,
-            "pending_review": payment_pending,
-            "rejected_count": link_issued,
+            "total_policy": total,
+            "active_count": active,
+            "payment_pending": payment_pending,
+            "Payment_link_issued": link_issued,
             "pending underwriter": pending_underwriter,
         },
         status_code=status.HTTP_200_OK,

@@ -39,41 +39,39 @@ def policy_stats(request):
         },
         status_code=status.HTTP_200_OK,
     )
+@api_view(['GET'])
+def PolicyQueueView(request):
+    search = request.GET.get('search')
+    payment_status = request.GET.get('payment_status')
+    status = request.GET.get('status')
+    method = request.GET.get('method')
 
-class PolicyQueueView():
+    policies = Policy.objects.prefetch_related('insurers', 'insurers__insurer')
 
-    def get(self, request):
-        search = request.GET.get('search')
-        payment_status = request.GET.get('payment_status')
-        status = request.GET.get('status')
-        method = request.GET.get('method')
+    if search:
+        policies = policies.filter(
+            Q(policy_id__icontains=search) |
+            Q(customer_name__icontains=search)
+        )
 
-        policies = Policy.objects.prefetch_related('insurers', 'insurers__insurer')
+    if payment_status:
+        policies = policies.filter(insurers__payment_status=payment_status)
 
-        if search:
-            policies = policies.filter(
-                Q(policy_id__icontains=search) |
-                Q(customer_name__icontains=search)
-            )
+    if status:
+        policies = policies.filter(insurers__status=status)
 
-        if payment_status:
-            policies = policies.filter(insurers__payment_status=payment_status)
+    if method:
+        policies = policies.filter(insurers__method=method)
 
-        if status:
-            policies = policies.filter(insurers__status=status)
+    policies = policies.distinct().order_by('-issue_date')
 
-        if method:
-            policies = policies.filter(insurers__method=method)
+    serializer = PolicyListSerializer(policies, many=True)
 
-        policies = policies.distinct().order_by('-issue_date')
-
-        serializer = PolicyListSerializer(policies, many=True)
-
-        return Response({
-            "success": True,
-            "message": "Policy queue fetched successfully",
-            "data": serializer.data
-        })
+    return Response({
+        "success": True,
+        "message": "Policy queue fetched successfully",
+        "data": serializer.data
+    })
     
 
 from rest_framework.decorators import api_view

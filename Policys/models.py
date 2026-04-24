@@ -22,10 +22,10 @@ class PolicyInsurer(models.Model):
 
     POLICY_STATUS_CHOICES = [
         ('active', 'Active'),
-        ('issued', 'Issued'),
-        ('payment_pending', 'Payment Pending'),
-        ('email_flow', 'Email Flow'),
-        ('pending', 'Pending'),
+        ('link_issued', 'Link_Issued'),
+        ('payment_pending', 'Payment_Pending'),
+        ('email_flow', 'Email_Flow'),
+        ('pending_underwriter', 'Pending_underwriter'),
     ]
 
     METHOD_CHOICES = [

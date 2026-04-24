@@ -2,14 +2,45 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q
 from .models import Policy, PolicyInsurer
 from .serializers import PolicyListSerializer
+from api.responses import success_response
+from .utils import get_date_filter
+from rest_framework import status
+@api_view(['GET'])
+def policy_stats(request):
+    period = request.GET.get("period")
 
+    queryset = PolicyInsurer.objects.all()
 
-class PolicyQueueView(APIView):
+    # Filter by Policy issue_date
+    date_filter = get_date_filter(period)
+    if date_filter:
+        queryset = queryset.filter(policy__issue_date__gte=date_filter)
+
+    total = queryset.count()
+
+    active = queryset.filter(status='active').count()
+    payment_pending = queryset.filter(status='payment_pending').count()
+    link_issued = queryset.filter(status='link_issued').count()
+    pending_underwriter = queryset.filter(status='pending').count()
+
+    return success_response(
+        message="Policy stats fetched successfully",
+        data={
+            "total_documents": total,
+            "verified_count": active,
+            "pending_review": payment_pending,
+            "rejected_count": link_issued,
+            "pending underwriter": pending_underwriter,
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+class PolicyQueueView():
 
     def get(self, request):
         search = request.GET.get('search')

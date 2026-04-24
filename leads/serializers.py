@@ -1,11 +1,14 @@
 from rest_framework import serializers
 
 from .models import Lead
+from deals.models import Deal
 class LeadListSerializer(serializers.ModelSerializer):
     contact = serializers.SerializerMethodField()
     timestamps = serializers.SerializerMethodField()
     source_info = serializers.SerializerMethodField()
     assignment = serializers.SerializerMethodField()
+    insurance_type = serializers.SerializerMethodField()
+    sub_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Lead
@@ -37,10 +40,25 @@ class LeadListSerializer(serializers.ModelSerializer):
             "progress_score": obj.progress_score,
             "responsible": obj.responsible.id if obj.responsible else None,
         }
+
+    def get_insurance_type(self, obj):
+        motor = getattr(obj, "motor_product", None)
+        return getattr(motor, "insurance_type", None) if motor else None
+
+    def get_sub_type(self, obj):
+        motor = getattr(obj, "motor_product", None)
+        return getattr(motor, "sub_type", None) if motor else None
     
 from rest_framework import serializers
 from .models import Lead
 class CreateLeadSerializer(serializers.ModelSerializer):
+    # Keep request compatibility, but store these in motor_details.
+    insurance_type = serializers.ChoiceField(
+        choices=Lead.INSURANCE_TYPE, required=False, allow_null=True
+    )
+    sub_type = serializers.ChoiceField(
+        choices=Lead.SUB_TYPE_CHOICES, required=False, allow_null=True
+    )
 
     class Meta:
         model = Lead
@@ -64,6 +82,24 @@ class CreateLeadSerializer(serializers.ModelSerializer):
             "source",
             "notes",
         ]
+
+    def create(self, validated_data):
+        insurance_type = validated_data.pop("insurance_type", None)
+        sub_type = validated_data.pop("sub_type", None)
+        lead = Lead.objects.create(**validated_data)
+
+        # For motor leads, create/update motor_details and link it.
+        if lead.product_type == "motor" and (insurance_type or sub_type):
+            motor = Deal.objects.create(
+                lead=lead,
+                insurance_type=insurance_type,
+                sub_type=sub_type,
+                stage_id=1,
+            )
+            lead.motor_product = motor
+            lead.save(update_fields=["motor_product"])
+
+        return lead
 
 
 class LeadStatusUpdateSerializer(serializers.ModelSerializer):

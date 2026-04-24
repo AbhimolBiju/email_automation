@@ -1,6 +1,32 @@
 from django.conf import settings
 from django.db import models
 
+class GeneralDetails(models.Model):
+    """
+    Product-specific details for product_type="general".
+    Add fields here as your general product flow evolves.
+    """
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "general_details"
+
+
+class MedicalDetails(models.Model):
+    """
+    Product-specific details for product_type="medical" (health).
+    Add fields here as your medical product flow evolves.
+    """
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "medical_details"
+
+
 class Lead(models.Model):
     STATUS_CHOICES = [
         ('NEW', 'New'),
@@ -73,13 +99,7 @@ class Lead(models.Model):
         choices=PREFERRED_CONTACT_METHODS,
         verbose_name="Preferred Contact Method",
     )
-    insurance_type = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        choices=INSURANCE_TYPE,
-        verbose_name="Insurance_type",
-    )
+    # insurance_type moved to motor_details (deals.Deal)
     is_pep = models.CharField(max_length=100, default=False, choices=PEP_STATUS_CHOICES, verbose_name="PEP Status")
     responsible = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="assigned_leads")
     stage = models.CharField(max_length=100,default='Assigned',choices=STAGE_CHOICES, help_text="Current pipeline stage")
@@ -96,12 +116,35 @@ class Lead(models.Model):
         choices=SOURCE_CHOICES,
         verbose_name="Lead Source",
     )
-    sub_type = models.CharField(
-        max_length=255,
-        blank=True,
+    # sub_type moved to motor_details (deals.Deal)
+
+    # Product-specific details pointer (motor_details for product_type="motor").
+    # Stored as `motor_product_id` column in `leads_lead`.
+    motor_product = models.ForeignKey(
+        "deals.Deal",
         null=True,
-        choices=SUB_TYPE_CHOICES,
-        verbose_name="subtype",
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="motor_leads",
+        db_column="motor_product_id",
+    )
+
+    # Product-specific table pointers for other product types.
+    general_product = models.OneToOneField(
+        "leads.GeneralDetails",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="lead",
+        db_column="general_product_id",
+    )
+    medical_product = models.OneToOneField(
+        "leads.MedicalDetails",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="lead",
+        db_column="medical_product_id",
     )
 
     class Meta:

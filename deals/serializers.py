@@ -143,6 +143,17 @@ class DealCreateSerializer(serializers.ModelSerializer):
 
         deal = Deal.objects.create(**validated_data)
 
+        # Keep the Lead.motor_product_id (motor) pointer in sync.
+        # Lead.motor_product points to motor_details row.
+        if deal.lead_id:
+            try:
+                lead = deal.lead
+                if lead and getattr(lead, "motor_product_id", None) is None:
+                    lead.motor_product = deal
+                    lead.save(update_fields=["motor_product"])
+            except Exception:
+                pass
+
         for doc_type, file in typed_docs.items():
             if file:
                 DealDocument.objects.create(

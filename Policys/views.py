@@ -122,6 +122,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import AdditionalDocument
 from .serializers import AdditionalDocumentSerializer
+from rest_framework.exceptions import NotFound
 
 class PolicyAdditionalDocumentView(APIView):
 
@@ -143,3 +144,45 @@ class PolicyAdditionalDocumentView(APIView):
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import NotFound
+from rest_framework import status
+
+@api_view(["PATCH"])
+def verify_document(request, id):
+    try:
+        document = AdditionalDocument.objects.get(id=id)
+    except AdditionalDocument.DoesNotExist:
+        raise NotFound("Document not found")
+
+    document.status = "VERIFIED"
+    document.save()
+
+    return Response({
+        "message": "Document verified successfully",
+        "data": {
+            "document_id": document.id,
+            "status": document.status
+        }
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(["PATCH"])
+def reject_document(request, id):
+    try:
+        document = AdditionalDocument.objects.get(id=id)
+    except AdditionalDocument.DoesNotExist:
+        raise NotFound("Document not found")
+
+    document.status = "REJECTED"
+    document.save()
+
+    return Response({
+        "message": "Document rejected successfully",
+        "data": {
+            "document_id": document.id,
+            "status": document.status
+        }
+    }, status=status.HTTP_200_OK)

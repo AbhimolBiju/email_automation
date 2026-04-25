@@ -3,7 +3,7 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 
 from deals.models import Deal
-from deals.views import deals_board, upload_deal_document
+from deals.views import deal_detail, deals_board, upload_deal_document
 from documents.models import Document
 from leads.models import GeneralDetails, Lead, MedicalDetails
 from deals.serializers import DealCreateSerializer
@@ -180,3 +180,96 @@ class DealDocumentUploadTests(TestCase):
         document = Document.objects.get(id=response.data["data"]["id"])
         self.assertIsNone(document.motor_deal)
         self.assertEqual(document.source, "deal_form_upload")
+
+
+class DealDetailEditTests(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+
+    def test_deal_detail_returns_lead_and_documents_for_editing(self):
+        lead = Lead.objects.create(
+            name="Edit Customer",
+            email="edit@example.com",
+            mobile_number="+971501234567",
+            phone_number="+971501234567",
+            status="QUALIFIED",
+            stage="sales_qualified_lead",
+            product_type="motor",
+        )
+        deal = Deal.objects.create(
+            lead=lead,
+            nationality="UAE",
+            emirates_id="784-1990-1234567-1",
+            stage_id=Deal.STAGE_QUOTATION,
+        )
+        document = Document.objects.create(
+            motor_deal=deal,
+            document_type="driving_license_front",
+            file=SimpleUploadedFile(
+                "license-front.txt", b"front", content_type="text/plain"
+            ),
+            source="deal_form",
+        )
+
+        request = self.factory.get(f"/deals/{deal.id}/")
+        response = deal_detail(request, deal.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["success"])
+        payload = response.data["data"]
+        self.assertEqual(payload["id"], deal.id)
+        self.assertEqual(payload["lead"]["id"], lead.id)
+        self.assertEqual(payload["lead"]["name"], "Edit Customer")
+        self.assertEqual(payload["documents"][0]["id"], document.id)
+        self.assertEqual(payload["documents"][0]["document_type"], "driving_license_front")
+        self.assertEqual(payload["stage_label"], "Quotation")
+
+    def test_deal_patch_updates_deal_lead_and_attaches_documents(self):
+        lead = Lead.objects.create(
+            name="Old Customer",
+            email="old@example.com",
+            mobile_number="+971500000000",
+            phone_number="+971500000000",
+            status="QUALIFIED",
+            stage="sales_qualified_lead",
+            product_type="motor",
+        )
+        deal = Deal.objects.create(
+            lead=lead,
+            nationality="UAE",
+            emirates_id="OLD-ID",
+            stage_id=Deal.STAGE_POTENTIAL_CUSTOMER,
+        )
+        document = Document.objects.create(
+            document_type="emirates_id_front",
+            file=SimpleUploadedFile("eid-front.txt", b"eid", content_type="text/plain"),
+            source="deal_form_upload",
+        )
+
+        request = self.factory.patch(
+            f"/deals/{deal.id}/",
+            {
+                "name": "New Customer",
+                "email": "new@example.com",
+                "mobile_number": "+971511111111",
+                "nationality": "India",
+                "emirates_id": "NEW-ID",
+                "document_ids": [document.id],
+            },
+            format="json",
+        )
+        response = deal_detail(request, deal.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["success"])
+
+        deal.refresh_from_db()
+        lead.refresh_from_db()
+        document.refresh_from_db()
+        self.assertEqual(deal.nationality, "India")
+        self.assertEqual(deal.emirates_id, "NEW-ID")
+        self.assertEqual(lead.name, "New Customer")
+        self.assertEqual(lead.email, "new@example.com")
+        self.assertEqual(lead.mobile_number, "+971511111111")
+        self.assertEqual(document.motor_deal, deal)
+        self.assertEqual(document.source, "deal_form")

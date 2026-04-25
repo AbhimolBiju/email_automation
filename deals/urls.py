@@ -21,6 +21,7 @@ from .views import *
 urlpatterns = [
     path('create_deal/', create_deal, name='create-deal'),
     path('documents/upload/', upload_deal_document, name='upload-deal-document'),
+    path('<int:deal_id>/', deal_detail, name='deal-detail'),
     path('pipeline-summary/', pipeline_summary, name='pipeline-summary'),
     path('board/', deals_board, name='deals-board'),
     path('search/', search_deals, name='search-deals'),
@@ -36,4 +37,3 @@ urlpatterns = [
     
     
 ]
-

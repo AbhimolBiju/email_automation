@@ -113,6 +113,127 @@ class DealDocumentSerializer(serializers.ModelSerializer):
         fields = ["id", "document_type", "file", "uploaded_at"]
 
 
+class DealDetailSerializer(serializers.ModelSerializer):
+    lead = serializers.SerializerMethodField()
+    documents = serializers.SerializerMethodField()
+    stage_label = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Deal
+        fields = "__all__"
+
+    def get_lead(self, obj):
+        if not obj.lead:
+            return None
+        responsible = obj.lead.responsible
+        responsible_name = ""
+        if responsible:
+            responsible_name = (
+                responsible.get_full_name()
+                or responsible.username
+                or responsible.email
+            )
+        return {
+            "id": obj.lead.id,
+            "name": obj.lead.name,
+            "email": obj.lead.email,
+            "mobile_number": obj.lead.mobile_number,
+            "phone_number": obj.lead.phone_number,
+            "product_type": obj.lead.product_type,
+            "delivery_channel": obj.lead.delivery_channel,
+            "status": obj.lead.status,
+            "stage": obj.lead.stage,
+            "responsible": responsible_name,
+            "created_at": obj.lead.created_at,
+            "updated_at": obj.lead.updated_at,
+        }
+
+    def get_documents(self, obj):
+        return [
+            {
+                "id": document.id,
+                "document_type": document.document_type,
+                "file": document.file.url if document.file else None,
+                "file_name": document.name,
+                "uploaded_at": document.uploaded_at,
+            }
+            for document in obj.shared_documents.all()
+        ]
+
+    def get_stage_label(self, obj):
+        return dict(Deal.STAGE_CHOICES).get(obj.stage_id, "")
+
+
+class DealUpdateSerializer(serializers.ModelSerializer):
+    document_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True,
+        required=False,
+    )
+    name = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    email = serializers.EmailField(write_only=True, required=False, allow_blank=True)
+    mobile_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    phone_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
+
+    class Meta:
+        model = Deal
+        fields = "__all__"
+        extra_kwargs = {
+            "lead": {"required": False, "allow_null": True},
+        }
+
+    def update(self, instance, validated_data):
+        document_ids = validated_data.pop("document_ids", [])
+        lead_name = validated_data.pop("name", None)
+        lead_email = validated_data.pop("email", None)
+        lead_mobile = validated_data.pop("mobile_number", None)
+        lead_phone = validated_data.pop("phone_number", None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if instance.lead_id:
+            lead = instance.lead
+            changed_fields = []
+            if lead_name is not None and lead.name != lead_name:
+                lead.name = lead_name
+                changed_fields.append("name")
+            if lead_email is not None and lead.email != lead_email:
+                lead.email = lead_email
+                changed_fields.append("email")
+            if lead_mobile is not None and lead.mobile_number != lead_mobile:
+                lead.mobile_number = lead_mobile
+                changed_fields.append("mobile_number")
+            if lead_phone is not None and lead.phone_number != lead_phone:
+                lead.phone_number = lead_phone
+                changed_fields.append("phone_number")
+            elif lead_mobile is not None and lead.phone_number != lead_mobile:
+                lead.phone_number = lead_mobile
+                changed_fields.append("phone_number")
+
+            if changed_fields:
+                changed_fields.append("updated_at")
+                lead.save(update_fields=changed_fields)
+
+        if document_ids:
+            uploaded_documents = Document.objects.filter(id__in=document_ids)
+            if uploaded_documents.count() != len(set(document_ids)):
+                raise serializers.ValidationError(
+                    {"document_ids": ["One or more uploaded documents were not found."]}
+                )
+            already_attached = uploaded_documents.exclude(
+                motor_deal__isnull=True,
+            ).exclude(motor_deal=instance)
+            if already_attached.exists():
+                raise serializers.ValidationError(
+                    {"document_ids": ["One or more documents are already attached to another deal."]}
+                )
+            uploaded_documents.update(motor_deal=instance, source="deal_form")
+
+        return instance
+
+
 class DealCreateSerializer(serializers.ModelSerializer):
     documents = serializers.ListField(
         child=serializers.FileField(),

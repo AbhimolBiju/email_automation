@@ -12,7 +12,9 @@ from .serializers import (
     DealExportSerializer,
     FilterOptionsResponseSerializer,
     DealCreateSerializer,
+    DealDetailSerializer,
     DealGeneralInfoSerializer,
+    DealUpdateSerializer,
     DealAdditionalFieldSerializer,
 )
 from documents.serializers import DocumentUploadSerializer
@@ -654,6 +656,38 @@ def create_deal(request):
         message="Deal created successfully",
         data={"id": deal.id},
         status_code=status.HTTP_201_CREATED,
+    )
+
+
+@api_view(['GET', 'PATCH', 'PUT'])
+@permission_classes([AllowAny])
+def deal_detail(request, deal_id):
+    try:
+        deal = Deal.objects.select_related("lead").prefetch_related(
+            "shared_documents",
+        ).get(id=deal_id)
+    except Deal.DoesNotExist:
+        raise NotFound("Deal not found")
+
+    if request.method == "GET":
+        serializer = DealDetailSerializer(deal)
+        return success_response(
+            message="Deal fetched successfully",
+            data=serializer.data,
+            status_code=status.HTTP_200_OK,
+        )
+
+    serializer = DealUpdateSerializer(
+        deal,
+        data=request.data,
+        partial=request.method == "PATCH",
+    )
+    serializer.is_valid(raise_exception=True)
+    deal = serializer.save()
+    return success_response(
+        message="Deal updated successfully",
+        data=DealDetailSerializer(deal).data,
+        status_code=status.HTTP_200_OK,
     )
 
 

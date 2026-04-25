@@ -1,8 +1,9 @@
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIRequestFactory
 
 from deals.models import Deal
-from documents.models import Document
+from documents.models import Document, unique_document_upload_path
 from documents.views import document_list, ocr_stats
 from leads.models import Lead
 
@@ -54,3 +55,22 @@ class DocumentViewsTests(TestCase):
         self.assertEqual(response.data["data"]["verified_count"], 1)
         self.assertEqual(response.data["data"]["pending_review"], 1)
         self.assertEqual(response.data["data"]["low_confidence_count"], 1)
+
+    def test_document_upload_path_uses_unique_name(self):
+        first = unique_document_upload_path(None, "license front.JPG")
+        second = unique_document_upload_path(None, "license front.JPG")
+
+        self.assertTrue(first.startswith("documents/"))
+        self.assertTrue(first.endswith(".jpg"))
+        self.assertNotEqual(first, second)
+
+    def test_document_file_save_uses_unique_name(self):
+        first = Document.objects.create(
+            file=SimpleUploadedFile("same-name.txt", b"one", content_type="text/plain")
+        )
+        second = Document.objects.create(
+            file=SimpleUploadedFile("same-name.txt", b"two", content_type="text/plain")
+        )
+
+        self.assertNotEqual(first.file.name, second.file.name)
+        self.assertTrue(first.file.name.startswith("documents/"))

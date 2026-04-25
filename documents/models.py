@@ -1,7 +1,14 @@
 import mimetypes
 import os
+from pathlib import Path
+from uuid import uuid4
 
 from django.db import models
+
+
+def unique_document_upload_path(instance, filename):
+    extension = Path(filename).suffix.lower()
+    return f"documents/{uuid4().hex}{extension}"
 
 
 class Document(models.Model):
@@ -26,7 +33,11 @@ class Document(models.Model):
     ]
 
     name = models.CharField(max_length=255, blank=True)
-    file = models.FileField(upload_to="documents/", blank=True, null=True)
+    file = models.FileField(
+        upload_to=unique_document_upload_path,
+        blank=True,
+        null=True,
+    )
     path = models.CharField(max_length=500, blank=True)
     file_type = models.CharField(max_length=100, blank=True, null=True)
     document_type = models.CharField(max_length=100, default="other")

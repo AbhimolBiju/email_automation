@@ -20,6 +20,28 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+def load_local_env(env_path):
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(env_path)
+        return
+    except ModuleNotFoundError:
+        pass
+
+    if not env_path.exists():
+        return
+
+    for line in env_path.read_text().splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        key, value = stripped.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+load_local_env(BASE_DIR / ".env")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -70,7 +92,7 @@ INSTALLED_APPS = [
     'Policys',
     'Task',
     'insurance',
-    'documents',
+    'documents.apps.DocumentsConfig',
     'Quote',
     'invoice'
 ]
@@ -159,6 +181,26 @@ STATIC_URL = "static/"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT = os.environ.get(
+    "AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT",
+    "",
+)
+AZURE_DOCUMENT_INTELLIGENCE_KEY = os.environ.get(
+    "AZURE_DOCUMENT_INTELLIGENCE_KEY",
+    "",
+)
+DOCUMENT_OCR_AUTO_PROCESS = os.environ.get("DOCUMENT_OCR_AUTO_PROCESS", "1").lower() in (
+    "1",
+    "true",
+    "yes",
+)
+DOCUMENT_OCR_POLLING_TIMEOUT_SECONDS = int(
+    os.environ.get("DOCUMENT_OCR_POLLING_TIMEOUT_SECONDS", "120")
+)
+DOCUMENT_OCR_LOW_CONFIDENCE_THRESHOLD = float(
+    os.environ.get("DOCUMENT_OCR_LOW_CONFIDENCE_THRESHOLD", "0.70")
+)
 
 
 

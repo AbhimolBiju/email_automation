@@ -8,4 +8,5 @@ urlpatterns = [
          path("<id>/details/", document_detail),
          path("<id>/verify/", verify_document),
          path("<id>/reject/", reject_document),
+         path("<id>/fetch-ocr/", fetch_document_ocr),
 ]

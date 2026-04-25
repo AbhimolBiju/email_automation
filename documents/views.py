@@ -13,6 +13,7 @@ from .serializers import (
     OCRDocumentDetailSerializer,
     OCRDocumentListSerializer,
 )
+from .tasks import enqueue_document_ocr
 from .utils import get_date_filter
 
 
@@ -140,6 +141,32 @@ def reject_document(request, id):
         message="Document rejected successfully",
         data={"document_id": f"DOC-{document.id:04d}", "status": "Rejected"},
         status_code=status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def fetch_document_ocr(request, id):
+    try:
+        document = Document.objects.get(id=id)
+    except Document.DoesNotExist:
+        raise NotFound("Document not found")
+
+    if not document.file:
+        return success_response(
+            message="Document has no file to process",
+            data={"document_id": f"DOC-{document.id:04d}", "ocr_status": document.ocr_status},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    document.ocr_status = Document.OCR_PENDING
+    document.save(update_fields=["ocr_status"])
+    enqueue_document_ocr(document.id, force=True)
+
+    return success_response(
+        message="OCR fetch queued successfully",
+        data={"document_id": f"DOC-{document.id:04d}", "ocr_status": Document.OCR_PENDING},
+        status_code=status.HTTP_202_ACCEPTED,
     )
 
 

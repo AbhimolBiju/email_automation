@@ -54,12 +54,20 @@ class PolicyInsurer(models.Model):
 
 class AdditionalDocument(models.Model):
 
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'), 
+        # ('SUBMITTED', 'Submitted'),
+        ('VERIFIED', 'Verified'),
+        ('REJECTED', 'Rejected'),
+        ]
+
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name='policy_additional_doc')
 
     document_name = models.CharField(max_length=255)
     document_type = models.CharField(max_length=100)
 
     file = models.FileField(upload_to='additional_documents/')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

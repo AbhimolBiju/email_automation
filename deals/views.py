@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from django.db.models import Sum,Count
+from django.db.models import Sum, Count
 from .models import Deal
 from leads.models import Lead
 from rest_framework.permissions import AllowAny
@@ -15,6 +15,7 @@ from .serializers import (
     DealGeneralInfoSerializer,
     DealAdditionalFieldSerializer
 )
+from django.utils import timezone
 from django.utils.dateformat import DateFormat
 from rest_framework.exceptions import NotFound, ValidationError
 from api.responses import success_response
@@ -63,74 +64,186 @@ def deals_board(request):
     stage_filter = request.GET.get('stages')
 
     if stage_filter:
-        stage_ids = [int(s) for s in stage_filter.split(',')]
+        try:
+            stage_ids = [int(s) for s in stage_filter.split(',') if s.strip()]
+        except ValueError:
+            raise ValidationError({"stages": ["Invalid stages format"]})
         deals = Deal.objects.filter(stage_id__in=stage_ids)
     else:
+        stage_ids = []
         deals = Deal.objects.all()
 
     stages = dict(Deal.STAGE_CHOICES)
-
+    stage_map = dict(Deal.STAGE_CHOICES)
     response_data = []
 
+    product_pointer_fields = [
+        field.name
+        for field in Lead._meta.fields
+        if field.name.endswith("_product") and getattr(field, "remote_field", None)
+    ]
+    product_selects = [f"lead__{field_name}" for field_name in product_pointer_fields]
+
+    deals = deals.select_related(
+        "lead",
+        "lead__responsible",
+        *product_selects,
+    ).order_by("-updated_at", "-id")
+    deals_by_stage = {stage_id: [] for stage_id in stages}
+    for deal in deals:
+        deals_by_stage.setdefault(deal.stage_id, []).append(deal)
+
     # For stage_id=1 ("Potential Customer"), we want to show Leads that have
-    # reached Lead.stage == "sales_qualified_lead" even if a Deal record doesn't exist yet.
+    # reached Lead.stage == "sales_qualified_lead" even if a motor_details
+    # record doesn't exist yet. A lead can point to multiple product-detail
+    # tables, so these are represented as generic lead items, not fake deals.
     sales_qualified_leads = None
-    if not stage_filter or 1 in (stage_ids if stage_filter else []):
+    if not stage_filter or 1 in stage_ids:
         sales_qualified_leads = (
             Lead.objects.filter(stage="sales_qualified_lead")
-            .exclude(deals__isnull=False)  # only those not already linked to a Deal
+            .select_related("responsible", *product_pointer_fields)
+            .exclude(deals__isnull=False)  # only those not already linked to motor_details rows
             .order_by("-updated_at")
         )
+
+    def format_dt(value):
+        if not value:
+            return None
+        return timezone.localtime(value).isoformat()
+
+    def legacy_lead_payload(lead):
+        if not lead:
+            return None
+        return {
+            "id": lead.id,
+            "name": lead.name or "",
+            "email": lead.email or "",
+            "status": lead.status or "",
+            "mobile_number": lead.mobile_number or "",
+            "updated_at": DateFormat(lead.updated_at).format("Y-m-d H:i"),
+        }
+
+    def responsible_payload(user):
+        if not user:
+            return None
+        name = (
+            getattr(user, "get_full_name", lambda: "")()
+            or getattr(user, "username", "")
+            or getattr(user, "email", "")
+        )
+        return {
+            "id": user.id,
+            "name": name,
+            "email": getattr(user, "email", "") or "",
+        }
+
+    def product_ref(product_type, table_name, product):
+        if not product:
+            return None
+        return {
+            "type": product_type,
+            "table": table_name,
+            "id": product.id,
+            "created_at": format_dt(getattr(product, "created_at", None)),
+            "updated_at": format_dt(getattr(product, "updated_at", None)),
+        }
+
+    def lead_products(lead):
+        if not lead:
+            return []
+        products = []
+        for field_name in product_pointer_fields:
+            product = getattr(lead, field_name, None)
+            products.append(
+                product_ref(
+                    field_name.removesuffix("_product"),
+                    product._meta.db_table if product else None,
+                    product,
+                )
+            )
+        return [product for product in products if product]
+
+    def lead_payload(lead):
+        if not lead:
+            return None
+        return {
+            "id": lead.id,
+            "name": lead.name or "",
+            "email": lead.email or "",
+            "status": lead.status or "",
+            "stage": lead.stage or "",
+            "source": lead.source or "",
+            "product_type": lead.product_type or "",
+            "mobile_number": lead.mobile_number or "",
+            "phone_number": lead.phone_number or "",
+            "responsible": responsible_payload(lead.responsible),
+            "products": lead_products(lead),
+            "created_at": format_dt(lead.created_at),
+            "updated_at": format_dt(lead.updated_at),
+        }
+
+    def motor_deal_item(deal):
+        lead = deal.lead
+        return {
+            "item_id": f"motor:{deal.id}",
+            "record_kind": "product",
+            "product_type": "motor",
+            "product_table": "motor_details",
+            "product_id": deal.id,
+            "deal_id": deal.id,  # legacy field for the current /deals page
+            "is_synthetic": False,
+            "stage": {"id": deal.stage_id, "label": stage_map.get(deal.stage_id, "")},
+            "lead": legacy_lead_payload(lead),
+            "lead_details": lead_payload(lead),
+            "product": {
+                "type": "motor",
+                "table": "motor_details",
+                "id": deal.id,
+                "insurance_type": deal.insurance_type,
+                "sub_type": deal.sub_type,
+                "reg_number": deal.reg_number,
+                "emirates_id": deal.emirates_id,
+                "created_at": format_dt(deal.created_at),
+                "updated_at": format_dt(deal.updated_at),
+            },
+        }
+
+    def lead_item(lead):
+        return {
+            "item_id": f"lead:{lead.id}",
+            "record_kind": "lead",
+            "product_type": lead.product_type or None,
+            "product_table": None,
+            "product_id": None,
+            "deal_id": lead.id,  # legacy synthetic id; prefer item_id in new clients
+            "is_synthetic": True,
+            "stage": {"id": 1, "label": stage_map.get(1, "")},
+            "lead": legacy_lead_payload(lead),
+            "lead_details": lead_payload(lead),
+            "product": None,
+        }
 
     for stage_id, label in stages.items():
 
         if stage_filter and stage_id not in stage_ids:
             continue
 
-        stage_deals = deals.filter(stage_id=stage_id).select_related('lead')
-
-        deal_list = []
+        item_list = []
 
         if stage_id == 1 and sales_qualified_leads is not None:
             for lead in sales_qualified_leads:
-                deal_list.append(
-                    {
-                        # No Deal exists yet; use a stable synthetic id for UI
-                        "deal_id": int(lead.id),
-                        "lead": {
-                            "id": lead.id,
-                            "name": lead.name or "",
-                            "email": lead.email or "",
-                            "status": lead.status or "",
-                            "mobile_number": lead.mobile_number or "",
-                            "updated_at": DateFormat(lead.updated_at).format(
-                                "Y-m-d H:i"
-                            ),
-                        },
-                    }
-                )
+                item_list.append(lead_item(lead))
 
-        for deal in stage_deals:
-            lead = deal.lead
-
-            deal_list.append({
-                "deal_id": deal.id,
-                "lead": {
-                    "id": lead.id if lead else None,
-                    "name": lead.name if lead else "",
-                    "email": lead.email if lead else "",
-                    "status": lead.status if lead else "",
-                    "mobile_number": lead.mobile_number if lead else "",
-                    "updated_at": DateFormat(lead.updated_at).format('Y-m-d H:i') if lead else ""
-                    
-                } if lead else None
-            })
+        for deal in deals_by_stage.get(stage_id, []):
+            item_list.append(motor_deal_item(deal))
 
         response_data.append({
+            "id": stage_id,
             "stage_id": stage_id,
             "label": label,
-            "deal_count": len(deal_list),
-            "deals": deal_list
+            "total_count": len(item_list),
+            "deal_count": len(item_list),
+            "deals": item_list,
         })
 
     return Response(response_data, status=status.HTTP_200_OK)
@@ -504,7 +617,9 @@ def create_deal(request):
             lead.phone_number = lead_mobile
             changed = True
         if changed:
-            lead.save(update_fields=["name", "mobile_number", "phone_number", "updated_at"])
+            lead.stage= data.get("lead_stage") or "sales_qualified_lead",
+            lead.status = data.get("lead_status") or "QUALIFIED"
+            lead.save(update_fields=["name", "mobile_number", "phone_number", "updated_at", "stage", "status"])
     else:
         try:
             lead = Lead.objects.get(id=lead_id)

@@ -13,8 +13,9 @@ from .serializers import (
     FilterOptionsResponseSerializer,
     DealCreateSerializer,
     DealGeneralInfoSerializer,
-    DealAdditionalFieldSerializer
+    DealAdditionalFieldSerializer,
 )
+from documents.serializers import DocumentUploadSerializer
 from django.utils import timezone
 from django.utils.dateformat import DateFormat
 from rest_framework.exceptions import NotFound, ValidationError
@@ -564,6 +565,25 @@ def grouped_deals(request):
     
     
     
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def upload_deal_document(request):
+    serializer = DocumentUploadSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    document = serializer.save(source=request.data.get("source") or "deal_form_upload")
+    return success_response(
+        message="Document uploaded successfully",
+        data={
+            "id": document.id,
+            "document_type": document.document_type,
+            "file_name": document.name,
+            "file": document.file.url if document.file else None,
+            "uploaded_at": document.uploaded_at,
+        },
+        status_code=status.HTTP_201_CREATED,
+    )
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_deal(request):

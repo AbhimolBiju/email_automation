@@ -119,6 +119,11 @@ class DealCreateSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False
     )
+    document_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True,
+        required=False,
+    )
     driving_license_front = serializers.FileField(write_only=True, required=False)
     driving_license_back = serializers.FileField(write_only=True, required=False)
     emirates_id_front = serializers.FileField(write_only=True, required=False)
@@ -132,6 +137,7 @@ class DealCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         documents = validated_data.pop('documents', [])
+        document_ids = validated_data.pop("document_ids", [])
         typed_docs = {
             "driving_license_front": validated_data.pop("driving_license_front", None),
             "driving_license_back": validated_data.pop("driving_license_back", None),
@@ -174,6 +180,19 @@ class DealCreateSerializer(serializers.ModelSerializer):
                 file=file,
                 source="deal_form",
             )
+
+        if document_ids:
+            uploaded_documents = Document.objects.filter(id__in=document_ids)
+            if uploaded_documents.count() != len(set(document_ids)):
+                raise serializers.ValidationError(
+                    {"document_ids": ["One or more uploaded documents were not found."]}
+                )
+            already_attached = uploaded_documents.exclude(motor_deal__isnull=True)
+            if already_attached.exists():
+                raise serializers.ValidationError(
+                    {"document_ids": ["One or more documents are already attached to a deal."]}
+                )
+            uploaded_documents.update(motor_deal=deal, source="deal_form")
 
         return deal
     

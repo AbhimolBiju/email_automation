@@ -3,7 +3,7 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 
 from deals.models import Deal
-from deals.views import deals_board
+from deals.views import deals_board, upload_deal_document
 from documents.models import Document
 from leads.models import GeneralDetails, Lead, MedicalDetails
 from deals.serializers import DealCreateSerializer
@@ -122,3 +122,61 @@ class DealCreateSerializerTests(TestCase):
         document = Document.objects.get(motor_deal=deal)
         self.assertEqual(document.document_type, "driving_license_front")
         self.assertEqual(document.source, "deal_form")
+
+    def test_create_attaches_pre_uploaded_document_ids(self):
+        lead = Lead.objects.create(
+            name="Uploaded Doc Customer",
+            email="uploaded-doc@example.com",
+            status="QUALIFIED",
+            stage="sales_qualified_lead",
+            product_type="motor",
+        )
+        document = Document.objects.create(
+            document_type="emirates_id_front",
+            file=SimpleUploadedFile(
+                "eid-front.txt", b"eid", content_type="text/plain"
+            ),
+            source="deal_form_upload",
+        )
+
+        serializer = DealCreateSerializer(
+            data={
+                "lead": lead.id,
+                "insurance_type": "car_insurance_new",
+                "sub_type": "third_party",
+                "document_ids": [document.id],
+            }
+        )
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        deal = serializer.save()
+
+        document.refresh_from_db()
+        self.assertEqual(document.motor_deal, deal)
+        self.assertEqual(document.source, "deal_form")
+
+
+class DealDocumentUploadTests(TestCase):
+    def setUp(self):
+        self.factory = APIRequestFactory()
+
+    def test_upload_deal_document_returns_document_id(self):
+        request = self.factory.post(
+            "/deals/documents/upload/",
+            {
+                "document_type": "driving_license_front",
+                "file": SimpleUploadedFile(
+                    "license-front.txt", b"front", content_type="text/plain"
+                ),
+            },
+            format="multipart",
+        )
+
+        response = upload_deal_document(request)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(response.data["success"])
+        self.assertIsNotNone(response.data["data"]["id"])
+        document = Document.objects.get(id=response.data["data"]["id"])
+        self.assertIsNone(document.motor_deal)
+        self.assertEqual(document.source, "deal_form_upload")

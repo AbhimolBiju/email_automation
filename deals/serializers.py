@@ -105,11 +105,11 @@ class DealSerializer(serializers.ModelSerializer):
 
 
 
-from .models import DealDocument
+from documents.models import Document
 
 class DealDocumentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DealDocument
+        model = Document
         fields = ["id", "document_type", "file", "uploaded_at"]
 
 
@@ -141,6 +141,10 @@ class DealCreateSerializer(serializers.ModelSerializer):
             "mulkiya_id_back": validated_data.pop("mulkiya_id_back", None),
         }
 
+        # New deals from the create flow should start in
+        # "Awaiting Additional Documents" regardless of client input.
+        validated_data["stage_id"] = Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS
+
         deal = Deal.objects.create(**validated_data)
 
         # Keep the Lead.motor_product_id (motor) pointer in sync.
@@ -156,12 +160,20 @@ class DealCreateSerializer(serializers.ModelSerializer):
 
         for doc_type, file in typed_docs.items():
             if file:
-                DealDocument.objects.create(
-                    deal=deal, document_type=doc_type, file=file
+                Document.objects.create(
+                    motor_deal=deal,
+                    document_type=doc_type,
+                    file=file,
+                    source="deal_form",
                 )
 
         for file in documents:
-            DealDocument.objects.create(deal=deal, document_type="other", file=file)
+            Document.objects.create(
+                motor_deal=deal,
+                document_type="other",
+                file=file,
+                source="deal_form",
+            )
 
         return deal
     

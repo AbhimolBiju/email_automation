@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from deals.models import Deal, DealDocument
+from deals.models import Deal
+from documents.models import Document
 from PIL import Image
 import json
 from django.core.files.storage import default_storage
@@ -57,17 +58,28 @@ def upload_document(request):
         # Clean up temp file
         os.remove(file_path)
 
-    # Create DealDocument
-    deal_document = DealDocument.objects.create(
-        deal=deal,
+    # Create shared Document
+    deal_document = Document.objects.create(
+        motor_deal=deal,
+        name=file.name,
         document_type=document_type,
-        file=file,  # This will save to deal_documents/
+        file=file,
         ocr_response=ocr_data,
-        ocr_status=True if 'error' not in ocr_data else False,
+        ocr_status=(
+            Document.OCR_SUCCESS
+            if 'error' not in ocr_data
+            else Document.OCR_FAILED
+        ),
+        status=(
+            Document.STATUS_PENDING
+            if 'error' not in ocr_data
+            else Document.STATUS_LOW_CONFIDENCE
+        ),
+        source="ocr_upload",
     )
 
     # Optionally update Deal with extracted info
     # For example, if text contains 'Emirates ID: 123', parse and update
     # But for now, skip or add simple logic
 
-    return Response({'message': 'Document processed and saved', 'deal_document_id': deal_document.id}, status=status.HTTP_201_CREATED)
+    return Response({'message': 'Document processed and saved', 'document_id': deal_document.id}, status=status.HTTP_201_CREATED)

@@ -1,9 +1,12 @@
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 
 from deals.models import Deal
 from deals.views import deals_board
+from documents.models import Document
 from leads.models import GeneralDetails, Lead, MedicalDetails
+from deals.serializers import DealCreateSerializer
 
 
 class DealsBoardTests(TestCase):
@@ -86,3 +89,36 @@ class DealsBoardTests(TestCase):
                 ("medical", "medical_details", medical.id),
             },
         )
+
+
+class DealCreateSerializerTests(TestCase):
+    def test_create_sets_stage_to_awaiting_additional_documents(self):
+        lead = Lead.objects.create(
+            name="Create Flow Customer",
+            email="create-flow@example.com",
+            status="QUALIFIED",
+            stage="sales_qualified_lead",
+            product_type="motor",
+        )
+        serializer = DealCreateSerializer(
+            data={
+                "lead": lead.id,
+                "stage_id": Deal.STAGE_POTENTIAL_CUSTOMER,
+                "insurance_type": "car_insurance_new",
+                "sub_type": "third_party",
+                "driving_license_front": SimpleUploadedFile(
+                    "license-front.txt", b"front", content_type="text/plain"
+                ),
+            }
+        )
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        deal = serializer.save()
+
+        self.assertEqual(
+            deal.stage_id,
+            Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS,
+        )
+        document = Document.objects.get(motor_deal=deal)
+        self.assertEqual(document.document_type, "driving_license_front")
+        self.assertEqual(document.source, "deal_form")

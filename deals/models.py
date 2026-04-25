@@ -5,10 +5,12 @@ from leads.models import Lead
 
 
 class Deal(models.Model):
+    STAGE_POTENTIAL_CUSTOMER = 1
+    STAGE_AWAITING_ADDITIONAL_DOCUMENTS = 2
 
     STAGE_CHOICES = [
-        (1, "Potential Customer"),
-        (2, "Awaiting Additional Documents"),
+        (STAGE_POTENTIAL_CUSTOMER, "Potential Customer"),
+        (STAGE_AWAITING_ADDITIONAL_DOCUMENTS, "Awaiting Additional Documents"),
         (3, "Quotation"),
         (4, "Follow up"),
         (5, "High Value Leads"),
@@ -78,7 +80,7 @@ class Deal(models.Model):
 
     stage_id = models.IntegerField(
         choices=STAGE_CHOICES,
-        default=1
+        default=STAGE_POTENTIAL_CUSTOMER
     )
     additional_field = models.TextField(blank=True, null=True)
 

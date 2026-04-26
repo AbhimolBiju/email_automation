@@ -25,7 +25,6 @@ def load_local_env(env_path):
         from dotenv import load_dotenv
 
         load_dotenv(env_path)
-        return
     except ModuleNotFoundError:
         pass
 

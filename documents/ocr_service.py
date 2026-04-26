@@ -2,6 +2,7 @@ import logging
 import os
 from dataclasses import dataclass
 from typing import Any
+from urllib.parse import urlparse
 
 from django.conf import settings
 
@@ -17,7 +18,8 @@ class OCRConfigurationError(RuntimeError):
 
 @dataclass(frozen=True)
 class OCRResult:
-    payload: dict[str, Any]
+    provider_response: dict[str, Any]
+    ocr_data: dict[str, Any]
     confidence: float
     document_type: str
 
@@ -29,6 +31,8 @@ def _get_azure_client():
         _load_runtime_env()
         endpoint = endpoint or os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", "")
         key = key or os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_KEY", "")
+    endpoint = _normalize_endpoint(endpoint)
+    key = key.strip().strip('"').strip("'")
     if not endpoint or not key:
         raise OCRConfigurationError(
             "Azure Document Intelligence is not configured. Set "
@@ -49,6 +53,19 @@ def _get_azure_client():
     )
 
 
+def _normalize_endpoint(endpoint: str) -> str:
+    endpoint = endpoint.strip().strip('"').strip("'")
+    parsed = urlparse(endpoint)
+    if not parsed.scheme or not parsed.netloc:
+        return endpoint.rstrip("/")
+    if parsed.path and parsed.path not in ("", "/"):
+        logger.warning(
+            "Ignoring path component on Azure Document Intelligence endpoint: %s",
+            parsed.path,
+        )
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+
 def _load_runtime_env() -> None:
     env_path = getattr(settings, "BASE_DIR", None)
     if env_path is None:
@@ -62,7 +79,6 @@ def _load_runtime_env() -> None:
         from dotenv import load_dotenv
 
         load_dotenv(env_file)
-        return
     except ModuleNotFoundError:
         pass
 
@@ -91,14 +107,15 @@ def run_azure_read_model(document: Document) -> OCRResult:
         raise ValueError("Document has no file to process.")
 
     client = _get_azure_client()
+    from azure.ai.documentintelligence.models import AnalyzeDocumentRequest
+
     timeout = getattr(settings, "DOCUMENT_OCR_POLLING_TIMEOUT_SECONDS", 120)
 
     document.file.open("rb")
     try:
         poller = client.begin_analyze_document(
             "prebuilt-read",
-            body=document.file,
-            content_type=document.file_type or "application/octet-stream",
+            body=AnalyzeDocumentRequest(bytes_source=document.file.read()),
         )
         result = poller.result(timeout=timeout)
     finally:
@@ -106,19 +123,25 @@ def run_azure_read_model(document: Document) -> OCRResult:
 
     raw_text = getattr(result, "content", "") or ""
     confidence = _average_confidence(result)
-    payload = extract_structured_fields(
+    ocr_data = extract_structured_fields(
         raw_text,
         confidence=confidence,
         document_type_hint=document.document_type or "other",
     )
-    payload["engine"] = "azure_document_intelligence"
-    payload["model_id"] = "prebuilt-read"
-    payload["source_file"] = document.path or document.file.name
+    provider_response = {
+        "engine": "azure_document_intelligence",
+        "model_id": "prebuilt-read",
+        "confidence": confidence,
+        "raw_text": raw_text,
+        "pages": len(getattr(result, "pages", []) or []),
+        "source_file": document.path or document.file.name,
+    }
 
     return OCRResult(
-        payload=payload,
+        provider_response=provider_response,
+        ocr_data=ocr_data,
         confidence=confidence,
-        document_type=payload.get("document_type", document.document_type or "other"),
+        document_type=ocr_data.get("document_type", document.document_type or "other"),
     )
 
 
@@ -158,6 +181,7 @@ def process_document_ocr(document_id: int, *, force: bool = False) -> None:
                 "model_id": "prebuilt-read",
                 "source_file": source_file,
             },
+            ocr_data=None,
             score=0,
         )
         return
@@ -169,9 +193,9 @@ def process_document_ocr(document_id: int, *, force: bool = False) -> None:
     )
     Document.objects.filter(id=document.id).update(
         ocr_status=Document.OCR_SUCCESS,
-        ocr_response=result.payload,
+        ocr_response=result.provider_response,
+        ocr_data=result.ocr_data,
         score=round(result.confidence * 100, 2),
-        document_type=result.document_type,
         status=review_status,
     )
     logger.info("OCR completed for document %s", document_id)

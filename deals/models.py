@@ -7,11 +7,12 @@ from leads.models import Lead
 class Deal(models.Model):
     STAGE_POTENTIAL_CUSTOMER = 1
     STAGE_AWAITING_ADDITIONAL_DOCUMENTS = 2
+    STAGE_QUOTATION = 3
 
     STAGE_CHOICES = [
         (STAGE_POTENTIAL_CUSTOMER, "Potential Customer"),
         (STAGE_AWAITING_ADDITIONAL_DOCUMENTS, "Awaiting Additional Documents"),
-        (3, "Quotation"),
+        (STAGE_QUOTATION, "Quotation"),
         (4, "Follow up"),
         (5, "High Value Leads"),
         (6, "Hot/Responded"),

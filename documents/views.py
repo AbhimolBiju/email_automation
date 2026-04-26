@@ -100,7 +100,7 @@ def document_detail(request, id):
     except Document.DoesNotExist:
         raise NotFound("Document not found")
 
-    serializer = OCRDocumentDetailSerializer(document)
+    serializer = OCRDocumentDetailSerializer(document, context={"request": request})
     return success_response(
         message="Document fetched successfully",
         data=serializer.data,
@@ -167,6 +167,44 @@ def fetch_document_ocr(request, id):
         message="OCR fetch queued successfully",
         data={"document_id": f"DOC-{document.id:04d}", "ocr_status": Document.OCR_PENDING},
         status_code=status.HTTP_202_ACCEPTED,
+    )
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def reupload_document_file(request, id):
+    try:
+        document = Document.objects.get(id=id)
+    except Document.DoesNotExist:
+        raise NotFound("Document not found")
+
+    uploaded_file = request.FILES.get("file")
+    if not uploaded_file:
+        return success_response(
+            message="File is required",
+            data={"document_id": f"DOC-{document.id:04d}"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    new_document = Document.objects.create(
+        name=uploaded_file.name,
+        file=uploaded_file,
+        file_type=uploaded_file.content_type or None,
+        document_type=document.document_type,
+        source=document.source or "document_reupload",
+        status=Document.STATUS_PENDING,
+        ocr_status=Document.OCR_PENDING,
+        motor_deal=document.motor_deal,
+        general_product=document.general_product,
+        medical_product=document.medical_product,
+        reuploaded_from=document,
+    )
+
+    serializer = OCRDocumentDetailSerializer(new_document, context={"request": request})
+    return success_response(
+        message="Document re-uploaded successfully",
+        data=serializer.data,
+        status_code=status.HTTP_201_CREATED,
     )
 
 

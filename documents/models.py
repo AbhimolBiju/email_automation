@@ -44,6 +44,7 @@ class Document(models.Model):
     source = models.CharField(max_length=100, blank=True, null=True)
     score = models.FloatField(blank=True, null=True)
     ocr_response = models.JSONField(blank=True, null=True)
+    ocr_data = models.JSONField(blank=True, null=True)
     ocr_status = models.CharField(
         max_length=20,
         choices=OCR_STATUS_CHOICES,
@@ -74,6 +75,13 @@ class Document(models.Model):
         null=True,
         blank=True,
         related_name="documents",
+    )
+    reuploaded_from = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reuploads",
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
 

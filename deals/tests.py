@@ -1,5 +1,6 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from pathlib import Path
 from rest_framework.test import APIRequestFactory
 
 from deals.models import Deal
@@ -9,6 +10,7 @@ from leads.models import GeneralDetails, Lead, MedicalDetails
 from deals.serializers import DealCreateSerializer
 
 
+@override_settings(MEDIA_ROOT=Path("/tmp/promise_backend_test_media"))
 class DealsBoardTests(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -91,6 +93,7 @@ class DealsBoardTests(TestCase):
         )
 
 
+@override_settings(MEDIA_ROOT=Path("/tmp/promise_backend_test_media"))
 class DealCreateSerializerTests(TestCase):
     def test_create_sets_stage_to_awaiting_additional_documents(self):
         lead = Lead.objects.create(
@@ -156,6 +159,7 @@ class DealCreateSerializerTests(TestCase):
         self.assertEqual(document.source, "deal_form")
 
 
+@override_settings(MEDIA_ROOT=Path("/tmp/promise_backend_test_media"))
 class DealDocumentUploadTests(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -182,6 +186,7 @@ class DealDocumentUploadTests(TestCase):
         self.assertEqual(document.source, "deal_form_upload")
 
 
+@override_settings(MEDIA_ROOT=Path("/tmp/promise_backend_test_media"))
 class DealDetailEditTests(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
@@ -209,6 +214,16 @@ class DealDetailEditTests(TestCase):
                 "license-front.txt", b"front", content_type="text/plain"
             ),
             source="deal_form",
+            status=Document.STATUS_VERIFIED,
+        )
+        Document.objects.create(
+            motor_deal=deal,
+            document_type="emirates_id_front",
+            file=SimpleUploadedFile(
+                "eid-front.txt", b"front", content_type="text/plain"
+            ),
+            source="deal_form",
+            status=Document.STATUS_REJECTED,
         )
 
         request = self.factory.get(f"/deals/{deal.id}/")
@@ -220,6 +235,7 @@ class DealDetailEditTests(TestCase):
         self.assertEqual(payload["id"], deal.id)
         self.assertEqual(payload["lead"]["id"], lead.id)
         self.assertEqual(payload["lead"]["name"], "Edit Customer")
+        self.assertEqual(len(payload["documents"]), 1)
         self.assertEqual(payload["documents"][0]["id"], document.id)
         self.assertEqual(payload["documents"][0]["document_type"], "driving_license_front")
         self.assertEqual(payload["stage_label"], "Quotation")
@@ -268,6 +284,7 @@ class DealDetailEditTests(TestCase):
         document.refresh_from_db()
         self.assertEqual(deal.nationality, "India")
         self.assertEqual(deal.emirates_id, "NEW-ID")
+        self.assertEqual(deal.stage_id, Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS)
         self.assertEqual(lead.name, "New Customer")
         self.assertEqual(lead.email, "new@example.com")
         self.assertEqual(lead.mobile_number, "+971511111111")

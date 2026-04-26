@@ -61,6 +61,7 @@ class OCRDocumentDetailSerializer(serializers.ModelSerializer):
     lead_id = serializers.SerializerMethodField()
     first_name = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
+    file_url = serializers.SerializerMethodField()
     confidence_score = serializers.SerializerMethodField()
     upload_date = serializers.DateTimeField(source="uploaded_at", read_only=True)
 
@@ -72,6 +73,7 @@ class OCRDocumentDetailSerializer(serializers.ModelSerializer):
             "lead_id",
             "first_name",
             "name",
+            "file_url",
             "file_type",
             "document_type",
             "path",
@@ -81,7 +83,9 @@ class OCRDocumentDetailSerializer(serializers.ModelSerializer):
             "status",
             "ocr_status",
             "ocr_response",
+            "ocr_data",
             "source",
+            "reuploaded_from",
         ]
 
     def get_document_id(self, obj):
@@ -99,6 +103,15 @@ class OCRDocumentDetailSerializer(serializers.ModelSerializer):
 
     def get_product(self, obj):
         return obj.product_label
+
+    def get_file_url(self, obj):
+        if not obj.file:
+            return None
+        url = obj.file.url
+        request = self.context.get("request")
+        if request:
+            return request.build_absolute_uri(url)
+        return url
 
     def get_confidence_score(self, obj):
         return int(round(obj.score or 0))
@@ -125,6 +138,7 @@ class DocumentUploadSerializer(serializers.ModelSerializer):
             "source",
             "score",
             "ocr_response",
+            "ocr_data",
             "ocr_status",
             "status",
             "motor_deal",

@@ -157,7 +157,12 @@ class DealDetailSerializer(serializers.ModelSerializer):
                 "file_name": document.name,
                 "uploaded_at": document.uploaded_at,
             }
-            for document in obj.shared_documents.all()
+            for document in obj.shared_documents.filter(
+                status__in=[
+                    Document.STATUS_PENDING,
+                    Document.STATUS_VERIFIED,
+                ]
+            )
         ]
 
     def get_stage_label(self, obj):
@@ -188,6 +193,8 @@ class DealUpdateSerializer(serializers.ModelSerializer):
         lead_email = validated_data.pop("email", None)
         lead_mobile = validated_data.pop("mobile_number", None)
         lead_phone = validated_data.pop("phone_number", None)
+
+        validated_data["stage_id"] = Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

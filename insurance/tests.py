@@ -6,6 +6,8 @@ from deals.models import Deal
 from insurance.models import InsuranceProvider, QuoteRequestLog, QuoteResult
 from insurance.providers.dic_masterdata import list_masterdata, lookup_code
 from insurance.providers.dic_provider import DICProvider
+from insurance.providers.nia_provider import NIAProvider
+from insurance.providers.qic_provider import QICProvider
 from insurance.providers.factory import build_provider, resolve_provider_class
 from insurance.services.quote_service import get_best_quotes
 from leads.models import Lead
@@ -296,3 +298,119 @@ class DICProviderTests(TestCase):
 
         self.assertEqual(result["policy_no"], "P/13/1001/25/020/00001")
         self.assertEqual(result["documents_base64"], "UERG")
+
+
+class QICProviderTests(TestCase):
+    def setUp(self):
+        self.provider_config = InsuranceProvider.objects.create(
+            name="QIC",
+            code="QIC",
+            priority=1,
+            is_active=True,
+            provider_class="qic_provider.QICProvider",
+            base_url="https://www.devapi.anoudapps.com",
+            username="qic-user",
+            password="qic-pass",
+            extra_config={"company_code": "002"},
+        )
+        self.provider = QICProvider(self.provider_config)
+
+    def test_qic_basic_authenticate_returns_basic_token(self):
+        token = self.provider.authenticate()
+        self.assertTrue(token)
+        self.assertIn("Authorization", self.provider.get_auth_headers())
+
+    def test_qic_get_quote_selects_lowest_net_premium(self):
+        self.provider.get_tariff = lambda payload: {
+            "quoteNo": "26200013010",
+            "products": [
+                {"productCode": "0110", "schemes": [{"schemeCode": "0297", "schemeDescription": "Comprehensive"}]},
+                {"productCode": "0150", "schemes": [{"schemeCode": "0401", "schemeDescription": "Third Party"}]},
+            ],
+        }
+        premiums = {
+            ("0110", "0297"): {"netPremium": 1386.53, "taxAmount": 66.03},
+            ("0150", "0401"): {"netPremium": 1155, "taxAmount": 55},
+        }
+        self.provider.get_net_premium = lambda payload: premiums[(payload["prodCode"], payload["schemeCode"])]
+
+        quote = self.provider.get_quote(
+            {
+                "customer": {"name": "John", "nationality": "Indian", "date_of_birth": "01/01/1990"},
+                "vehicle": {"make_id": "Acura", "model_id": "MDX", "body_type_id": "4 X 4", "engine_capacity_id": "4", "model_year": "2022", "chassis_number": "VIN123"},
+            }
+        )
+        data = quote.as_dict(include_raw_response=True)
+
+        self.assertEqual(data["provider"], "QIC")
+        self.assertEqual(data["total"], 1155.0)
+        self.assertEqual(data["plan_name"], "Third Party")
+
+
+class NIAProviderTests(TestCase):
+    def setUp(self):
+        self.provider_config = InsuranceProvider.objects.create(
+            name="NIA",
+            code="NIA",
+            priority=1,
+            is_active=True,
+            provider_class="nia_provider.NIAProvider",
+            base_url="https://portal.nia.example",
+            username="nia@example.com",
+            password="nia-pass",
+            extra_config={"mock_token": "nia-token"},
+        )
+        self.provider = NIAProvider(self.provider_config)
+
+    def test_nia_authenticate_uses_mock_token(self):
+        self.assertEqual(self.provider.authenticate(), "nia-token")
+
+    def test_nia_get_quote_computes_total_from_selected_covers(self):
+        self.provider.create_quote = lambda payload: {
+            "QuotationNo": "Q/MOT/162428",
+            "Data": {"ProdCode": "1002", "ProdName": "Motor Comprehensive –Non Agency"},
+            "Covers": [
+                {"Code": "1001", "Premium": "1470", "Selected": "Y"},
+                {"Code": "1002", "Premium": "750", "Selected": "Y"},
+                {"Code": "1007", "Premium": "0", "Selected": "N"},
+            ],
+        }
+        self.provider.save_quote_with_plan = lambda payload: {"Status": 1}
+        self.provider.save_additional_info = lambda payload: {"Status": 1}
+        self.provider.save_documents = lambda payload: {"Status": 1}
+
+        quote = self.provider.get_quote(
+            {
+                "customer": {
+                    "name": "John",
+                    "nationality": "INDIAN",
+                    "date_of_birth": "01/01/1990",
+                    "email": "john@example.com",
+                    "mobile_number": "97150000000",
+                    "emirates_id": "784-1990-0000000-1",
+                    "occupation": "ACCOUNTANT",
+                    "emirate": "DUBAI",
+                    "gender": "Male",
+                },
+                "vehicle": {
+                    "chassis_number": "VIN123",
+                    "make_id": "AUDI",
+                    "model_id": "A3 BASE",
+                    "body_type_id": "SALOON",
+                    "engine_capacity_id": "4 CYLINDERS",
+                    "registration_date": "01/01/2022",
+                    "model_year": "2022",
+                    "is_gcc_spec": True,
+                    "agency_repair": False,
+                    "is_vehicle_brand_new": False,
+                    "traffic_transaction_type": "Vehicle Renewal",
+                },
+                "documents": [],
+            }
+        )
+        data = quote.as_dict(include_raw_response=True)
+
+        self.assertEqual(data["provider"], "NIA")
+        self.assertEqual(data["premium"], 2220.0)
+        self.assertEqual(data["total"], 2220.0)
+        self.assertEqual(data["plan_name"], "Motor Comprehensive –Non Agency")

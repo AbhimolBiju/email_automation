@@ -1,0 +1,10 @@
+ {
+ 	"Authentication": {
+		"Token": "FWKTR428UM",
+		"UserId": "motor@test.ae"
+	},
+ 	"ViewVehicelMatrixData": {
+ 		"VehModel": "9002",
+                "VehManfYear": "2018"
+ 	}
+ }

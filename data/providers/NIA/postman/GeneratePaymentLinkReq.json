@@ -1,0 +1,10 @@
+ {
+ 	"Authentication": {
+		"Token": "FWKTR428UM",
+		"UserId": "motor@test.ae"
+	},
+ 	"GeneratePaymentLinkData": {
+ 		"Email": "motor@mibdubai.ae",
+                "QuotNo": "Q0/01/10/2014/00508"
+ 	}
+ }

@@ -19,5 +19,8 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path("general-info/<int:lead_id>/",get_insurance_info),
+    path("general-info/<int:lead_id>/", get_insurance_info),
+    path("providers/", list_insurance_providers),
+    path("providers/<int:provider_id>/health-check/", provider_health_check),
+    path("deals/<int:deal_id>/quotes/", get_deal_quotes),
 ]

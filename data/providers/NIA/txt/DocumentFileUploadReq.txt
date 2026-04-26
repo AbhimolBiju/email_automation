@@ -1,0 +1,15 @@
+ {
+ 	"Authentication": {
+		"UserId": "motor@test.ae",
+		"UserPassword": "123456"
+	},
+ 	"DocumentUploadData": {
+ 		"Base64ImageString": "",
+                "QuotNo": "Q0/01/10/2014/00508",
+                "FileExtension": ".jpg",
+		"FileName": "Mulkia",
+		"Remarks": "",
+		"SequenceNo": "1",
+		"DocumentIdNo": "TL/12/2018"
+ 	}
+ }

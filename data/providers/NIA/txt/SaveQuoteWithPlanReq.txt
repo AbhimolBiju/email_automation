@@ -1,0 +1,26 @@
+{
+	"Authentication": {
+		"Token": "FWKTR428UM",
+		"UserId": "motor@test.ae"
+	},
+	"SelectedCoverData": [{
+		"QuotNo": "Q0/01/10/2015/02007",
+		"ProdCode": "1005",
+		"SelectedCovers": [{
+			"Code": "1001",
+			"CvrType": "BC",
+			"Premium": 1095
+		}, {
+			"Code": "1002",
+			"CvrType": "IC",
+			"Premium": 850
+		}, {
+			"Code": "1003",
+			"CvrType": "OC",
+			"Premium": 120
+		}]
+
+
+	}]
+
+ }

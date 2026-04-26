@@ -1,0 +1,13 @@
+{
+	"Status": {
+		"Code": "1008",
+		"Description": "Vehicle Matrix Details Fetched Successfully"
+	},
+	"Data": {
+		"Make": "TOYOTA",
+		"Model": "YARIS TOP",
+		"BodyType": "HATCH BACK",
+		"MinSI": "49600.0",
+		"MaxSI": "93000.0"
+	}
+}

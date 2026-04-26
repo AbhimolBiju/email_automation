@@ -1,0 +1,9 @@
+ {
+ 	"Authentication": {
+		"Token": "FWKTR428UM",
+		"UserId": "motor@test.ae"
+	},
+ 	"ViewPolicySummaryData": {
+ 		"QuotNo": "Q0/01/10/2015/02007"
+ 	}
+ }

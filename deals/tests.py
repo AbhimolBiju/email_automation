@@ -5,6 +5,10 @@ from rest_framework.test import APIRequestFactory
 
 from deals.models import Deal
 from deals.views import deal_detail, deals_board, upload_deal_document
+from deals.workflows import (
+    REQUIRED_MOTOR_DOCUMENT_TYPES,
+    maybe_move_deal_to_quotation_after_document_verification,
+)
 from documents.models import Document
 from leads.models import GeneralDetails, Lead, MedicalDetails
 from deals.serializers import DealCreateSerializer
@@ -290,3 +294,84 @@ class DealDetailEditTests(TestCase):
         self.assertEqual(lead.mobile_number, "+971511111111")
         self.assertEqual(document.motor_deal, deal)
         self.assertEqual(document.source, "deal_form")
+
+
+@override_settings(
+    MEDIA_ROOT=Path("/tmp/promise_backend_test_media"),
+    DOCUMENT_OCR_AUTO_PROCESS=False,
+)
+class DealDocumentVerificationWorkflowTests(TestCase):
+    def setUp(self):
+        self.lead = Lead.objects.create(
+            name="Workflow Customer",
+            email="workflow@example.com",
+            status="QUALIFIED",
+            stage="sales_qualified_lead",
+            product_type="motor",
+        )
+        self.deal = Deal.objects.create(
+            lead=self.lead,
+            stage_id=Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS,
+        )
+
+    def create_document(self, document_type: str, *, status: str, suffix: str = ""):
+        return Document.objects.create(
+            motor_deal=self.deal,
+            document_type=document_type,
+            status=status,
+            file=SimpleUploadedFile(
+                f"{document_type}{suffix}.txt",
+                b"doc",
+                content_type="text/plain",
+            ),
+            source="deal_form",
+        )
+
+    def test_moves_to_quotation_when_latest_required_docs_are_verified(self):
+        for document_type in REQUIRED_MOTOR_DOCUMENT_TYPES:
+            self.create_document(document_type, status=Document.STATUS_VERIFIED)
+
+        moved = maybe_move_deal_to_quotation_after_document_verification(self.deal.id)
+
+        self.assertTrue(moved)
+        self.deal.refresh_from_db()
+        self.assertEqual(self.deal.stage_id, Deal.STAGE_QUOTATION)
+
+    def test_does_not_move_when_any_required_document_is_missing(self):
+        for document_type in REQUIRED_MOTOR_DOCUMENT_TYPES[:-1]:
+            self.create_document(document_type, status=Document.STATUS_VERIFIED)
+
+        moved = maybe_move_deal_to_quotation_after_document_verification(self.deal.id)
+
+        self.assertFalse(moved)
+        self.deal.refresh_from_db()
+        self.assertEqual(
+            self.deal.stage_id,
+            Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS,
+        )
+
+    def test_uses_latest_uploaded_document_per_required_type(self):
+        for document_type in REQUIRED_MOTOR_DOCUMENT_TYPES:
+            self.create_document(document_type, status=Document.STATUS_VERIFIED, suffix="-old")
+            self.create_document(document_type, status=Document.STATUS_PENDING, suffix="-new")
+
+        moved = maybe_move_deal_to_quotation_after_document_verification(self.deal.id)
+
+        self.assertFalse(moved)
+        self.deal.refresh_from_db()
+        self.assertEqual(
+            self.deal.stage_id,
+            Deal.STAGE_AWAITING_ADDITIONAL_DOCUMENTS,
+        )
+
+    def test_does_not_downgrade_deal_already_in_later_stage(self):
+        self.deal.stage_id = Deal.STAGE_QUOTATION
+        self.deal.save(update_fields=["stage_id"])
+        for document_type in REQUIRED_MOTOR_DOCUMENT_TYPES:
+            self.create_document(document_type, status=Document.STATUS_VERIFIED)
+
+        moved = maybe_move_deal_to_quotation_after_document_verification(self.deal.id)
+
+        self.assertFalse(moved)
+        self.deal.refresh_from_db()
+        self.assertEqual(self.deal.stage_id, Deal.STAGE_QUOTATION)

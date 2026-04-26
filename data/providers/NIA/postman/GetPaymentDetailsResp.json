@@ -1,0 +1,13 @@
+{
+	"Status": {
+		"Code": "3006",
+		"Description": "Payment Details Successful"
+	},
+	"Data": {
+		"PolicyNo": "",
+		"QuoteNo": "Q/2018/0001",
+		"Status": "SUCCESS",
+		"PGReceiptNo": "2002590374691889",
+		"Amount": "1620"
+	}
+}

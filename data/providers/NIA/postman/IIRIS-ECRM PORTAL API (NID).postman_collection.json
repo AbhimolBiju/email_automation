@@ -1,0 +1,182 @@
+{
+  "info": {
+    "_postman_id": "fd9c6e55-12da-4969-a89a-beecfec9ab4a",
+    "name": "IIRIS-ECRM PORTAL API (NID)",
+    "description": "**New India Dubai**\n\nFrom API new folder\n\nreferred document -> NIA_MOTOR_API_DOC - 20th May 2025.pdf",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31373684"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "ValidateLogin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"amir.basha@promiseinsure.com\",\n    \"password\": \"Mfapidxb!2025\",\n    \"loginMode\": \"EMAIL\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/Api/Auth/Login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "Api",
+                "Auth",
+                "Login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CreateQuote",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"PolRefNo\": \"\",\n    \"PolPartyCode\": \"201001\",\n    \"PolDeptCode\": \"10\",\n    \"PolDivnCode\": \"813\",\n    \"PolAssrCode\": \"201001\",\n    \"PolAssrType\": \"100\",\n    \"PolAssrName\": \"ABC\",\n    \"PolAssrMobile\": \"5555555\",\n    \"PolAssrEmail\": \"garg@email.com\",\n    \"PolAssrCivilId\": \"784-1995-5555555-5\",\n    \"PolSchCode\": \"1000\",\n    \"PolAssrDob\": \"12/10/1988\",\n    \"PolPrevInsValidYn\": \"Y\",\n    \"PolProdCode\": \"1002\",\n    \"PolSiCurrCode\": \"101\",\n    \"PolPremCurrCode\": \"101\",\n    \"PolSchemeType\": \"2\",\n    \"PolAssrVehLicExpDt\": \"10/05/2026\",\n    \"PolAssrVehLicIssDt\": \"10/05/2020\",\n    \"PolAssrVehLicIssPlace\": \"1000\",\n    \"PolPrevPolNo\": \"0\",\n    \"PolAssrLastName\": \"2\",\n    \"PolAssrPhone\": \"\",\n    \"PolAssrTradeLicNo\": \"\",\n    \"VehMake\": \"009\",\n    \"VehModel\": \"9195\",\n    \"VehBodyType\": \"001\",\n    \"VehMfgYear\": \"2023.0\",\n    \"VehNoSeats\": \"5.0\",\n    \"VehBrandNewYn\": \"Y\",\n    \"VehRegnDt\": \"10/05/2021\",\n    \"VehUsage\": \"1001\",\n    \"VehNoCylinder\": \"05\",\n    \"VehFcValue\": \"30700.0\",\n    \"VehAge\": \"1.0\",\n    \"VehAgencyType\": \"N\",\n    \"VehCc\": \"\",\n    \"VehChassisNo\": \"RKLBB0BE4P0048836\",\n    \"VehLoadCapacity\": \"0\",\n    \"VehNcdYears\": \"1\",\n    \"VehOffroadYn\": \"N\",\n    \"VehPrevInsType\": \"1\",\n    \"VehRegion\": \"GCC\",\n    \"VehTrim\": \"XLI\",\n    \"VehNoDoors\": \"4\",\n    \"VehBackValue\": \"111\",\n    \"VehBackValueDesc\": \"2\",\n    \"VehAccident\": \"N\",\n    \"VehDriverExperience\": \"1\",\n    \"VehRegnCardExp\": \"N\",\n    \"PolPrevExpDt\": \"05/09/2017\",\n    \"VehOdometer \": \"1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Api/Motor/CreateQuote",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "Api",
+            "Motor",
+            "CreateQuote"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Motor Save Quote With Plan",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"ReferenceNo\": \"R/269223\",\n    \"SchemeCode\": \"1000\",\n    \"ProductCode\": \"1002\",\n    \"SelectedCovers\": [\n        {\n            \"Code\": \"10007\",\n            \"CoverPremFc\": \"1000.0\",\n            \"CoverPremLc\": \"1000.0\"\n        },\n        {\n            \"Code\": \"10006\",\n            \"CoverPremFc\": \"0\",\n            \"CoverPremLc\": \"0\"\n        },\n        {\n            \"Code\": \"10005\",\n            \"CoverPremFc\": \"0.0\",\n            \"CoverPremLc\": \"0.0\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Api/Motor/SaveQuoteWithPlan",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "Api",
+            "Motor",
+            "SaveQuoteWithPlan"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Motor Save Additional Info",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"PolRefNo\": \"R/123456\",\n    \"PolType\": \"N\",\n    \"PolFmDt\": \"11/21/2022\",\n    \"PolToDt\": \"12/21/2023\",\n    \"PolAssrNameL2\": \" \",\n    \"PolAssrAddlName\": \"ABC \",\n    \"PolAssrTcfNo\": \"14553994\",\n    \"PolAssrTrnNo\": \"123 \",\n    \"PolAssrSex\": \" Male\",\n    \"PolAssrPobox\": \"11 \",\n    \"PolAssrAddr1\": \"Dubai\",\n    \"PolAssrProvince\": \"01 \",\n    \"PolAssrNation\": \" \",\n    \"PolAssrOccup\": \"031 \",\n    \"PolAssrVehLicNo\": \" 3456789\",\n    \"PolAssrMaritalSts\": \" N\",\n    \"VehDriverName\": \" Abc\",\n    \"VehDriverCivilId\": \"784199432474025 \",\n    \"VehDriverLicNo\": \"23456789 \",\n    \"VehDriverLicIssDt\": \"09/25/2020 \",\n    \"VehDriverLicExpDt\": \" 09/25/2023\",\n    \"VehEngineNo\": \"QR25174441V\",\n    \"VehRegnLocation\": \"Duabi \",\n    \"VehPlateColor\": \" K\",\n    \"VehRegnNo\": \"1\",\n    \"VehTransType \": \"1 \",\n    \"VehBodyColor1\": \" R\",\n    \"VehBankCode \": \"123\",\n    \"VehWeightEmpty \": \" 1\",\n    \"VehWeightFull \": \" 1\",\n    \"VehRemarks \": \"1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Api/Motor/SaveAddlInfo",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "Api",
+            "Motor",
+            "SaveAddlInfo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Save Documents",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"polRefNo\": \"R/01832\",\n    \"docUpload\": [\n        {\n            \"docCode\": \"10001\",\n            \"docSrlNo\": 0,\n            \"docDesc\": \"Mulkiya Front\",\n            \"storageType\": \"F\",\n            \"docFile\": \"base64 docile\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Api/Motor/SaveDocument",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "Api",
+            "Motor",
+            "SaveDocument"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Proposal Summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/Api/Motor/ProposalSummary",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "Api",
+            "Motor",
+            "ProposalSummary"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

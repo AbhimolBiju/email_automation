@@ -1,0 +1,513 @@
+{
+  "info": {
+    "_postman_id": "346e8aa8-3570-4634-936e-39e9c576e4cb",
+    "name": "Motor_UAE_Integration_PromiseInsuranceServicesLLC",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32298943"
+  },
+  "item": [
+    {
+      "name": "tariff",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"insuredName\": \"Insured\",\r\n    \"policyFromDate\": \"\",\r\n    \"makeCode\": \"0775\",\r\n    \"modelCode\": \"102001\",\r\n    \"modelYear\": \"2019\",\r\n    \"sumInsured\": 55373.0,\r\n    \"vehicleType\": \"1002\",\r\n    \"vehicleUsage\": \"1001\",\r\n    \"noOfCylinder\": \"1004\",\r\n    \"nationality\": \"055\",\r\n    \"seatingCapacity\": \"5\",\r\n    \"firstRegDate\": \"01/01/2018\",\r\n    \"gccSpec\": 1,\r\n    \"previousInsuranceValid\": 1,\r\n    \"totalLoss\": 0,\r\n    \"driverDOB\": \"01/01/1994\",\r\n    \"noClaimYear\": 5,\r\n    \"selfDeclarationYear\": 0,\r\n    \"chassisNo\": \"\",\r\n    \"driverExp\": \"\",\r\n    \"admeId\": 401369,\r\n    \"regnLocation\":\"001\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/motor/tariff?company=002",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "motor",
+            "tariff"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "tariff_TP(without sumInsured)",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"insuredName\": \"Insured\",\r\n    \"policyFromDate\": \"\",\r\n    \"makeCode\": \"0775\",\r\n    \"modelCode\": \"102001\",\r\n    \"modelYear\": \"2019\",\r\n    \"sumInsured\": \"0\",\r\n    \"vehicleType\": \"1002\",\r\n    \"vehicleUsage\": \"1001\",\r\n    \"noOfCylinder\": \"1004\",\r\n    \"nationality\": \"055\",\r\n    \"seatingCapacity\": \"5\",\r\n    \"firstRegDate\": \"01/01/2018\",\r\n    \"gccSpec\": 1,\r\n    \"previousInsuranceValid\": 1,\r\n    \"totalLoss\": 0,\r\n    \"driverDOB\": \"01/01/1994\",\r\n    \"noClaimYear\": 5,\r\n    \"selfDeclarationYear\": 0,\r\n    \"chassisNo\": \"\",\r\n    \"driverExp\": \"\",\r\n    \"admeId\": 401369,\r\n    \"regnLocation\":\"001\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/motor/tariff?company=002",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "motor",
+            "tariff"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "netPremium",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"quoteNo\": \"26200013010\",\r\n    \"schemes\": [\r\n        {\r\n            \"schemeCode\": \"0297\",\r\n            \"productCode\": \"0110\"\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/motor/netPremium?company=002",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "motor",
+            "netPremium"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getQuoteSchedule",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/getQuoteSchedule?company=002&quoteNo=26200013010&docType=Quotation",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "getQuoteSchedule"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            },
+            {
+              "key": "quoteNo",
+              "value": "26200013010"
+            },
+            {
+              "key": "docType",
+              "value": "Quotation"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SendPayLink",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"quoteNo\":\"26200013010\",\r\n    \"userId\": \"nazih.m\",\r\n    \"emailId\": \"manilakshmi.m@anoudtechnologies.com\",\r\n    \"userType\":\"A\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://devapi.anoudapps.com/qicservices/aggregator/sendPayLink?company=002",
+          "protocol": "https",
+          "host": [
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "sendPayLink"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getPolicyReport_Schedule",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/getPolicyReport?company=002&docType=Schedule&policyNo=2520031489",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "getPolicyReport"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            },
+            {
+              "key": "docType",
+              "value": "Schedule"
+            },
+            {
+              "key": "policyNo",
+              "value": "2520031489"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getPolicyReport_Receipt",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/getPolicyReport?company=002&docType=Receipt&policyNo=2520031489",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "getPolicyReport"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            },
+            {
+              "key": "docType",
+              "value": "Receipt"
+            },
+            {
+              "key": "policyNo",
+              "value": "2520031489"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getPolicyReport_Wordings",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "promise_api#2026$",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "promise_api",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "company",
+            "value": "002",
+            "type": "text",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.devapi.anoudapps.com/qicservices/aggregator/getPolicyReport?company=002&docType=Wordings&policyNo=2520031489",
+          "protocol": "https",
+          "host": [
+            "www",
+            "devapi",
+            "anoudapps",
+            "com"
+          ],
+          "path": [
+            "qicservices",
+            "aggregator",
+            "getPolicyReport"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "002"
+            },
+            {
+              "key": "docType",
+              "value": "Wordings"
+            },
+            {
+              "key": "policyNo",
+              "value": "2520031489"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

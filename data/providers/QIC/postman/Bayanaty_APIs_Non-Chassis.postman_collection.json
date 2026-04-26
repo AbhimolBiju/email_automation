@@ -1,0 +1,365 @@
+{
+	"info": {
+		"_postman_id": "3bb4faf2-4ceb-475e-a472-666ae6d8f627",
+		"name": "Bayanaty_Coll Non-Chassis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44266649",
+		"_collection_link": "https://api-team-0860.postman.co/workspace/220b0c46-1f44-484f-8238-ee15b4eafa23/collection/44266649-3bb4faf2-4ceb-475e-a472-666ae6d8f627?action=share&source=collection_link&creator=44266649"
+	},
+	"item": [
+		{
+			"name": "bayanatyVehicleValuation_UAT",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "mithun",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "mithun123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "company",
+						"value": "002",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  //\"TransactionId\": \"abc12345\",\r\n // \"AgentId\": \"AgentA1\",\r\n  \"ModelYear\": 2019, \r\n  \"MakeId\": 200134,\r\n  \"ModelId\": 301101,\r\n  \"TrimId\": 401369,\r\n  \"BodyTypeId\": 500135,\r\n  \"EngineCapacityId\": 600100,\r\n \"TransmissionId\": 700001,\r\n  \"IsGccSpec\": true,\r\n // \"Mileage\": 250000,\r\n  \"Vin\": \"JTMDW3FV4KD510156\"\r\n  //\"IsBrandNew\": false,\r\n  //\"ValuationDate\": \"2025-05-09T00:00:00.000Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://devapi.anoudapps.com/qicservices/aggregator/bayanaty/vehicleValuation",
+					"protocol": "https",
+					"host": [
+						"devapi",
+						"anoudapps",
+						"com"
+					],
+					"path": [
+						"qicservices",
+						"aggregator",
+						"bayanaty",
+						"vehicleValuation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bayanaty_BodyType UAT",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "online123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "online",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "company",
+						"value": "002",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "UserName",
+						"value": "online",
+						"type": "text"
+					},
+					{
+						"key": "Password",
+						"value": "online123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ModelYear\": 2015,\r\n  \"MakeId\": 200075,\r\n  \"ModelId\": 300276,\r\n//   \"EngineCapacityId\": 600108,\r\n  \"TransactionId\": \"abc12345\",\r\n  \"AgentId\": \"AgentA1\",\r\n//   \"BodyTypeId\": 500116,\r\n  \"TrimId\": 401816\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://devapi.anoudapps.com/qicservices/aggregator/bayanaty/bodyType?company=002",
+					"protocol": "https",
+					"host": [
+						"devapi",
+						"anoudapps",
+						"com"
+					],
+					"path": [
+						"qicservices",
+						"aggregator",
+						"bayanaty",
+						"bodyType"
+					],
+					"query": [
+						{
+							"key": "ModelYear",
+							"value": "2015",
+							"disabled": true
+						},
+						{
+							"key": "MakeId",
+							"value": "200075",
+							"disabled": true
+						},
+						{
+							"key": "ModelId",
+							"value": "300276",
+							"disabled": true
+						},
+						{
+							"key": "TrimId",
+							"value": "401816",
+							"disabled": true
+						},
+						{
+							"key": "TransactionId",
+							"value": "abc12345",
+							"disabled": true
+						},
+						{
+							"key": "AgentId",
+							"value": "AgentA1",
+							"disabled": true
+						},
+						{
+							"key": "company",
+							"value": "002"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bayanaty_EngineCapacities UAT",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "online123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "online",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "company",
+						"value": "002",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ModelYear\": 2015,\r\n  \"MakeId\": 200075,\r\n  \"ModelId\": 300276,\r\n//   \"EngineCapacityId\": 600108,\r\n  \"TransactionId\": \"abc12345\",\r\n  \"AgentId\": \"AgentA1\",\r\n  \"BodyTypeId\": 500116,\r\n  \"TrimId\": 401816\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://devapi.anoudapps.com/qicservices/aggregator/bayanaty/engineCapacities?ModelYear=2015&MakeId=200075&ModelId=300276&TransactionId=abc12345&AgentId=AgentA1&BodyType=500116&company=002",
+					"protocol": "https",
+					"host": [
+						"devapi",
+						"anoudapps",
+						"com"
+					],
+					"path": [
+						"qicservices",
+						"aggregator",
+						"bayanaty",
+						"engineCapacities"
+					],
+					"query": [
+						{
+							"key": "ModelYear",
+							"value": "2015"
+						},
+						{
+							"key": "MakeId",
+							"value": "200075"
+						},
+						{
+							"key": "ModelId",
+							"value": "300276"
+						},
+						{
+							"key": "EngineCapacityId",
+							"value": "600108",
+							"disabled": true
+						},
+						{
+							"key": "TransactionId",
+							"value": "abc12345"
+						},
+						{
+							"key": "AgentId",
+							"value": "AgentA1"
+						},
+						{
+							"key": "BodyType",
+							"value": "500116"
+						},
+						{
+							"key": "company",
+							"value": "002"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bayanaty_Trims UAT",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "online123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "online",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "company",
+						"value": "002",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ModelYear\": 2015,\r\n  \"MakeId\": 200075,\r\n  \"ModelId\": 300276,\r\n//   \"EngineCapacityId\": 600108,\r\n  \"TransactionId\": \"abc12345\",\r\n  \"AgentId\": \"AgentA1\"\r\n//   ,\r\n//   \"BodyTypeId\": 500116,\r\n//   \"TrimId\": 401816\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://devapi.anoudapps.com/qicservices/aggregator/bayanaty/trims",
+					"protocol": "https",
+					"host": [
+						"devapi",
+						"anoudapps",
+						"com"
+					],
+					"path": [
+						"qicservices",
+						"aggregator",
+						"bayanaty",
+						"trims"
+					],
+					"query": [
+						{
+							"key": "ModelYear",
+							"value": "2015",
+							"disabled": true
+						},
+						{
+							"key": "MakeId",
+							"value": "200075",
+							"disabled": true
+						},
+						{
+							"key": "ModelId",
+							"value": "300276",
+							"disabled": true
+						},
+						{
+							"key": "TransactionId",
+							"value": "abc12345",
+							"disabled": true
+						},
+						{
+							"key": "AgentId",
+							"value": "AgentA1",
+							"disabled": true
+						},
+						{
+							"key": "EngineCapacityId",
+							"value": "600108",
+							"disabled": true
+						},
+						{
+							"key": "BodyType",
+							"value": "500116",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

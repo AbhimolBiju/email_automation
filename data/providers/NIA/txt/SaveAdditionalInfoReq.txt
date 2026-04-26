@@ -1,0 +1,27 @@
+{
+	"Authentication": {
+		"Token": "QKHQBKY2GL",
+		"UserId": "test@gmail.com"
+	},
+ 	"AdditionalDetailsData": {
+ 		"InsrGender": "M",
+ 		"QuotNo": "Q0/01/10/2015/01533",
+ 		"PolStartDt": "29/06/2018",
+ 		"PolRemarks": "",
+ 		"PolEvgQuoteNo": "",
+ 		"InsrNameAr": "????? ???",
+ 		"InsrAddress1": "DIERA DUBAI",
+ 		"InsrEmiratesId": "752555555",
+ 		"InsrAddress2": "34345",
+ 		"InsrAddress3": "GDGDG",
+ 		"InsrMortgageBank": "5",
+ 		"InsrTrnNo": "24234234",
+ 		"VehChassisNo": "HY4667346573465",
+ 		"VehRegnNo": "4114",
+ 		"VehEngineNo": "12312312323",
+ 		"VehTcfNo": "1234567890",
+ 		"VehColor": "258",
+                "VehPlateCode": "001"
+ 	}
+
+ }

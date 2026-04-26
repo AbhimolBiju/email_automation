@@ -156,6 +156,8 @@ class DealDetailSerializer(serializers.ModelSerializer):
                 "file": document.file.url if document.file else None,
                 "file_name": document.name,
                 "uploaded_at": document.uploaded_at,
+                "ocr_status": document.ocr_status,
+                "ocr_data": document.ocr_data,
             }
             for document in obj.shared_documents.filter(
                 status__in=[

@@ -1,0 +1,2552 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "PolAssrOccup"
+  },
+  "records": [
+    {
+      "Code": "659",
+      "Description": "WATER PURIFICATION & DIST."
+    },
+    {
+      "Code": "453",
+      "Description": "ACCOUNTANT"
+    },
+    {
+      "Code": "086",
+      "Description": "ACCOUNTANTS AND AUDITORS"
+    },
+    {
+      "Code": "087",
+      "Description": "ADJUSTMENT CLERKS"
+    },
+    {
+      "Code": "511",
+      "Description": "ADMINISTRATIVE ASSISTANT"
+    },
+    {
+      "Code": "088",
+      "Description": "ADMINISTRATIVE SERVICE MANAGER"
+    },
+    {
+      "Code": "513",
+      "Description": "ADMINISTRATOR"
+    },
+    {
+      "Code": "663",
+      "Description": "ADVERTISING & COMMUNICATION"
+    },
+    {
+      "Code": "089",
+      "Description": "ADVERTISING CLERKS"
+    },
+    {
+      "Code": "494",
+      "Description": "ADVERTISING CONSULTANT"
+    },
+    {
+      "Code": "548",
+      "Description": "ADVISOR"
+    },
+    {
+      "Code": "429",
+      "Description": "ADVOCATES"
+    },
+    {
+      "Code": "021",
+      "Description": "AGRICULTURE"
+    },
+    {
+      "Code": "651",
+      "Description": "AIRCONDITIONING REPAIRING"
+    },
+    {
+      "Code": "090",
+      "Description": "AIRCRAFT MECHANICS"
+    },
+    {
+      "Code": "091",
+      "Description": "AIRCRAFT PILOTS ANDFLIGHT ENGG"
+    },
+    {
+      "Code": "656",
+      "Description": "ALUMINIUM & GLASS CONTRACTING"
+    },
+    {
+      "Code": "092",
+      "Description": "AMUSEMENT AND RECREATION ATTEN"
+    },
+    {
+      "Code": "093",
+      "Description": "ANIMAL CARETAKERS, EXCEPT FARM"
+    },
+    {
+      "Code": "094",
+      "Description": "ANNOUNCERS, RADIO AND TV"
+    },
+    {
+      "Code": "095",
+      "Description": "APPRAISERS,REAL ESTATE"
+    },
+    {
+      "Code": "435",
+      "Description": "ARCHITECT"
+    },
+    {
+      "Code": "503",
+      "Description": "ARMY OFFICER"
+    },
+    {
+      "Code": "498",
+      "Description": "ARTIST"
+    },
+    {
+      "Code": "096",
+      "Description": "ASSEMBLERS/FABRICATORS"
+    },
+    {
+      "Code": "097",
+      "Description": "ASSESSORS"
+    },
+    {
+      "Code": "287",
+      "Description": "ASTRONOMERS:"
+    },
+    {
+      "Code": "107",
+      "Description": "ATTENDANTS, & BARTENDER"
+    },
+    {
+      "Code": "570",
+      "Description": "AUTO REPAIR WORKSHOP & OFFICE"
+    },
+    {
+      "Code": "098",
+      "Description": "AUTOMOTIVE BODY AND RELATED RE"
+    },
+    {
+      "Code": "099",
+      "Description": "AUTOMOTIVE MECHANICS"
+    },
+    {
+      "Code": "100",
+      "Description": "AUXILLARY EQUIPMENT OPERATORS"
+    },
+    {
+      "Code": "479",
+      "Description": "AVIATION"
+    },
+    {
+      "Code": "678",
+      "Description": "As Per List Attached"
+    },
+    {
+      "Code": "101",
+      "Description": "BAGGAGE PORTERS AND BELLHOPS"
+    },
+    {
+      "Code": "102",
+      "Description": "BAILIFFS"
+    },
+    {
+      "Code": "103",
+      "Description": "BAKERS,BREAD AND PASTRY"
+    },
+    {
+      "Code": "438",
+      "Description": "BANKER"
+    },
+    {
+      "Code": "505",
+      "Description": "BANKING"
+    },
+    {
+      "Code": "104",
+      "Description": "BARTENDERS"
+    },
+    {
+      "Code": "504",
+      "Description": "BEAUTICIAN"
+    },
+    {
+      "Code": "497",
+      "Description": "BEAUTY THERAPIST"
+    },
+    {
+      "Code": "105",
+      "Description": "BILL AND ACCOUNT COLLECTORS"
+    },
+    {
+      "Code": "106",
+      "Description": "BILLING,COST AND RATE CLERKS"
+    },
+    {
+      "Code": "022",
+      "Description": "BILLING,POSTING MACHINE OPRTS"
+    },
+    {
+      "Code": "023",
+      "Description": "BINDERY MACHINE OPERATORS"
+    },
+    {
+      "Code": "024",
+      "Description": "BINDERY MACHINE SETTERS"
+    },
+    {
+      "Code": "126",
+      "Description": "BIOMEDICAL EQPT REPAIRERS:"
+    },
+    {
+      "Code": "681",
+      "Description": "BITUMEN"
+    },
+    {
+      "Code": "025",
+      "Description": "BLASTERS AND EXPLOSIVE WORKERS"
+    },
+    {
+      "Code": "583",
+      "Description": "BLOCK FACTORY/GEN.TRADING/LT"
+    },
+    {
+      "Code": "560",
+      "Description": "BLOCK MAKING FACTORY"
+    },
+    {
+      "Code": "026",
+      "Description": "BOILER OPERATORS AND TENDERS"
+    },
+    {
+      "Code": "027",
+      "Description": "BOOKKEEPING,ACCOUNTING CLERKS"
+    },
+    {
+      "Code": "475",
+      "Description": "BOOKSHOP"
+    },
+    {
+      "Code": "028",
+      "Description": "BRICK MASONS"
+    },
+    {
+      "Code": "514",
+      "Description": "BROADCAST JOURNALIST"
+    },
+    {
+      "Code": "029",
+      "Description": "BROADCAST NEWS ANALYSTS"
+    },
+    {
+      "Code": "501",
+      "Description": "BROADCASTER"
+    },
+    {
+      "Code": "012",
+      "Description": "BROKER"
+    },
+    {
+      "Code": "655",
+      "Description": "BROKERAGE FIRM - ONLINE TRDG."
+    },
+    {
+      "Code": "011",
+      "Description": "BUILDER"
+    },
+    {
+      "Code": "589",
+      "Description": "BUILDING CONSTRUCTION AND GENE"
+    },
+    {
+      "Code": "638",
+      "Description": "BUILDING CONTRACTORS"
+    },
+    {
+      "Code": "553",
+      "Description": "BUILDING DEMOLITION CONTRACTOR"
+    },
+    {
+      "Code": "605",
+      "Description": "BUILDING MAINTANANCE"
+    },
+    {
+      "Code": "660",
+      "Description": "BUILDING MAINTENANCE WORK"
+    },
+    {
+      "Code": "554",
+      "Description": "BUILDING MATERIALS TRADING"
+    },
+    {
+      "Code": "603",
+      "Description": "BUILDING OWNER/LANDLORD"
+    },
+    {
+      "Code": "527",
+      "Description": "BURSAR"
+    },
+    {
+      "Code": "030",
+      "Description": "BUS AND TRUCK MECHANICS"
+    },
+    {
+      "Code": "031",
+      "Description": "BUS DRIVERS"
+    },
+    {
+      "Code": "032",
+      "Description": "BUS DRIVERS,SCHOOL"
+    },
+    {
+      "Code": "001",
+      "Description": "BUSINESS"
+    },
+    {
+      "Code": "482",
+      "Description": "BUSINESS EXECUTIVE"
+    },
+    {
+      "Code": "484",
+      "Description": "BUSINESSMAN"
+    },
+    {
+      "Code": "530",
+      "Description": "BUTCHER"
+    },
+    {
+      "Code": "033",
+      "Description": "BUTCHERS AND MEAT CUTTERS"
+    },
+    {
+      "Code": "034",
+      "Description": "CABINETMAKERS AND BENCH CARPEN"
+    },
+    {
+      "Code": "035",
+      "Description": "CAMERA OPERATORS"
+    },
+    {
+      "Code": "036",
+      "Description": "CARPENTERS"
+    },
+    {
+      "Code": "256",
+      "Description": "CASH REGISTER SERVICERS:"
+    },
+    {
+      "Code": "037",
+      "Description": "CASHIERS"
+    },
+    {
+      "Code": "290",
+      "Description": "CASTING MACHINE OPERATORS"
+    },
+    {
+      "Code": "487",
+      "Description": "CATERER"
+    },
+    {
+      "Code": "556",
+      "Description": "CEMENT FACTORY"
+    },
+    {
+      "Code": "038",
+      "Description": "CENTRAL OFFICE AND PBX INSTALL"
+    },
+    {
+      "Code": "039",
+      "Description": "CENTRAL OFFICE OPERATORS"
+    },
+    {
+      "Code": "002",
+      "Description": "CHARTERED ACCOUNTANT"
+    },
+    {
+      "Code": "499",
+      "Description": "CHARTERED INSURER"
+    },
+    {
+      "Code": "040",
+      "Description": "CHEMICAL EQUIP CONTROLLERS"
+    },
+    {
+      "Code": "041",
+      "Description": "CHEMICAL TECHNICIANS&TECHNOLOG"
+    },
+    {
+      "Code": "042",
+      "Description": "CHEMISTS,EXCEPT BIOCHEMISTS"
+    },
+    {
+      "Code": "043",
+      "Description": "CHILD CARE WORKERS"
+    },
+    {
+      "Code": "044",
+      "Description": "CIVIL ENGINEERS,INCLDG TRAFFIC"
+    },
+    {
+      "Code": "574",
+      "Description": "CLEANING SERV."
+    },
+    {
+      "Code": "486",
+      "Description": "CLEARING AGENTS"
+    },
+    {
+      "Code": "465",
+      "Description": "CLERK IN HOLY ORDERS"
+    },
+    {
+      "Code": "232",
+      "Description": "CLINICAL LAB TECHNICIANS:"
+    },
+    {
+      "Code": "233",
+      "Description": "CLINICAL LAB TECHNOLOGISTS:"
+    },
+    {
+      "Code": "516",
+      "Description": "CO-ORDINATOR"
+    },
+    {
+      "Code": "045",
+      "Description": "COATING,PAINTING MCH OPERATORS"
+    },
+    {
+      "Code": "643",
+      "Description": "COFFEE SHOP"
+    },
+    {
+      "Code": "676",
+      "Description": "COFFEE SHOP / FOOD OUTLET"
+    },
+    {
+      "Code": "046",
+      "Description": "COIN&VENDING MACHINE SERVICERS"
+    },
+    {
+      "Code": "546",
+      "Description": "COLDSTORE"
+    },
+    {
+      "Code": "545",
+      "Description": "COLDSTORE CONSTRUCTION"
+    },
+    {
+      "Code": "478",
+      "Description": "COLLEGE PROFESSOR"
+    },
+    {
+      "Code": "047",
+      "Description": "COMBINATION MACHINE TOOL OPRTS"
+    },
+    {
+      "Code": "048",
+      "Description": "COMBINED FOOD PREP. WORKERS"
+    },
+    {
+      "Code": "515",
+      "Description": "COMMODITY TRADER"
+    },
+    {
+      "Code": "579",
+      "Description": "COMMUNICATION NETWORKS"
+    },
+    {
+      "Code": "049",
+      "Description": "COMMUNICATIONS MANAGER"
+    },
+    {
+      "Code": "050",
+      "Description": "COMPLIANCE&ENFORCEMENT INSPEC"
+    },
+    {
+      "Code": "051",
+      "Description": "COMPUTER OPERATORS"
+    },
+    {
+      "Code": "052",
+      "Description": "COMPUTER PROGRAMMER AIDES"
+    },
+    {
+      "Code": "053",
+      "Description": "COMPUTER PROGRAMMERS"
+    },
+    {
+      "Code": "458",
+      "Description": "COMPUTER SCIENTIST"
+    },
+    {
+      "Code": "448",
+      "Description": "COMPUTER TECHNICIAN"
+    },
+    {
+      "Code": "054",
+      "Description": "CONCRETE AND TERRAZZO FINISHER"
+    },
+    {
+      "Code": "667",
+      "Description": "CONSTRUCTION"
+    },
+    {
+      "Code": "055",
+      "Description": "CONSTRUCTION AND BLDG. INSPECT"
+    },
+    {
+      "Code": "056",
+      "Description": "CONSTRUCTION MANAGERS"
+    },
+    {
+      "Code": "673",
+      "Description": "CONSULTANCY SERVICES"
+    },
+    {
+      "Code": "003",
+      "Description": "CONSULTANT"
+    },
+    {
+      "Code": "562",
+      "Description": "CONTRACTING AND MAINTENANCE"
+    },
+    {
+      "Code": "442",
+      "Description": "CONTRACTOR"
+    },
+    {
+      "Code": "485",
+      "Description": "CONTRACTORS"
+    },
+    {
+      "Code": "058",
+      "Description": "CONVEYOR OPERATORS"
+    },
+    {
+      "Code": "059",
+      "Description": "COOKING MACHINE OPERATORS"
+    },
+    {
+      "Code": "060",
+      "Description": "COOKS,INSTITUTION OR CAFETERIA"
+    },
+    {
+      "Code": "062",
+      "Description": "COOKS,SHORT ORDER"
+    },
+    {
+      "Code": "063",
+      "Description": "COOKS,SPECIALITY FAST FOOD"
+    },
+    {
+      "Code": "064",
+      "Description": "CORRECTION OFFICERS&JAILERS"
+    },
+    {
+      "Code": "065",
+      "Description": "CORRESPONDENCE CLERKS"
+    },
+    {
+      "Code": "066",
+      "Description": "COST ESTIMATORS"
+    },
+    {
+      "Code": "067",
+      "Description": "COUNTER AND RENTAL CLERKS"
+    },
+    {
+      "Code": "068",
+      "Description": "COUNTER ATTENDANTS-LUNCHROOM"
+    },
+    {
+      "Code": "069",
+      "Description": "COURT CLERKS"
+    },
+    {
+      "Code": "070",
+      "Description": "CRANE AND TOWER OPERATORS"
+    },
+    {
+      "Code": "071",
+      "Description": "CREDIT CHECKERS"
+    },
+    {
+      "Code": "072",
+      "Description": "CRIMINAL INVESTIGATORS"
+    },
+    {
+      "Code": "073",
+      "Description": "CROSSING GUARDS"
+    },
+    {
+      "Code": "074",
+      "Description": "CRUSHING,GRINDING OPERATORS"
+    },
+    {
+      "Code": "529",
+      "Description": "CULTURAL DIRECTOR"
+    },
+    {
+      "Code": "075",
+      "Description": "CUSTOMER SERVICE REPRESENTATIV"
+    },
+    {
+      "Code": "076",
+      "Description": "DAIRY PROCESSING EQPT OPERATOR"
+    },
+    {
+      "Code": "077",
+      "Description": "DATA ENTRY KEYERS"
+    },
+    {
+      "Code": "078",
+      "Description": "DATA PROCESSING EQPT REPAIRERS"
+    },
+    {
+      "Code": "572",
+      "Description": "DEALERS IN COMPUTER TRADE"
+    },
+    {
+      "Code": "561",
+      "Description": "DEALING WITH HARDWARE & MACH"
+    },
+    {
+      "Code": "079",
+      "Description": "DEMONSTARTORS,PROMOTERS"
+    },
+    {
+      "Code": "080",
+      "Description": "DENTAL ASSISTANTS"
+    },
+    {
+      "Code": "081",
+      "Description": "DENTAL HYGIENISTS"
+    },
+    {
+      "Code": "298",
+      "Description": "DENTAL LAB TECHNICIANS:"
+    },
+    {
+      "Code": "543",
+      "Description": "DENTAL SURGEON"
+    },
+    {
+      "Code": "082",
+      "Description": "DENTISTS"
+    },
+    {
+      "Code": "576",
+      "Description": "DEPARTMENT STORE"
+    },
+    {
+      "Code": "083",
+      "Description": "DERRICK OPERATORS"
+    },
+    {
+      "Code": "084",
+      "Description": "DESIGNERS,EXCEPT INTERIOR"
+    },
+    {
+      "Code": "519",
+      "Description": "DEVELOPMENT ECONOMIST"
+    },
+    {
+      "Code": "085",
+      "Description": "DIETETIC TECHNICIANS"
+    },
+    {
+      "Code": "468",
+      "Description": "DIPLOMAT"
+    },
+    {
+      "Code": "547",
+      "Description": "DIPLOMATIC MISSION"
+    },
+    {
+      "Code": "493",
+      "Description": "DIRECTOR"
+    },
+    {
+      "Code": "108",
+      "Description": "DISPATCHERS"
+    },
+    {
+      "Code": "133",
+      "Description": "DRAFTERS"
+    },
+    {
+      "Code": "109",
+      "Description": "DRAFTERS:"
+    },
+    {
+      "Code": "110",
+      "Description": "DRAGLINE OPERATORS:"
+    },
+    {
+      "Code": "016",
+      "Description": "DRIVER"
+    },
+    {
+      "Code": "595",
+      "Description": "DRIVER OF MOTOR BICYCLE"
+    },
+    {
+      "Code": "582",
+      "Description": "DRIVER,MESSENGER,COOK,HSE SRNT"
+    },
+    {
+      "Code": "111",
+      "Description": "DRIVER/SALES WORKERS:"
+    },
+    {
+      "Code": "557",
+      "Description": "DRIVING SCHOOL"
+    },
+    {
+      "Code": "202",
+      "Description": "DRY CLEANING MACHINE OPRTS"
+    },
+    {
+      "Code": "112",
+      "Description": "DRYWALL INSTALLERS:"
+    },
+    {
+      "Code": "113",
+      "Description": "DUPLICATING MACHINE OPRTRS"
+    },
+    {
+      "Code": "114",
+      "Description": "EARTH DRILLERS"
+    },
+    {
+      "Code": "115",
+      "Description": "ECONOMISTS"
+    },
+    {
+      "Code": "271",
+      "Description": "EDP EQUIPMENT OPERATORS:"
+    },
+    {
+      "Code": "116",
+      "Description": "EDUCATION ADMINISTRATORS:"
+    },
+    {
+      "Code": "417",
+      "Description": "EDUCATIONAL COUNSELORS:"
+    },
+    {
+      "Code": "522",
+      "Description": "EDUCATIONAL INSTITUTION"
+    },
+    {
+      "Code": "449",
+      "Description": "EDUCATIONIST"
+    },
+    {
+      "Code": "118",
+      "Description": "ELECTRIC METER INSTALLERS"
+    },
+    {
+      "Code": "119",
+      "Description": "ELECTRIC MOTOR REPAIRERS:"
+    },
+    {
+      "Code": "120",
+      "Description": "ELECTRICAL ASSEMBLERS:"
+    },
+    {
+      "Code": "523",
+      "Description": "ELECTRICAL CONTRACTORS"
+    },
+    {
+      "Code": "122",
+      "Description": "ELECTRICAL ENGINEER"
+    },
+    {
+      "Code": "124",
+      "Description": "ELECTRICAL INSTALLERS"
+    },
+    {
+      "Code": "125",
+      "Description": "ELECTRICIANS:"
+    },
+    {
+      "Code": "662",
+      "Description": "ELECTRO MECHANICAL CONTRACTOR"
+    },
+    {
+      "Code": "127",
+      "Description": "ELECTRO-MECHANICAL  WORKS"
+    },
+    {
+      "Code": "121",
+      "Description": "ELECTRONIC ASSEMBLERS:"
+    },
+    {
+      "Code": "123",
+      "Description": "ELECTRONIC ENGINEERS:"
+    },
+    {
+      "Code": "128",
+      "Description": "EMBALMERS:"
+    },
+    {
+      "Code": "129",
+      "Description": "EMERGNCY MEDICAL TECHNS:"
+    },
+    {
+      "Code": "130",
+      "Description": "EMPLOYMENT INTERVIEWERS"
+    },
+    {
+      "Code": "004",
+      "Description": "ENGINEER"
+    },
+    {
+      "Code": "132",
+      "Description": "ENGINEERING TEACHERS"
+    },
+    {
+      "Code": "131",
+      "Description": "ENGINEERING TECHNICIANS"
+    },
+    {
+      "Code": "551",
+      "Description": "EVANGELIST"
+    },
+    {
+      "Code": "134",
+      "Description": "EXCAVATING MACHINE OPRTRS"
+    },
+    {
+      "Code": "528",
+      "Description": "EXECUTIVE ASSISTANT"
+    },
+    {
+      "Code": "512",
+      "Description": "EXECUTIVE DIRECTOR"
+    },
+    {
+      "Code": "569",
+      "Description": "EXPORT(LIGHT & FIXTURES)"
+    },
+    {
+      "Code": "135",
+      "Description": "FALLERS AND BUCKERS:"
+    },
+    {
+      "Code": "137",
+      "Description": "FARM EQUIPMENT MECHANICS:"
+    },
+    {
+      "Code": "472",
+      "Description": "FARMER"
+    },
+    {
+      "Code": "490",
+      "Description": "FASHION DESIGNER"
+    },
+    {
+      "Code": "138",
+      "Description": "FENCE ERECTORS:"
+    },
+    {
+      "Code": "602",
+      "Description": "FERTILIZER CHEMICAL PRODUCT"
+    },
+    {
+      "Code": "139",
+      "Description": "FILE CLERKS:"
+    },
+    {
+      "Code": "264",
+      "Description": "FILLING MACHINE OPERATORS"
+    },
+    {
+      "Code": "518",
+      "Description": "FINANCE EXECUTIVE"
+    },
+    {
+      "Code": "140",
+      "Description": "FINANCIAL MANAGERS:"
+    },
+    {
+      "Code": "141",
+      "Description": "FIRE FIGHTERS:"
+    },
+    {
+      "Code": "142",
+      "Description": "FIRE FIGHTING SUPERVISORS:"
+    },
+    {
+      "Code": "521",
+      "Description": "FIRE-SERVICE (NURSE)"
+    },
+    {
+      "Code": "143",
+      "Description": "FIRST-LINE SUPERVISORS"
+    },
+    {
+      "Code": "144",
+      "Description": "FISH AND GAME WARDENS:"
+    },
+    {
+      "Code": "480",
+      "Description": "FLIGHT ATTENDANT"
+    },
+    {
+      "Code": "145",
+      "Description": "FLIGHT ATTENDANTS:"
+    },
+    {
+      "Code": "649",
+      "Description": "FOOD & BEVERAGES AND RETAILS"
+    },
+    {
+      "Code": "146",
+      "Description": "FOOD BATCHMAKERS:"
+    },
+    {
+      "Code": "675",
+      "Description": "FOOD OUTLET"
+    },
+    {
+      "Code": "147",
+      "Description": "FOOD PREPARATION WORKERS"
+    },
+    {
+      "Code": "148",
+      "Description": "FOOD SERVERS, OUTSIDE:"
+    },
+    {
+      "Code": "517",
+      "Description": "FOOTBALLERS"
+    },
+    {
+      "Code": "150",
+      "Description": "FOREST  WORKERS:"
+    },
+    {
+      "Code": "524",
+      "Description": "FOREST OPERATIONS MANAGER"
+    },
+    {
+      "Code": "151",
+      "Description": "FORESTERS"
+    },
+    {
+      "Code": "654",
+      "Description": "FREIGHT AGENCY"
+    },
+    {
+      "Code": "152",
+      "Description": "FREIGHT MATERIAL MOVERS"
+    },
+    {
+      "Code": "153",
+      "Description": "FUNERAL ATTENDANTS:"
+    },
+    {
+      "Code": "154",
+      "Description": "FUNERAL DIRECTORS"
+    },
+    {
+      "Code": "155",
+      "Description": "FURNITURE FINISHERS:"
+    },
+    {
+      "Code": "671",
+      "Description": "FURNITURE MANUFACTURING"
+    },
+    {
+      "Code": "156",
+      "Description": "GAS COMPRESSOR OPRTRS:"
+    },
+    {
+      "Code": "157",
+      "Description": "GAS PLANT OPERATORS:"
+    },
+    {
+      "Code": "158",
+      "Description": "GAUGERS:"
+    },
+    {
+      "Code": "567",
+      "Description": "GENERAL LAND TRANSPORT"
+    },
+    {
+      "Code": "159",
+      "Description": "GENERAL MANAGERS"
+    },
+    {
+      "Code": "489",
+      "Description": "GENERAL MERCHANTS"
+    },
+    {
+      "Code": "160",
+      "Description": "GENERAL OFFICE CLERKS:"
+    },
+    {
+      "Code": "658",
+      "Description": "GENERAL TRADING"
+    },
+    {
+      "Code": "640",
+      "Description": "GENERAL TRANSPORT"
+    },
+    {
+      "Code": "161",
+      "Description": "GEOLOGISTS, GEOPHYSICISTS"
+    },
+    {
+      "Code": "162",
+      "Description": "GLAZIERS:"
+    },
+    {
+      "Code": "163",
+      "Description": "GRADER, DOZER OPERATORS:"
+    },
+    {
+      "Code": "473",
+      "Description": "GRAPHIC DESIGNER"
+    },
+    {
+      "Code": "164",
+      "Description": "GRINDING & POLISHING WORKS"
+    },
+    {
+      "Code": "165",
+      "Description": "GUARDS AND WATCH GUARDS:"
+    },
+    {
+      "Code": "166",
+      "Description": "GUIDES:"
+    },
+    {
+      "Code": "680",
+      "Description": "Gymnasium"
+    },
+    {
+      "Code": "167",
+      "Description": "HAIRDRESSERS, HAIRSTYLISTS"
+    },
+    {
+      "Code": "168",
+      "Description": "HAND PACKERS & PACKAGERS"
+    },
+    {
+      "Code": "169",
+      "Description": "HAND WORKING OCCUPATIONS"
+    },
+    {
+      "Code": "170",
+      "Description": "HEAD SAWYERS:"
+    },
+    {
+      "Code": "550",
+      "Description": "HEALTH CONSULTANT"
+    },
+    {
+      "Code": "245",
+      "Description": "HEAVY EQUIPMENT MECHANICS"
+    },
+    {
+      "Code": "172",
+      "Description": "HELPERS STONE MASONS"
+    },
+    {
+      "Code": "179",
+      "Description": "HELPERS, LABORERS"
+    },
+    {
+      "Code": "173",
+      "Description": "HELPERS-CARPENTERS"
+    },
+    {
+      "Code": "174",
+      "Description": "HELPERS-CONST. TRADES"
+    },
+    {
+      "Code": "175",
+      "Description": "HELPERS-ELECTRICIANS"
+    },
+    {
+      "Code": "176",
+      "Description": "HELPERS-MECHANICS"
+    },
+    {
+      "Code": "177",
+      "Description": "HELPERS-PLUMBERS"
+    },
+    {
+      "Code": "178",
+      "Description": "HELPERS-ROOFERS:"
+    },
+    {
+      "Code": "180",
+      "Description": "HIGHWAY MAINT. WORKERS:"
+    },
+    {
+      "Code": "117",
+      "Description": "HOME APPLIANCE REPAIRERS:"
+    },
+    {
+      "Code": "272",
+      "Description": "HOME CARE AIDES:"
+    },
+    {
+      "Code": "181",
+      "Description": "HOME HEALTH AIDES:"
+    },
+    {
+      "Code": "136",
+      "Description": "HOME MANGMNT ADVISORS:"
+    },
+    {
+      "Code": "182",
+      "Description": "HOSTS & HOSTESSES"
+    },
+    {
+      "Code": "639",
+      "Description": "HOTEL"
+    },
+    {
+      "Code": "183",
+      "Description": "HOTEL DESK CLERKS:"
+    },
+    {
+      "Code": "184",
+      "Description": "HOUSEKEEPERS:"
+    },
+    {
+      "Code": "225",
+      "Description": "HOUSEKEEPING CLEANERS:"
+    },
+    {
+      "Code": "005",
+      "Description": "HOUSEWIFE"
+    },
+    {
+      "Code": "526",
+      "Description": "HUMAN RESOURCE MANAGER"
+    },
+    {
+      "Code": "185",
+      "Description": "HUMAN SERVICES WORKERS:"
+    },
+    {
+      "Code": "578",
+      "Description": "IMPORT & EXPORT"
+    },
+    {
+      "Code": "186",
+      "Description": "INDUSTRIAL ENGINEERS"
+    },
+    {
+      "Code": "006",
+      "Description": "INFANT"
+    },
+    {
+      "Code": "584",
+      "Description": "INSTALLATION OF SECURITY ALARM"
+    },
+    {
+      "Code": "189",
+      "Description": "INSTALLERS/REPAIRERS"
+    },
+    {
+      "Code": "190",
+      "Description": "INSTRNL.COORDINATORS"
+    },
+    {
+      "Code": "191",
+      "Description": "INSTRUCTORS & COACHES, SPORTS & PHYSICAL TRAINING:"
+    },
+    {
+      "Code": "387",
+      "Description": "INSTRUCTORS TRAINING:"
+    },
+    {
+      "Code": "192",
+      "Description": "INSTRUCTORS, NONVOCATIONAL EDUCATION:"
+    },
+    {
+      "Code": "193",
+      "Description": "INSULATION WORKERS:"
+    },
+    {
+      "Code": "571",
+      "Description": "INSURANCE"
+    },
+    {
+      "Code": "194",
+      "Description": "INSURANCE ADJUSTERS, EXAMINERS, & INVESTIGATORS:"
+    },
+    {
+      "Code": "195",
+      "Description": "INSURANCE CLAIMS CLERKS:"
+    },
+    {
+      "Code": "471",
+      "Description": "INSURANCE EXECUTIVE"
+    },
+    {
+      "Code": "542",
+      "Description": "INSURANCE OFFICER"
+    },
+    {
+      "Code": "196",
+      "Description": "INSURANCE POLICY PROCESSING CLERKS:"
+    },
+    {
+      "Code": "197",
+      "Description": "INTERIOR DESIGNERS:"
+    },
+    {
+      "Code": "198",
+      "Description": "INTERVIEWING CLERKS"
+    },
+    {
+      "Code": "520",
+      "Description": "ISLAMIC PREACHER"
+    },
+    {
+      "Code": "199",
+      "Description": "JANITORS & CLEANERS"
+    },
+    {
+      "Code": "588",
+      "Description": "JEWELLERY SHOP"
+    },
+    {
+      "Code": "200",
+      "Description": "JOB PRINTERS:"
+    },
+    {
+      "Code": "201",
+      "Description": "JUDGES AND MAGISTRATES:"
+    },
+    {
+      "Code": "647",
+      "Description": "JUICE PARLOUR"
+    },
+    {
+      "Code": "646",
+      "Description": "KITCHEN CABINET MFG. UNIT"
+    },
+    {
+      "Code": "274",
+      "Description": "LABOR RELATIONS MANAGERS:"
+    },
+    {
+      "Code": "275",
+      "Description": "LABOR RELATIONS SPLSTS:"
+    },
+    {
+      "Code": "668",
+      "Description": "LABOUR CAMP BUILDING"
+    },
+    {
+      "Code": "564",
+      "Description": "LANDLORD OF WAREHOUSE BUILDING"
+    },
+    {
+      "Code": "363",
+      "Description": "LANGUAGE PATHOLOGISTS"
+    },
+    {
+      "Code": "203",
+      "Description": "LAW CLERKS:"
+    },
+    {
+      "Code": "204",
+      "Description": "LAWN SERVICE MANAGERS:"
+    },
+    {
+      "Code": "013",
+      "Description": "LAWYER"
+    },
+    {
+      "Code": "205",
+      "Description": "LAWYERS:"
+    },
+    {
+      "Code": "540",
+      "Description": "LECTURER"
+    },
+    {
+      "Code": "206",
+      "Description": "LEGAL ASSISTANTS"
+    },
+    {
+      "Code": "467",
+      "Description": "LEGAL PRACTITIONER"
+    },
+    {
+      "Code": "207",
+      "Description": "LEGAL SECRETARIES:"
+    },
+    {
+      "Code": "208",
+      "Description": "LETTERPRESS SETTERS"
+    },
+    {
+      "Code": "209",
+      "Description": "LIBRARIAN"
+    },
+    {
+      "Code": "210",
+      "Description": "LIBRARY ASSISTANTS"
+    },
+    {
+      "Code": "393",
+      "Description": "LIBRARY ASSISTANTS, :"
+    },
+    {
+      "Code": "211",
+      "Description": "LICENSE CLERKS:"
+    },
+    {
+      "Code": "212",
+      "Description": "LICENSED PRACTICAL NURSES:"
+    },
+    {
+      "Code": "213",
+      "Description": "LIFE SCIENCES TEACHERS"
+    },
+    {
+      "Code": "214",
+      "Description": "LIFE SCIENTISTS:"
+    },
+    {
+      "Code": "419",
+      "Description": "LIQUID WASTE PLANT OPRTS"
+    },
+    {
+      "Code": "215",
+      "Description": "LOAN & CREDIT CLERKS:"
+    },
+    {
+      "Code": "216",
+      "Description": "LOAN OFFICERS"
+    },
+    {
+      "Code": "217",
+      "Description": "LOCOMOTIVE FIRERS:"
+    },
+    {
+      "Code": "149",
+      "Description": "LODGING MANAGERS:"
+    },
+    {
+      "Code": "218",
+      "Description": "LOG HANDLING EQPT OPRTRS"
+    },
+    {
+      "Code": "219",
+      "Description": "LOGGING TRACTOR OPRTS"
+    },
+    {
+      "Code": "220",
+      "Description": "MACHINE BUILDERS"
+    },
+    {
+      "Code": "221",
+      "Description": "MACHINE FEEDERS"
+    },
+    {
+      "Code": "222",
+      "Description": "MACHINE FORMING OPERATORS"
+    },
+    {
+      "Code": "444",
+      "Description": "MACHINE OPEARTOR"
+    },
+    {
+      "Code": "019",
+      "Description": "MACHINISTS"
+    },
+    {
+      "Code": "224",
+      "Description": "MACHINISTS:"
+    },
+    {
+      "Code": "226",
+      "Description": "MAIL CLERKS"
+    },
+    {
+      "Code": "227",
+      "Description": "MAIL MACHINE OPERATORS"
+    },
+    {
+      "Code": "228",
+      "Description": "MAINTENANCE REPAIRERS"
+    },
+    {
+      "Code": "223",
+      "Description": "MAINTENANCE WORKERS:"
+    },
+    {
+      "Code": "229",
+      "Description": "MANAGEMENT ANALYSTS:"
+    },
+    {
+      "Code": "461",
+      "Description": "MANAGER"
+    },
+    {
+      "Code": "591",
+      "Description": "MANAGER,TECHNICIANS & OFFICE S"
+    },
+    {
+      "Code": "445",
+      "Description": "MANAGING DIRECTOR"
+    },
+    {
+      "Code": "531",
+      "Description": "MANUFACTURERS"
+    },
+    {
+      "Code": "500",
+      "Description": "MANUFACTURERS OF FURNITURE & F"
+    },
+    {
+      "Code": "464",
+      "Description": "MANUFACTURING OF PROPYLENE BAG"
+    },
+    {
+      "Code": "378",
+      "Description": "MAPPING SCIENTISTS:"
+    },
+    {
+      "Code": "457",
+      "Description": "MARKETING EXECUTIVE"
+    },
+    {
+      "Code": "018",
+      "Description": "MECHANIC"
+    },
+    {
+      "Code": "231",
+      "Description": "MECHANICAL ENGINEER"
+    },
+    {
+      "Code": "677",
+      "Description": "MEDIA"
+    },
+    {
+      "Code": "234",
+      "Description": "MEDICAL ASSISTANTS:"
+    },
+    {
+      "Code": "477",
+      "Description": "MEDICAL DOCTOR"
+    },
+    {
+      "Code": "459",
+      "Description": "MEDICAL PRACTITIONER"
+    },
+    {
+      "Code": "235",
+      "Description": "MEDICAL REC. TECHNICIANS:"
+    },
+    {
+      "Code": "236",
+      "Description": "MEDICAL SECRETARIES:"
+    },
+    {
+      "Code": "237",
+      "Description": "MEDICINE & HEALTH SERVICES"
+    },
+    {
+      "Code": "238",
+      "Description": "MERCHANDISE DISPLAYERS"
+    },
+    {
+      "Code": "544",
+      "Description": "MERCHANTS"
+    },
+    {
+      "Code": "239",
+      "Description": "MESSENGERS:"
+    },
+    {
+      "Code": "354",
+      "Description": "METAL DUCT INSTALLERS"
+    },
+    {
+      "Code": "240",
+      "Description": "METAL FABRICATORS"
+    },
+    {
+      "Code": "590",
+      "Description": "METAL PIPES & PROFILES MANUFAC"
+    },
+    {
+      "Code": "241",
+      "Description": "METER READERS, UTILITIES:"
+    },
+    {
+      "Code": "242",
+      "Description": "MILLWRIGHTS:"
+    },
+    {
+      "Code": "243",
+      "Description": "MINE CUTTING OPERATORS:"
+    },
+    {
+      "Code": "409",
+      "Description": "MINE MACHINERY MECHANICS:"
+    },
+    {
+      "Code": "244",
+      "Description": "MINING ENGINEERS"
+    },
+    {
+      "Code": "057",
+      "Description": "MINING MACHINE OPERATORS"
+    },
+    {
+      "Code": "437",
+      "Description": "MINISTER OF RELIGION"
+    },
+    {
+      "Code": "508",
+      "Description": "MODEL"
+    },
+    {
+      "Code": "246",
+      "Description": "MOTION PICT. PROJECTIONISTS:"
+    },
+    {
+      "Code": "247",
+      "Description": "MUNICIPAL CLERKS:"
+    },
+    {
+      "Code": "248",
+      "Description": "MUSICIANS, INSTRUMENTAL:"
+    },
+    {
+      "Code": "451",
+      "Description": "NANNY"
+    },
+    {
+      "Code": "555",
+      "Description": "NEON MAKING & INSTALLATION"
+    },
+    {
+      "Code": "249",
+      "Description": "NEW ACCOUNTS CLERKS:"
+    },
+    {
+      "Code": "250",
+      "Description": "NUCLEAR TECHNOLOGISTS:"
+    },
+    {
+      "Code": "329",
+      "Description": "NURSE"
+    },
+    {
+      "Code": "251",
+      "Description": "NURSERY WORKERS:"
+    },
+    {
+      "Code": "252",
+      "Description": "NURSING AIDES, ORDERLIES,"
+    },
+    {
+      "Code": "253",
+      "Description": "NURSING INSTRUCTORS"
+    },
+    {
+      "Code": "254",
+      "Description": "OCCUPATIONAL THERAPISTS:"
+    },
+    {
+      "Code": "255",
+      "Description": "OCCUPATIONAL THERAPY AIDES"
+    },
+    {
+      "Code": "669",
+      "Description": "OFFICE"
+    },
+    {
+      "Code": "665",
+      "Description": "OFFICE OF TOURISM COMPANY"
+    },
+    {
+      "Code": "257",
+      "Description": "OFFSET PRESS SETTERS"
+    },
+    {
+      "Code": "258",
+      "Description": "OIL PUMPERS"
+    },
+    {
+      "Code": "259",
+      "Description": "OPERATING ENGINEERS:"
+    },
+    {
+      "Code": "260",
+      "Description": "OPTICIANS"
+    },
+    {
+      "Code": "261",
+      "Description": "OPTOMETRISTS:"
+    },
+    {
+      "Code": "262",
+      "Description": "ORDER CLERKS"
+    },
+    {
+      "Code": "263",
+      "Description": "ORDER FILLERS"
+    },
+    {
+      "Code": "476",
+      "Description": "PAEDIATRICIAN"
+    },
+    {
+      "Code": "265",
+      "Description": "PAINTERS & PAPERHANGERS"
+    },
+    {
+      "Code": "266",
+      "Description": "PAINTING, COATING,WORKERS"
+    },
+    {
+      "Code": "650",
+      "Description": "PAPER INDUSTRIES"
+    },
+    {
+      "Code": "267",
+      "Description": "PARALEGAL PERSONNEL:"
+    },
+    {
+      "Code": "539",
+      "Description": "PARAMOUNT CHIEF"
+    },
+    {
+      "Code": "525",
+      "Description": "PARLIAMENTARIAN"
+    },
+    {
+      "Code": "268",
+      "Description": "PASTE-UP WORKERS:"
+    },
+    {
+      "Code": "502",
+      "Description": "PASTOR"
+    },
+    {
+      "Code": "269",
+      "Description": "PAVING, SURFACING, OPRTS"
+    },
+    {
+      "Code": "270",
+      "Description": "PAYROLL CLERKS:"
+    },
+    {
+      "Code": "273",
+      "Description": "PERSONNEL CLERKS"
+    },
+    {
+      "Code": "276",
+      "Description": "PETROLEUM ENGINEERS:"
+    },
+    {
+      "Code": "277",
+      "Description": "PETROLEUM REFINERY OPRTS:"
+    },
+    {
+      "Code": "278",
+      "Description": "PETROLEUM TECHNICIANS"
+    },
+    {
+      "Code": "648",
+      "Description": "PHARMACEUTICAL TRADERS"
+    },
+    {
+      "Code": "279",
+      "Description": "PHARMACIST"
+    },
+    {
+      "Code": "280",
+      "Description": "PHARMACY AIDES:"
+    },
+    {
+      "Code": "281",
+      "Description": "PHARMACY TECHNICIANS:"
+    },
+    {
+      "Code": "283",
+      "Description": "PHOTO PROCESSIING OPRTS."
+    },
+    {
+      "Code": "566",
+      "Description": "PHOTO STUDIO"
+    },
+    {
+      "Code": "282",
+      "Description": "PHOTOGRAPHERS:"
+    },
+    {
+      "Code": "284",
+      "Description": "PHYSICAL THERAPISTS:"
+    },
+    {
+      "Code": "286",
+      "Description": "PHYSICIAN'S ASSISTANTS:"
+    },
+    {
+      "Code": "285",
+      "Description": "PHYSICIANS AND SURGEONS:"
+    },
+    {
+      "Code": "322",
+      "Description": "PHYSICISTS"
+    },
+    {
+      "Code": "447",
+      "Description": "PHYSIOTHERAPIST"
+    },
+    {
+      "Code": "664",
+      "Description": "PILING & FOUNDATION CONTRACTIN"
+    },
+    {
+      "Code": "288",
+      "Description": "PIPELAYERS:"
+    },
+    {
+      "Code": "289",
+      "Description": "PLANT AND SYSTEM WORKERS:"
+    },
+    {
+      "Code": "432",
+      "Description": "PLASTIC MANUFACTURING INDUSTRY"
+    },
+    {
+      "Code": "563",
+      "Description": "PLAY AREA OPERATOR"
+    },
+    {
+      "Code": "291",
+      "Description": "PLUMBERS, PIPEFITTERS"
+    },
+    {
+      "Code": "292",
+      "Description": "PODIATRISTS:"
+    },
+    {
+      "Code": "293",
+      "Description": "POLICE & DETECTIVE SUPERVISORS:"
+    },
+    {
+      "Code": "294",
+      "Description": "POLICE DETECTIVES:"
+    },
+    {
+      "Code": "295",
+      "Description": "POLICE PATROL OFFICERS:"
+    },
+    {
+      "Code": "296",
+      "Description": "POWER DISTRIBUTORS"
+    },
+    {
+      "Code": "401",
+      "Description": "PRECISION GRINDERS"
+    },
+    {
+      "Code": "300",
+      "Description": "PRECISION INSPECTORS"
+    },
+    {
+      "Code": "301",
+      "Description": "PRECISION INSTRUMENT REPRS"
+    },
+    {
+      "Code": "299",
+      "Description": "PRECSN. MOLD & CORE MAKRS"
+    },
+    {
+      "Code": "302",
+      "Description": "PRESSERS, DELICATE FABRICS"
+    },
+    {
+      "Code": "303",
+      "Description": "PRESSING MACHINE OPRTS."
+    },
+    {
+      "Code": "510",
+      "Description": "PRINCIPAL ACCOUNTANT"
+    },
+    {
+      "Code": "304",
+      "Description": "PRINTING PRESS OPERATORS"
+    },
+    {
+      "Code": "587",
+      "Description": "PRINTING PRESS,STATIONERY & GT"
+    },
+    {
+      "Code": "469",
+      "Description": "PRISONS OFFICER"
+    },
+    {
+      "Code": "305",
+      "Description": "PROCUREMENT CLERKS:"
+    },
+    {
+      "Code": "306",
+      "Description": "PRODUCERS, DIRECTORS"
+    },
+    {
+      "Code": "307",
+      "Description": "PRODUCTION INSPECTORS"
+    },
+    {
+      "Code": "187",
+      "Description": "PRODUCTION MANAGERS:"
+    },
+    {
+      "Code": "308",
+      "Description": "PRODUCTION PLANNING CLERKS"
+    },
+    {
+      "Code": "558",
+      "Description": "PRODUCTION SUPERVISOR"
+    },
+    {
+      "Code": "007",
+      "Description": "PROFESSIONAL"
+    },
+    {
+      "Code": "443",
+      "Description": "PROFESSOR"
+    },
+    {
+      "Code": "460",
+      "Description": "PROJECT COORDINATOR"
+    },
+    {
+      "Code": "309",
+      "Description": "PROOFREADERS"
+    },
+    {
+      "Code": "474",
+      "Description": "PROPERTY HOLDING COMPANY"
+    },
+    {
+      "Code": "441",
+      "Description": "PROPRIETOR"
+    },
+    {
+      "Code": "311",
+      "Description": "PSYCHIATRIC AIDES:"
+    },
+    {
+      "Code": "312",
+      "Description": "PSYCHIATRIC TECHNICIANS:"
+    },
+    {
+      "Code": "313",
+      "Description": "PSYCHOLOGISTS:"
+    },
+    {
+      "Code": "314",
+      "Description": "PUBLIC ADMINISTRATION CHIEF"
+    },
+    {
+      "Code": "230",
+      "Description": "PUBLIC RELATIONS MANAGERS"
+    },
+    {
+      "Code": "506",
+      "Description": "PUBLIC RELATIONS OFFICER"
+    },
+    {
+      "Code": "315",
+      "Description": "PUBLIC RELATIONS SPECIALISTS"
+    },
+    {
+      "Code": "316",
+      "Description": "PUNCHING MACHINE SETTERS"
+    },
+    {
+      "Code": "495",
+      "Description": "PUPIL"
+    },
+    {
+      "Code": "317",
+      "Description": "PURCHASING AGENTS"
+    },
+    {
+      "Code": "318",
+      "Description": "PURCHASING MANAGERS:"
+    },
+    {
+      "Code": "319",
+      "Description": "RADIO MECHANICS:"
+    },
+    {
+      "Code": "320",
+      "Description": "RADIO OPERATORS:"
+    },
+    {
+      "Code": "321",
+      "Description": "RADIOLOGICAL TECHNICIANS:"
+    },
+    {
+      "Code": "323",
+      "Description": "RAILROAD BRAKE SIGNAL OPER"
+    },
+    {
+      "Code": "324",
+      "Description": "REAL ESTATE CLERKS:"
+    },
+    {
+      "Code": "310",
+      "Description": "REAL ESTATE MANAGERS"
+    },
+    {
+      "Code": "325",
+      "Description": "RECEPTIONISTS"
+    },
+    {
+      "Code": "326",
+      "Description": "RECREATION WORKERS:"
+    },
+    {
+      "Code": "327",
+      "Description": "RECREATIONAL THERAPISTS:"
+    },
+    {
+      "Code": "171",
+      "Description": "REFRIGERATION MECHANICS"
+    },
+    {
+      "Code": "328",
+      "Description": "REFUSE COLLECTORS:"
+    },
+    {
+      "Code": "297",
+      "Description": "RELAY ELECTRICIANS:"
+    },
+    {
+      "Code": "565",
+      "Description": "REPACKING FACTORY"
+    },
+    {
+      "Code": "330",
+      "Description": "REPORTERS AND CORRES."
+    },
+    {
+      "Code": "331",
+      "Description": "RESERVATION  TICKET AGENTS"
+    },
+    {
+      "Code": "604",
+      "Description": "RESIDENTIAL BUILDING"
+    },
+    {
+      "Code": "332",
+      "Description": "RESIDENTIAL VILLA"
+    },
+    {
+      "Code": "672",
+      "Description": "RESIDENTIAL/COMMERCIAL BUILDIN"
+    },
+    {
+      "Code": "333",
+      "Description": "RESPIRATORY THERAPISTS:"
+    },
+    {
+      "Code": "674",
+      "Description": "RESTAURANT / SHOP"
+    },
+    {
+      "Code": "061",
+      "Description": "RESTAURANT/FOOD OUTLET"
+    },
+    {
+      "Code": "586",
+      "Description": "RETAILS SHOP (BATHROOM SUPP)"
+    },
+    {
+      "Code": "009",
+      "Description": "RETIRED"
+    },
+    {
+      "Code": "455",
+      "Description": "RETIRED CIVIL SERVANT"
+    },
+    {
+      "Code": "454",
+      "Description": "RETIRED EDUCATIONIST"
+    },
+    {
+      "Code": "456",
+      "Description": "RETIRED PUBLIC SERVANT"
+    },
+    {
+      "Code": "334",
+      "Description": "ROOF BOLTERS:"
+    },
+    {
+      "Code": "335",
+      "Description": "ROOFERS:"
+    },
+    {
+      "Code": "336",
+      "Description": "ROTARY DRILL OPERATORS"
+    },
+    {
+      "Code": "337",
+      "Description": "ROUSTABOUTS:"
+    },
+    {
+      "Code": "338",
+      "Description": "SAFETY ENGINEERS"
+    },
+    {
+      "Code": "657",
+      "Description": "SALES (READYMADE CLOTHES)"
+    },
+    {
+      "Code": "342",
+      "Description": "SALES AGENTS"
+    },
+    {
+      "Code": "339",
+      "Description": "SALES AGENTS - INSURANCE"
+    },
+    {
+      "Code": "341",
+      "Description": "SALES AGENTS COMMODITIES"
+    },
+    {
+      "Code": "340",
+      "Description": "SALES AGENTS, ADVERTISING:"
+    },
+    {
+      "Code": "343",
+      "Description": "SALES ENGINEERS:"
+    },
+    {
+      "Code": "541",
+      "Description": "SALES EXECUTIVE"
+    },
+    {
+      "Code": "462",
+      "Description": "SALES MANAGER"
+    },
+    {
+      "Code": "345",
+      "Description": "SALES REP. -RETAIL"
+    },
+    {
+      "Code": "344",
+      "Description": "SALES REPRESENTATIVES"
+    },
+    {
+      "Code": "581",
+      "Description": "SALES/STORE KEEPER"
+    },
+    {
+      "Code": "346",
+      "Description": "SALESPERSONS, PARTS:"
+    },
+    {
+      "Code": "347",
+      "Description": "SALESPERSONS, RETAIL:"
+    },
+    {
+      "Code": "642",
+      "Description": "SALOON"
+    },
+    {
+      "Code": "348",
+      "Description": "SAWING MACHINE OPERATORS"
+    },
+    {
+      "Code": "594",
+      "Description": "SCHOOL"
+    },
+    {
+      "Code": "483",
+      "Description": "SCIENTIST"
+    },
+    {
+      "Code": "440",
+      "Description": "SEAMSTRESS"
+    },
+    {
+      "Code": "349",
+      "Description": "SECRETARIES"
+    },
+    {
+      "Code": "434",
+      "Description": "SECRETARY"
+    },
+    {
+      "Code": "507",
+      "Description": "SECURITY OFFICER"
+    },
+    {
+      "Code": "431",
+      "Description": "SECURITY SERVICES"
+    },
+    {
+      "Code": "446",
+      "Description": "SELF EMPLOYED"
+    },
+    {
+      "Code": "450",
+      "Description": "SERVANT"
+    },
+    {
+      "Code": "010",
+      "Description": "SERVICE"
+    },
+    {
+      "Code": "350",
+      "Description": "SERVICE STATION ATTENDANTS"
+    },
+    {
+      "Code": "351",
+      "Description": "SERVICE UNIT OPERATORS:"
+    },
+    {
+      "Code": "352",
+      "Description": "SEWING MACHINE OPERATORS"
+    },
+    {
+      "Code": "353",
+      "Description": "SEWING MACHINE OPERTS"
+    },
+    {
+      "Code": "355",
+      "Description": "SHEET METAL WORKERS:"
+    },
+    {
+      "Code": "356",
+      "Description": "SHERIFFS & DEPUTY SHERIFFS"
+    },
+    {
+      "Code": "509",
+      "Description": "SHIPPING"
+    },
+    {
+      "Code": "357",
+      "Description": "SHIPPING, RECEIVING CLERKS:"
+    },
+    {
+      "Code": "568",
+      "Description": "SHOPS,STORE,OFFICES"
+    },
+    {
+      "Code": "552",
+      "Description": "SHOWROOM, STORES & CAR PARKS"
+    },
+    {
+      "Code": "601",
+      "Description": "SIGNBOARD MAKERS"
+    },
+    {
+      "Code": "358",
+      "Description": "SMALL ENGINE SPECIALISTS:"
+    },
+    {
+      "Code": "359",
+      "Description": "SOCIAL SCIENCES TEACHERS"
+    },
+    {
+      "Code": "361",
+      "Description": "SOCIAL WORKER"
+    },
+    {
+      "Code": "014",
+      "Description": "SOCIAL WORKS"
+    },
+    {
+      "Code": "360",
+      "Description": "SOCIALWRKRS EXCPT MEDICAL"
+    },
+    {
+      "Code": "496",
+      "Description": "SOCIOLOGIST"
+    },
+    {
+      "Code": "466",
+      "Description": "SOLDIER"
+    },
+    {
+      "Code": "362",
+      "Description": "SPECIAL AGENTS, INSURANCE:"
+    },
+    {
+      "Code": "017",
+      "Description": "SPORTSMAN"
+    },
+    {
+      "Code": "364",
+      "Description": "SPRAYERS/APPLICATORS:"
+    },
+    {
+      "Code": "365",
+      "Description": "STATEMENT CLERKS:"
+    },
+    {
+      "Code": "366",
+      "Description": "STATION INST.& REPAIRERS"
+    },
+    {
+      "Code": "367",
+      "Description": "STATIONARY ENGINEERS:"
+    },
+    {
+      "Code": "559",
+      "Description": "STATIONERY WHOLE SALE AND RETA"
+    },
+    {
+      "Code": "368",
+      "Description": "STATISTICAL CLERKS:"
+    },
+    {
+      "Code": "369",
+      "Description": "STATISTICIANS:"
+    },
+    {
+      "Code": "661",
+      "Description": "STEEL WORKSHOP"
+    },
+    {
+      "Code": "370",
+      "Description": "STENOGRAPHERS:"
+    },
+    {
+      "Code": "371",
+      "Description": "STOCK CLERKS"
+    },
+    {
+      "Code": "372",
+      "Description": "STOCK CLERKS, SALES FLOOR:"
+    },
+    {
+      "Code": "373",
+      "Description": "STONE MASONS:"
+    },
+    {
+      "Code": "430",
+      "Description": "STRAIGHTING & WELDING"
+    },
+    {
+      "Code": "374",
+      "Description": "STRIPPERS:"
+    },
+    {
+      "Code": "375",
+      "Description": "STRUCTURAL METAL WORKERS"
+    },
+    {
+      "Code": "653",
+      "Description": "STRUCTURED CABLING SYSTEM"
+    },
+    {
+      "Code": "008",
+      "Description": "STUDENT"
+    },
+    {
+      "Code": "670",
+      "Description": "SUPERMARKET / MALL"
+    },
+    {
+      "Code": "376",
+      "Description": "SURGICAL TECHNOLOGISTS"
+    },
+    {
+      "Code": "427",
+      "Description": "SURVERYORS"
+    },
+    {
+      "Code": "377",
+      "Description": "SURVEYING TECHNICIANS:"
+    },
+    {
+      "Code": "379",
+      "Description": "SWITCHBOARD OPERATORS:"
+    },
+    {
+      "Code": "380",
+      "Description": "SYSTEMS ANALYSTS"
+    },
+    {
+      "Code": "679",
+      "Description": "Shipping, Cargo Handling and a"
+    },
+    {
+      "Code": "439",
+      "Description": "TAILOR"
+    },
+    {
+      "Code": "636",
+      "Description": "TAILORING/TRADING"
+    },
+    {
+      "Code": "381",
+      "Description": "TAPERS:"
+    },
+    {
+      "Code": "382",
+      "Description": "TAX EXAMINERS, COLLECTORS"
+    },
+    {
+      "Code": "383",
+      "Description": "TAX PREPARERS:"
+    },
+    {
+      "Code": "384",
+      "Description": "TAXI DRIVERS & CHAUFFEURS:"
+    },
+    {
+      "Code": "463",
+      "Description": "TEACHER"
+    },
+    {
+      "Code": "385",
+      "Description": "TEACHER AIDES CLERICAL"
+    },
+    {
+      "Code": "386",
+      "Description": "TEACHER PARAPROFESSIONAL"
+    },
+    {
+      "Code": "388",
+      "Description": "TEACHERS ELEMNTRY SCHOOL"
+    },
+    {
+      "Code": "390",
+      "Description": "TEACHERS PRESCHOOL"
+    },
+    {
+      "Code": "389",
+      "Description": "TEACHERS, KINDERGARTEN:"
+    },
+    {
+      "Code": "391",
+      "Description": "TEACHERS, SECNDRY SCHOOL"
+    },
+    {
+      "Code": "392",
+      "Description": "TEACHERS, SPL. EDUCATION"
+    },
+    {
+      "Code": "394",
+      "Description": "TECHNICAL WRITERS:"
+    },
+    {
+      "Code": "452",
+      "Description": "TECHNICIAN"
+    },
+    {
+      "Code": "395",
+      "Description": "TELEPHONE & CABLE REPAIRER"
+    },
+    {
+      "Code": "396",
+      "Description": "TELLERS:"
+    },
+    {
+      "Code": "397",
+      "Description": "THERAPISTS:"
+    },
+    {
+      "Code": "637",
+      "Description": "TILING WORKS"
+    },
+    {
+      "Code": "580",
+      "Description": "TISSUE PAPER MANUFACTURING"
+    },
+    {
+      "Code": "399",
+      "Description": "TITLE EXAMINERS"
+    },
+    {
+      "Code": "400",
+      "Description": "TITLE SEARCHERS:"
+    },
+    {
+      "Code": "644",
+      "Description": "TOUR OPERATOR"
+    },
+    {
+      "Code": "645",
+      "Description": "TOUR OPERATORS"
+    },
+    {
+      "Code": "573",
+      "Description": "TOURS PACKAGES"
+    },
+    {
+      "Code": "433",
+      "Description": "TRADER"
+    },
+    {
+      "Code": "600",
+      "Description": "TRADING"
+    },
+    {
+      "Code": "436",
+      "Description": "TRADING"
+    },
+    {
+      "Code": "592",
+      "Description": "TRADING & BUILDING MAINTANANCE"
+    },
+    {
+      "Code": "577",
+      "Description": "TRADING IN DISPOSABLE PRODUCTS"
+    },
+    {
+      "Code": "593",
+      "Description": "TRADING IN STATIONERY"
+    },
+    {
+      "Code": "575",
+      "Description": "TRADING IN TEXTILE & FABRICS"
+    },
+    {
+      "Code": "402",
+      "Description": "TRANSPORTATION INSPECTORS:"
+    },
+    {
+      "Code": "488",
+      "Description": "TRANSPORTING CO."
+    },
+    {
+      "Code": "403",
+      "Description": "TRAVEL AGENTS:"
+    },
+    {
+      "Code": "404",
+      "Description": "TRAVEL CLERKS:"
+    },
+    {
+      "Code": "188",
+      "Description": "TRUCK & TRACTOR OPERATORS"
+    },
+    {
+      "Code": "405",
+      "Description": "TRUCK DRIVERS"
+    },
+    {
+      "Code": "406",
+      "Description": "TRUCK DRIVERS, ROUTE WORKR"
+    },
+    {
+      "Code": "407",
+      "Description": "TYPESETTING OPERATORS"
+    },
+    {
+      "Code": "408",
+      "Description": "TYPISTS"
+    },
+    {
+      "Code": "398",
+      "Description": "TYRE REPAIRERS & CHANGERS:"
+    },
+    {
+      "Code": "641",
+      "Description": "TYRE REPAIRING SHOP"
+    },
+    {
+      "Code": "410",
+      "Description": "UNDERWRITERS:"
+    },
+    {
+      "Code": "411",
+      "Description": "URBAN & REGIONAL PLANNERS:"
+    },
+    {
+      "Code": "412",
+      "Description": "USHERS LOBBY ATTENDANTS"
+    },
+    {
+      "Code": "428",
+      "Description": "VALUERS"
+    },
+    {
+      "Code": "413",
+      "Description": "VEHICLE WASHERS"
+    },
+    {
+      "Code": "415",
+      "Description": "VETERINARY ASSISTANTS:"
+    },
+    {
+      "Code": "015",
+      "Description": "VETERINARY DOCTOR"
+    },
+    {
+      "Code": "414",
+      "Description": "VETERINARY INSPECTORS:"
+    },
+    {
+      "Code": "416",
+      "Description": "VETERINARY TECHNICIANS"
+    },
+    {
+      "Code": "418",
+      "Description": "WAITERS AND WAITRESSES:"
+    },
+    {
+      "Code": "666",
+      "Description": "WAREHOUSE"
+    },
+    {
+      "Code": "596",
+      "Description": "WAREHOUSE KEEPER"
+    },
+    {
+      "Code": "420",
+      "Description": "WEIGHERS, MEASURERS"
+    },
+    {
+      "Code": "421",
+      "Description": "WELDERS AND CUTTERS:"
+    },
+    {
+      "Code": "423",
+      "Description": "WELDING MACHINE OPRTS"
+    },
+    {
+      "Code": "422",
+      "Description": "WELDING MACHINE TENDERS:"
+    },
+    {
+      "Code": "424",
+      "Description": "WHOLESALE & RETAIL BUYERS"
+    },
+    {
+      "Code": "481",
+      "Description": "WILDLIFE GUARD"
+    },
+    {
+      "Code": "425",
+      "Description": "WOOD MACHINISTS:"
+    },
+    {
+      "Code": "426",
+      "Description": "WOODWRKNG MACHINE OPRTS."
+    },
+    {
+      "Code": "020",
+      "Description": "WORKER"
+    },
+    {
+      "Code": "470",
+      "Description": "WORLDWIDE FORWARDERS"
+    }
+  ]
+}

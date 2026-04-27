@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehLoadCapacity"
+  },
+  "records": [
+    {
+      "Code": "0",
+      "Description": "No Loading"
+    },
+    {
+      "Code": "1",
+      "Description": "1 Ton"
+    },
+    {
+      "Code": "2",
+      "Description": "2 Ton"
+    },
+    {
+      "Code": "3",
+      "Description": "3 Ton"
+    },
+    {
+      "Code": "4",
+      "Description": "More than 3 Ton"
+    },
+    {
+      "Code": "5",
+      "Description": "Less Than 2000 GALLON"
+    },
+    {
+      "Code": "6",
+      "Description": "2000 To 5000 GALLON"
+    }
+  ]
+}

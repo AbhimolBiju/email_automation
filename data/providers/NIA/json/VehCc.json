@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehCc"
+  },
+  "records": [
+    {
+      "Code": "1.0 L",
+      "Description": "1.0 L"
+    },
+    {
+      "Code": "1.2 L",
+      "Description": "1.2 L"
+    },
+    {
+      "Code": "1.5 L",
+      "Description": "1.5 L"
+    },
+    {
+      "Code": "2.0 L",
+      "Description": "2.0 L"
+    },
+    {
+      "Code": "2.5 L",
+      "Description": "2.5 L"
+    },
+    {
+      "Code": "100",
+      "Description": "0 CC TO 100 CC"
+    },
+    {
+      "Code": "101",
+      "Description": "101 CC TO 150 CC"
+    },
+    {
+      "Code": "102",
+      "Description": "151 CC TO 180 CC"
+    },
+    {
+      "Code": "103",
+      "Description": "181 CC TO 200 CC"
+    },
+    {
+      "Code": "104",
+      "Description": "201 CC TO 250 CC"
+    },
+    {
+      "Code": "105",
+      "Description": "251 CC TO 1000 CC"
+    }
+  ]
+}

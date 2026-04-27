@@ -1,0 +1,748 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "PolAssrNation"
+  },
+  "records": [
+    {
+      "Code": "001",
+      "Description": "AFGHAN"
+    },
+    {
+      "Code": "002",
+      "Description": "ALBANIAN"
+    },
+    {
+      "Code": "003",
+      "Description": "ALGERIAN"
+    },
+    {
+      "Code": "004",
+      "Description": "ANDORRAN"
+    },
+    {
+      "Code": "005",
+      "Description": "ANGOLAN"
+    },
+    {
+      "Code": "006",
+      "Description": "ARGENTINIAN"
+    },
+    {
+      "Code": "007",
+      "Description": "ARMENIAN"
+    },
+    {
+      "Code": "008",
+      "Description": "AUSTRALIAN"
+    },
+    {
+      "Code": "009",
+      "Description": "AUSTRIAN"
+    },
+    {
+      "Code": "010",
+      "Description": "AZERBAIJANI"
+    },
+    {
+      "Code": "011",
+      "Description": "BAHAMIAN"
+    },
+    {
+      "Code": "012",
+      "Description": "BAHRAINI"
+    },
+    {
+      "Code": "013",
+      "Description": "BANGLADESHI"
+    },
+    {
+      "Code": "014",
+      "Description": "BARBADIAN"
+    },
+    {
+      "Code": "016",
+      "Description": "BELGIAN"
+    },
+    {
+      "Code": "017",
+      "Description": "BELIZIAN"
+    },
+    {
+      "Code": "015",
+      "Description": "BELORUSSIAN OR BYELORUSSIAN"
+    },
+    {
+      "Code": "018",
+      "Description": "BENINESE"
+    },
+    {
+      "Code": "019",
+      "Description": "BHUTANESE"
+    },
+    {
+      "Code": "020",
+      "Description": "BOLIVIAN"
+    },
+    {
+      "Code": "021",
+      "Description": "BOSNIAN"
+    },
+    {
+      "Code": "022",
+      "Description": "BOTSWANAN"
+    },
+    {
+      "Code": "023",
+      "Description": "BRAZILIAN"
+    },
+    {
+      "Code": "024",
+      "Description": "BRITISH"
+    },
+    {
+      "Code": "159",
+      "Description": "BRITISH"
+    },
+    {
+      "Code": "025",
+      "Description": "BRUNEIAN"
+    },
+    {
+      "Code": "026.",
+      "Description": "BULGARIAN"
+    },
+    {
+      "Code": "027",
+      "Description": "BURKINESE"
+    },
+    {
+      "Code": "028",
+      "Description": "BURMESE"
+    },
+    {
+      "Code": "029",
+      "Description": "BURUNDIAN"
+    },
+    {
+      "Code": "030",
+      "Description": "CAMBODIAN"
+    },
+    {
+      "Code": "031",
+      "Description": "CAMEROONIAN"
+    },
+    {
+      "Code": "032",
+      "Description": "CANADIAN"
+    },
+    {
+      "Code": "033",
+      "Description": "CAPE VERDEAN"
+    },
+    {
+      "Code": "034",
+      "Description": "CHADIAN"
+    },
+    {
+      "Code": "035",
+      "Description": "CHILEAN"
+    },
+    {
+      "Code": "036",
+      "Description": "CHINESE"
+    },
+    {
+      "Code": "037",
+      "Description": "COLOMBIAN"
+    },
+    {
+      "Code": "178",
+      "Description": "COMOROS"
+    },
+    {
+      "Code": "038",
+      "Description": "CONGOLESE"
+    },
+    {
+      "Code": "039",
+      "Description": "COSTA RICAN"
+    },
+    {
+      "Code": "040",
+      "Description": "CROAT OR CROATIAN"
+    },
+    {
+      "Code": "041",
+      "Description": "CUBAN"
+    },
+    {
+      "Code": "042",
+      "Description": "CYPRIOT"
+    },
+    {
+      "Code": "043",
+      "Description": "CZECH"
+    },
+    {
+      "Code": "044",
+      "Description": "DANISH"
+    },
+    {
+      "Code": "045",
+      "Description": "DJIBOUTIAN"
+    },
+    {
+      "Code": "047",
+      "Description": "DOMINICAN"
+    },
+    {
+      "Code": "046",
+      "Description": "DOMINICIAN"
+    },
+    {
+      "Code": "069",
+      "Description": "DUTCH"
+    },
+    {
+      "Code": "109",
+      "Description": "DUTCH"
+    },
+    {
+      "Code": "048",
+      "Description": "ECUADOREAN"
+    },
+    {
+      "Code": "049",
+      "Description": "EGYPTIAN"
+    },
+    {
+      "Code": "051",
+      "Description": "ENGLISH"
+    },
+    {
+      "Code": "052",
+      "Description": "ERITREAN"
+    },
+    {
+      "Code": "053",
+      "Description": "ESTONIAN"
+    },
+    {
+      "Code": "054",
+      "Description": "ETHIOPIAN"
+    },
+    {
+      "Code": "055",
+      "Description": "FIJIAN"
+    },
+    {
+      "Code": "056",
+      "Description": "FINNISH"
+    },
+    {
+      "Code": "057",
+      "Description": "FRENCH"
+    },
+    {
+      "Code": "058",
+      "Description": "GABONESE"
+    },
+    {
+      "Code": "059",
+      "Description": "GAMBIAN"
+    },
+    {
+      "Code": "060",
+      "Description": "GEORGIAN"
+    },
+    {
+      "Code": "061",
+      "Description": "GERMAN"
+    },
+    {
+      "Code": "062",
+      "Description": "GHANIAN"
+    },
+    {
+      "Code": "063",
+      "Description": "GREEK"
+    },
+    {
+      "Code": "064",
+      "Description": "GRENADIAN"
+    },
+    {
+      "Code": "065",
+      "Description": "GUATEMALAN"
+    },
+    {
+      "Code": "066",
+      "Description": "GUINEAN"
+    },
+    {
+      "Code": "067",
+      "Description": "GUYANESE"
+    },
+    {
+      "Code": "068",
+      "Description": "HAITIAN"
+    },
+    {
+      "Code": "070",
+      "Description": "HUNGARIAN"
+    },
+    {
+      "Code": "071",
+      "Description": "ICELANDIC"
+    },
+    {
+      "Code": "072",
+      "Description": "INDIAN"
+    },
+    {
+      "Code": "073",
+      "Description": "INDONESIAN"
+    },
+    {
+      "Code": "074",
+      "Description": "IRANIAN"
+    },
+    {
+      "Code": "075",
+      "Description": "IRAQI"
+    },
+    {
+      "Code": "076",
+      "Description": "IRISH"
+    },
+    {
+      "Code": "077",
+      "Description": "ISRAELI"
+    },
+    {
+      "Code": "078",
+      "Description": "ITALIAN"
+    },
+    {
+      "Code": "079",
+      "Description": "JAMICAN"
+    },
+    {
+      "Code": "080",
+      "Description": "JAPANESE"
+    },
+    {
+      "Code": "081",
+      "Description": "JORDANIAN"
+    },
+    {
+      "Code": "082",
+      "Description": "KAZAKH"
+    },
+    {
+      "Code": "083",
+      "Description": "KENYAN"
+    },
+    {
+      "Code": "084",
+      "Description": "KUWAITI"
+    },
+    {
+      "Code": "185",
+      "Description": "KYRGYZSTAN"
+    },
+    {
+      "Code": "175",
+      "Description": "KYRGYZSTANI"
+    },
+    {
+      "Code": "085",
+      "Description": "LAOTIAN"
+    },
+    {
+      "Code": "086",
+      "Description": "LATVIAN"
+    },
+    {
+      "Code": "087",
+      "Description": "LEBANESE"
+    },
+    {
+      "Code": "088",
+      "Description": "LIBERIAN"
+    },
+    {
+      "Code": "089",
+      "Description": "LIBYAN"
+    },
+    {
+      "Code": "090",
+      "Description": "LITHUANIAN"
+    },
+    {
+      "Code": "091",
+      "Description": "MACEDONIAN"
+    },
+    {
+      "Code": "092",
+      "Description": "MALAGASAY OR MADAGASCAN"
+    },
+    {
+      "Code": "093",
+      "Description": "MALAWIAN"
+    },
+    {
+      "Code": "094",
+      "Description": "MALAYSIAN"
+    },
+    {
+      "Code": "095",
+      "Description": "MALDIVIAN"
+    },
+    {
+      "Code": "096",
+      "Description": "MALIAN"
+    },
+    {
+      "Code": "097",
+      "Description": "MALTESE"
+    },
+    {
+      "Code": "183",
+      "Description": "MAURITANIA"
+    },
+    {
+      "Code": "098",
+      "Description": "MAURITANIAN"
+    },
+    {
+      "Code": "099",
+      "Description": "MAURITIAN"
+    },
+    {
+      "Code": "100",
+      "Description": "MEXICAN"
+    },
+    {
+      "Code": "101",
+      "Description": "MOLDOVAN"
+    },
+    {
+      "Code": "102",
+      "Description": "MONEGASQUE OR MONACAN"
+    },
+    {
+      "Code": "103",
+      "Description": "MONGOLIAN"
+    },
+    {
+      "Code": "104",
+      "Description": "MONTENEGRIN"
+    },
+    {
+      "Code": "105",
+      "Description": "MOROCCAN"
+    },
+    {
+      "Code": "106",
+      "Description": "MOZAMBICAN"
+    },
+    {
+      "Code": "107",
+      "Description": "NAMIBIAN"
+    },
+    {
+      "Code": "108",
+      "Description": "NEPALESE"
+    },
+    {
+      "Code": "180",
+      "Description": "NETHERLANDS"
+    },
+    {
+      "Code": "181",
+      "Description": "NEVISIAN"
+    },
+    {
+      "Code": "176",
+      "Description": "NEW ZEALAND"
+    },
+    {
+      "Code": "110",
+      "Description": "NICARAGUAN"
+    },
+    {
+      "Code": "112",
+      "Description": "NIGERIAN"
+    },
+    {
+      "Code": "111",
+      "Description": "NIGERIEN"
+    },
+    {
+      "Code": "113",
+      "Description": "NORTH KOREAN"
+    },
+    {
+      "Code": "114",
+      "Description": "NORWEGIAN"
+    },
+    {
+      "Code": "115",
+      "Description": "OMANI"
+    },
+    {
+      "Code": "116",
+      "Description": "PAKISTANI"
+    },
+    {
+      "Code": "173",
+      "Description": "PALESTINE"
+    },
+    {
+      "Code": "117",
+      "Description": "PANAMANIAN"
+    },
+    {
+      "Code": "118",
+      "Description": "PAPUA NEW GUINEAN OR GUINEAN"
+    },
+    {
+      "Code": "119",
+      "Description": "PARAGUAYAN"
+    },
+    {
+      "Code": "120",
+      "Description": "PERUVIAN"
+    },
+    {
+      "Code": "121",
+      "Description": "PHILIPPINE"
+    },
+    {
+      "Code": "122",
+      "Description": "POLISH"
+    },
+    {
+      "Code": "123",
+      "Description": "PORTUGESE"
+    },
+    {
+      "Code": "124",
+      "Description": "QATARI"
+    },
+    {
+      "Code": "182",
+      "Description": "REPUBLIC OF KOSOVO"
+    },
+    {
+      "Code": "125",
+      "Description": "ROMANIAN"
+    },
+    {
+      "Code": "126",
+      "Description": "RUSSIAN"
+    },
+    {
+      "Code": "127",
+      "Description": "RWANDAN"
+    },
+    {
+      "Code": "177",
+      "Description": "SAINT KITTS"
+    },
+    {
+      "Code": "179",
+      "Description": "SALVADORANS"
+    },
+    {
+      "Code": "050",
+      "Description": "SALVADOREAN"
+    },
+    {
+      "Code": "128",
+      "Description": "SAUDI ARABIAN OR SAUDI"
+    },
+    {
+      "Code": "129",
+      "Description": "SCOTTISH"
+    },
+    {
+      "Code": "130",
+      "Description": "SENEGALESE"
+    },
+    {
+      "Code": "131",
+      "Description": "SERB OR SERBIAN"
+    },
+    {
+      "Code": "132",
+      "Description": "SEYCHELLOIS"
+    },
+    {
+      "Code": "133",
+      "Description": "SIERRA LEONIAN"
+    },
+    {
+      "Code": "134",
+      "Description": "SINGAPOREAN"
+    },
+    {
+      "Code": "135",
+      "Description": "SLOVENE OR SLOVENIAN"
+    },
+    {
+      "Code": "136",
+      "Description": "SOMALI"
+    },
+    {
+      "Code": "137",
+      "Description": "SOUTH AFRICAN"
+    },
+    {
+      "Code": "138",
+      "Description": "SOUTH KOREAN"
+    },
+    {
+      "Code": "139",
+      "Description": "SPANISH"
+    },
+    {
+      "Code": "140",
+      "Description": "SRI LANKAN"
+    },
+    {
+      "Code": "141",
+      "Description": "SUDANESE"
+    },
+    {
+      "Code": "142",
+      "Description": "SURINAMESE"
+    },
+    {
+      "Code": "143",
+      "Description": "SWAZI"
+    },
+    {
+      "Code": "144",
+      "Description": "SWEDISH"
+    },
+    {
+      "Code": "145",
+      "Description": "SWISS"
+    },
+    {
+      "Code": "146",
+      "Description": "SYRIAN"
+    },
+    {
+      "Code": "147",
+      "Description": "TAIWANESE"
+    },
+    {
+      "Code": "148",
+      "Description": "TAJIK OR TADJIK"
+    },
+    {
+      "Code": "149",
+      "Description": "TANZANIAN"
+    },
+    {
+      "Code": "150",
+      "Description": "THAI"
+    },
+    {
+      "Code": "151",
+      "Description": "TOGOLESE"
+    },
+    {
+      "Code": "152",
+      "Description": "TRINIDADIAN AND TOBAGAN"
+    },
+    {
+      "Code": "153",
+      "Description": "TUNISIAN"
+    },
+    {
+      "Code": "154",
+      "Description": "TURKISH"
+    },
+    {
+      "Code": "155",
+      "Description": "TURKMEN OR TURKOMAN"
+    },
+    {
+      "Code": "156",
+      "Description": "TUVALUAN"
+    },
+    {
+      "Code": "172",
+      "Description": "U.A.E"
+    },
+    {
+      "Code": "174",
+      "Description": "U.S.A"
+    },
+    {
+      "Code": "157",
+      "Description": "UGANDAN"
+    },
+    {
+      "Code": "158",
+      "Description": "UKRAINIAN"
+    },
+    {
+      "Code": "160",
+      "Description": "URUGUAYAN"
+    },
+    {
+      "Code": "161",
+      "Description": "UZBEK"
+    },
+    {
+      "Code": "162",
+      "Description": "VATICAN"
+    },
+    {
+      "Code": "163",
+      "Description": "VENEZUELAN"
+    },
+    {
+      "Code": "164",
+      "Description": "VIETNAMESE"
+    },
+    {
+      "Code": "165",
+      "Description": "WELSH"
+    },
+    {
+      "Code": "166",
+      "Description": "WESTERN SAMOAN"
+    },
+    {
+      "Code": "167",
+      "Description": "YEMENI"
+    },
+    {
+      "Code": "168",
+      "Description": "YOGOSLAV"
+    },
+    {
+      "Code": "169",
+      "Description": "ZAIREAN"
+    },
+    {
+      "Code": "170",
+      "Description": "ZAMBIAN"
+    },
+    {
+      "Code": "184",
+      "Description": "ZANZIBAAR"
+    },
+    {
+      "Code": "171",
+      "Description": "ZIMBABWEAN"
+    }
+  ]
+}

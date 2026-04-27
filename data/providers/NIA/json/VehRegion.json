@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehRegion"
+  },
+  "records": [
+    {
+      "Code": "GCC",
+      "Description": "GCC"
+    },
+    {
+      "Code": "Non-GCC",
+      "Description": "Non-GCC"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehServiceType"
+  },
+  "records": [
+    {
+      "Code": "Y",
+      "Description": "Yes"
+    },
+    {
+      "Code": "N",
+      "Description": "No"
+    }
+  ]
+}

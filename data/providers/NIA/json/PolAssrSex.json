@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "PolAssrSex"
+  },
+  "records": [
+    {
+      "Code": "F",
+      "Description": "Female"
+    },
+    {
+      "Code": "M",
+      "Description": "Male"
+    }
+  ]
+}

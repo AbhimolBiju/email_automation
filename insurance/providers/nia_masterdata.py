@@ -1,38 +1,29 @@
 from __future__ import annotations
 
-import re
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from .masterdata_json import ProviderJsonMasterdata, normalize_masterdata_value
 from .xlsx_loader import load_workbook_rows
 
 
 MASTERDATA_ROOT = (
     Path(__file__).resolve().parents[2] / "data" / "providers" / "NIA" / "masterdata"
 )
+JSON_ROOT = Path(__file__).resolve().parents[2] / "data" / "providers" / "NIA" / "json"
+
+_LOADER = ProviderJsonMasterdata("NIA", JSON_ROOT)
 
 
-def _normalize(value: Any) -> str:
-    if value is None:
-        return ""
-    text = str(value).strip().upper()
-    text = text.replace("&", "AND")
-    return re.sub(r"[^A-Z0-9]+", "", text)
-
-
-@lru_cache(maxsize=None)
 def _mapping_workbook() -> dict[str, list[list[str]]]:
     return load_workbook_rows(MASTERDATA_ROOT / "Mapping data.xlsx")
 
 
-@lru_cache(maxsize=None)
 def _plate_mapping_workbook() -> dict[str, list[list[str]]]:
     return load_workbook_rows(MASTERDATA_ROOT / "Plate Code Mapping.xlsx")
 
 
-@lru_cache(maxsize=None)
-def load_sheet_records(sheet_name: str) -> list[dict[str, str]]:
+def _excel_sheet_records(sheet_name: str) -> list[dict[str, str]]:
     rows = _mapping_workbook().get(sheet_name, [])
     if not rows:
         return []
@@ -41,7 +32,7 @@ def load_sheet_records(sheet_name: str) -> list[dict[str, str]]:
     for row in rows[1:]:
         if not any(str(value).strip() for value in row):
             continue
-        record = {}
+        record: dict[str, str] = {}
         for idx, header in enumerate(headers):
             if not header:
                 continue
@@ -50,8 +41,7 @@ def load_sheet_records(sheet_name: str) -> list[dict[str, str]]:
     return records
 
 
-@lru_cache(maxsize=None)
-def load_plate_code_records() -> list[dict[str, str]]:
+def _excel_plate_code_records(_dataset: str) -> list[dict[str, str]]:
     rows = _plate_mapping_workbook().get("Sheet1", [])
     if not rows:
         return []
@@ -60,7 +50,7 @@ def load_plate_code_records() -> list[dict[str, str]]:
     for row in rows[1:]:
         if len(row) < 6 or not any(str(value).strip() for value in row):
             continue
-        record = {}
+        record: dict[str, str] = {}
         for idx, header in enumerate(headers):
             if not header:
                 continue
@@ -69,36 +59,62 @@ def load_plate_code_records() -> list[dict[str, str]]:
     return records
 
 
-def lookup_code(sheet_name: str, value: Any, *, code_key: str = "Code", description_key: str = "Description", default: str = "") -> str:
+def load_sheet_records(sheet_name: str) -> list[dict[str, str]]:
+    return _LOADER.require_records(sheet_name, fallback_loader=_excel_sheet_records)
+
+
+def load_plate_code_records() -> list[dict[str, str]]:
+    return _LOADER.require_records("PlateCodeMapping", fallback_loader=_excel_plate_code_records)
+
+
+def lookup_code(
+    sheet_name: str,
+    value: Any,
+    *,
+    code_key: str = "Code",
+    description_key: str = "Description",
+    default: str = "",
+) -> str:
     text = str(value).strip() if value not in (None, "") else ""
     if not text:
         return default
-    normalized = _normalize(text)
+    normalized = normalize_masterdata_value(text)
     for record in load_sheet_records(sheet_name):
-        if _normalize(record.get(code_key, "")) == normalized:
+        if normalize_masterdata_value(record.get(code_key, "")) == normalized:
             return record.get(code_key, "")
-        if _normalize(record.get(description_key, "")) == normalized:
+        if normalize_masterdata_value(record.get(description_key, "")) == normalized:
             return record.get(code_key, "")
     return default or text
 
 
-def lookup_description(sheet_name: str, value: Any, *, code_key: str = "Code", description_key: str = "Description", default: str = "") -> str:
+def lookup_description(
+    sheet_name: str,
+    value: Any,
+    *,
+    code_key: str = "Code",
+    description_key: str = "Description",
+    default: str = "",
+) -> str:
     text = str(value).strip() if value not in (None, "") else ""
     if not text:
         return default
-    normalized = _normalize(text)
+    normalized = normalize_masterdata_value(text)
     for record in load_sheet_records(sheet_name):
-        if _normalize(record.get(code_key, "")) == normalized:
+        if normalize_masterdata_value(record.get(code_key, "")) == normalized:
             return record.get(description_key, "")
-        if _normalize(record.get(description_key, "")) == normalized:
+        if normalize_masterdata_value(record.get(description_key, "")) == normalized:
             return record.get(description_key, "")
     return default or text
 
 
 def lookup_plate_color_code(value: Any, reg_city: Any) -> str:
-    normalized_value = _normalize(value)
-    normalized_city = _normalize(reg_city)
+    normalized_value = normalize_masterdata_value(value)
+    normalized_city = normalize_masterdata_value(reg_city)
     for record in load_plate_code_records():
-        if _normalize(record.get("Description", "")) == normalized_value and _normalize(record.get("Reg. City", "")) == normalized_city:
+        if (
+            normalize_masterdata_value(record.get("Description", "")) == normalized_value
+            and normalize_masterdata_value(record.get("Reg. City", "")) == normalized_city
+        ):
             return record.get("Code", "")
     return str(value).strip() if value not in (None, "") else ""
+

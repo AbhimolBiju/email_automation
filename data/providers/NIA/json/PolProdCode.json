@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "PolProdCode"
+  },
+  "records": [
+    {
+      "Code": "1001",
+      "Description": "Motor Comprehensive – Agency"
+    },
+    {
+      "Code": "1501",
+      "Description": "Third Party Liability"
+    },
+    {
+      "Code": "1002",
+      "Description": "Motor Comprehensive –Non Agency"
+    }
+  ]
+}

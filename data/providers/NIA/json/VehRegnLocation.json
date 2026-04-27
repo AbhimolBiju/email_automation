@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehRegnLocation"
+  },
+  "records": [
+    {
+      "Code": "1000",
+      "Description": "ABU DHABI"
+    },
+    {
+      "Code": "4000",
+      "Description": "AJMAN"
+    },
+    {
+      "Code": "2000",
+      "Description": "AL AIN"
+    },
+    {
+      "Code": "0001",
+      "Description": "DUBAI"
+    },
+    {
+      "Code": "6000",
+      "Description": "FUJAIRAH"
+    },
+    {
+      "Code": "7000",
+      "Description": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "3000",
+      "Description": "SHARJAH"
+    },
+    {
+      "Code": "8000",
+      "Description": "SULTANATE OF OMAN"
+    },
+    {
+      "Code": "5000",
+      "Description": "UMM AL QUWAIN"
+    }
+  ]
+}

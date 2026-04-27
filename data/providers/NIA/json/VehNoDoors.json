@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehNoDoors"
+  },
+  "records": [
+    {
+      "Code": "0",
+      "Description": "0 Door"
+    },
+    {
+      "Code": "1",
+      "Description": "1 Door"
+    },
+    {
+      "Code": "2",
+      "Description": "2 Doors"
+    },
+    {
+      "Code": "3",
+      "Description": "3 Doors"
+    },
+    {
+      "Code": "4",
+      "Description": "4 Doors"
+    },
+    {
+      "Code": "5",
+      "Description": "5 Doors"
+    },
+    {
+      "Code": "6",
+      "Description": "6 Doors"
+    },
+    {
+      "Code": "7",
+      "Description": "7 Doors"
+    },
+    {
+      "Code": "8",
+      "Description": "8 Doors"
+    }
+  ]
+}

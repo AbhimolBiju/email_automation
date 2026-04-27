@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "source_file": "Emirites.xlsx"
+  },
+  "records": [
+    {
+      "code": "01",
+      "description": "DUBAI"
+    },
+    {
+      "code": "02",
+      "description": "SHARJAH.  U.A.E"
+    },
+    {
+      "code": "03",
+      "description": "RAS AL-KHAIMAH"
+    },
+    {
+      "code": "04",
+      "description": "ABU DHABI"
+    },
+    {
+      "code": "05",
+      "description": "UMM AL-QUWAIN"
+    },
+    {
+      "code": "06",
+      "description": "FUJAIRAH"
+    },
+    {
+      "code": "07",
+      "description": "AJMAN"
+    }
+  ]
+}

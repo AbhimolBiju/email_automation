@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehBackValueDesc"
+  },
+  "records": [
+    {
+      "Code": "1",
+      "Description": "BOX"
+    },
+    {
+      "Code": "2",
+      "Description": "EQUIPMENT"
+    },
+    {
+      "Code": "3",
+      "Description": "FREEZER"
+    },
+    {
+      "Code": "4",
+      "Description": "GPS"
+    },
+    {
+      "Code": "5",
+      "Description": "GRILL"
+    },
+    {
+      "Code": "6",
+      "Description": "STICKER"
+    },
+    {
+      "Code": "7",
+      "Description": "TANKER"
+    }
+  ]
+}

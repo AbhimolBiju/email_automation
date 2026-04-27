@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehMfgYear"
+  },
+  "records": [
+    {
+      "Code": "1995",
+      "Description": "1995"
+    },
+    {
+      "Code": "1996",
+      "Description": "1996"
+    },
+    {
+      "Code": "1997",
+      "Description": "1997"
+    },
+    {
+      "Code": "1998",
+      "Description": "1998"
+    },
+    {
+      "Code": "1999",
+      "Description": "1999"
+    },
+    {
+      "Code": "2000",
+      "Description": "2000"
+    },
+    {
+      "Code": "2001",
+      "Description": "2001"
+    },
+    {
+      "Code": "2002",
+      "Description": "2002"
+    },
+    {
+      "Code": "2003",
+      "Description": "2003"
+    },
+    {
+      "Code": "2004",
+      "Description": "2004"
+    },
+    {
+      "Code": "2005",
+      "Description": "2005"
+    },
+    {
+      "Code": "2006",
+      "Description": "2006"
+    },
+    {
+      "Code": "2007",
+      "Description": "2007"
+    },
+    {
+      "Code": "2008",
+      "Description": "2008"
+    },
+    {
+      "Code": "2009",
+      "Description": "2009"
+    },
+    {
+      "Code": "2010",
+      "Description": "2010"
+    },
+    {
+      "Code": "2011",
+      "Description": "2011"
+    },
+    {
+      "Code": "2012",
+      "Description": "2012"
+    },
+    {
+      "Code": "2013",
+      "Description": "2013"
+    },
+    {
+      "Code": "2014",
+      "Description": "2014"
+    },
+    {
+      "Code": "2015",
+      "Description": "2015"
+    },
+    {
+      "Code": "2016",
+      "Description": "2016"
+    },
+    {
+      "Code": "2017",
+      "Description": "2017"
+    },
+    {
+      "Code": "2018",
+      "Description": "2018"
+    },
+    {
+      "Code": "2019",
+      "Description": "2019"
+    },
+    {
+      "Code": "2020",
+      "Description": "2020"
+    },
+    {
+      "Code": "2021",
+      "Description": "2021"
+    },
+    {
+      "Code": "2022",
+      "Description": "2022"
+    },
+    {
+      "Code": "2023",
+      "Description": "2023"
+    },
+    {
+      "Code": "2024",
+      "Description": "2024"
+    },
+    {
+      "Code": "2025",
+      "Description": "2025"
+    }
+  ]
+}

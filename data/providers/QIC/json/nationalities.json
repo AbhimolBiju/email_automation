@@ -1,0 +1,1007 @@
+{
+  "metadata": {
+    "source_file": "Nationality_list_Bayanaty_MasterData.xlsx"
+  },
+  "records": [
+    {
+      "nationality_code": "001",
+      "nationality_desc": "Afghan"
+    },
+    {
+      "nationality_code": "002",
+      "nationality_desc": "Albanian"
+    },
+    {
+      "nationality_code": "003",
+      "nationality_desc": "Algerian"
+    },
+    {
+      "nationality_code": "004",
+      "nationality_desc": "American"
+    },
+    {
+      "nationality_code": "005",
+      "nationality_desc": "Andorran"
+    },
+    {
+      "nationality_code": "006",
+      "nationality_desc": "Angolan"
+    },
+    {
+      "nationality_code": "007",
+      "nationality_desc": "Antiguans"
+    },
+    {
+      "nationality_code": "008",
+      "nationality_desc": "Argentinean"
+    },
+    {
+      "nationality_code": "009",
+      "nationality_desc": "Armenian"
+    },
+    {
+      "nationality_code": "010",
+      "nationality_desc": "Australian"
+    },
+    {
+      "nationality_code": "011",
+      "nationality_desc": "Austrian"
+    },
+    {
+      "nationality_code": "012",
+      "nationality_desc": "Azerbaijani"
+    },
+    {
+      "nationality_code": "013",
+      "nationality_desc": "Bahamian"
+    },
+    {
+      "nationality_code": "014",
+      "nationality_desc": "Bahraini"
+    },
+    {
+      "nationality_code": "015",
+      "nationality_desc": "Bangladeshi"
+    },
+    {
+      "nationality_code": "016",
+      "nationality_desc": "Barbadian"
+    },
+    {
+      "nationality_code": "017",
+      "nationality_desc": "Barbudans"
+    },
+    {
+      "nationality_code": "018",
+      "nationality_desc": "Batswana"
+    },
+    {
+      "nationality_code": "019",
+      "nationality_desc": "Belarusian"
+    },
+    {
+      "nationality_code": "020",
+      "nationality_desc": "Belgian"
+    },
+    {
+      "nationality_code": "021",
+      "nationality_desc": "Belizean"
+    },
+    {
+      "nationality_code": "022",
+      "nationality_desc": "Beninese"
+    },
+    {
+      "nationality_code": "023",
+      "nationality_desc": "Bhutanese"
+    },
+    {
+      "nationality_code": "024",
+      "nationality_desc": "Bolivian"
+    },
+    {
+      "nationality_code": "025",
+      "nationality_desc": "Bosnian"
+    },
+    {
+      "nationality_code": "026",
+      "nationality_desc": "Brazilian"
+    },
+    {
+      "nationality_code": "027",
+      "nationality_desc": "British"
+    },
+    {
+      "nationality_code": "028",
+      "nationality_desc": "Bruneian"
+    },
+    {
+      "nationality_code": "029",
+      "nationality_desc": "Bulgarian"
+    },
+    {
+      "nationality_code": "030",
+      "nationality_desc": "Burkinabe"
+    },
+    {
+      "nationality_code": "031",
+      "nationality_desc": "Burmese"
+    },
+    {
+      "nationality_code": "032",
+      "nationality_desc": "Burundian"
+    },
+    {
+      "nationality_code": "033",
+      "nationality_desc": "Cambodian"
+    },
+    {
+      "nationality_code": "034",
+      "nationality_desc": "Cameroonian"
+    },
+    {
+      "nationality_code": "035",
+      "nationality_desc": "Canadian"
+    },
+    {
+      "nationality_code": "036",
+      "nationality_desc": "Cape Verdean"
+    },
+    {
+      "nationality_code": "037",
+      "nationality_desc": "Central African"
+    },
+    {
+      "nationality_code": "038",
+      "nationality_desc": "Chadian"
+    },
+    {
+      "nationality_code": "039",
+      "nationality_desc": "Chilean"
+    },
+    {
+      "nationality_code": "040",
+      "nationality_desc": "Chinese"
+    },
+    {
+      "nationality_code": "041",
+      "nationality_desc": "Colombian"
+    },
+    {
+      "nationality_code": "042",
+      "nationality_desc": "Comorian"
+    },
+    {
+      "nationality_code": "043",
+      "nationality_desc": "Congolese"
+    },
+    {
+      "nationality_code": "044",
+      "nationality_desc": "Costa Rican"
+    },
+    {
+      "nationality_code": "045",
+      "nationality_desc": "Croatian"
+    },
+    {
+      "nationality_code": "046",
+      "nationality_desc": "Cuban"
+    },
+    {
+      "nationality_code": "047",
+      "nationality_desc": "Cypriot"
+    },
+    {
+      "nationality_code": "048",
+      "nationality_desc": "Czech"
+    },
+    {
+      "nationality_code": "049",
+      "nationality_desc": "Danish"
+    },
+    {
+      "nationality_code": "050",
+      "nationality_desc": "Djibouti"
+    },
+    {
+      "nationality_code": "051",
+      "nationality_desc": "Dominican"
+    },
+    {
+      "nationality_code": "052",
+      "nationality_desc": "Dutch"
+    },
+    {
+      "nationality_code": "053",
+      "nationality_desc": "East Timorese"
+    },
+    {
+      "nationality_code": "054",
+      "nationality_desc": "Ecuadorean"
+    },
+    {
+      "nationality_code": "055",
+      "nationality_desc": "Egyptian"
+    },
+    {
+      "nationality_code": "056",
+      "nationality_desc": "Emirati"
+    },
+    {
+      "nationality_code": "057",
+      "nationality_desc": "Equatorial Guinean"
+    },
+    {
+      "nationality_code": "058",
+      "nationality_desc": "Eritrean"
+    },
+    {
+      "nationality_code": "059",
+      "nationality_desc": "Estonian"
+    },
+    {
+      "nationality_code": "060",
+      "nationality_desc": "Ethiopian"
+    },
+    {
+      "nationality_code": "061",
+      "nationality_desc": "Fijian"
+    },
+    {
+      "nationality_code": "062",
+      "nationality_desc": "Filipino"
+    },
+    {
+      "nationality_code": "063",
+      "nationality_desc": "Finnish"
+    },
+    {
+      "nationality_code": "064",
+      "nationality_desc": "French"
+    },
+    {
+      "nationality_code": "065",
+      "nationality_desc": "Gabonese"
+    },
+    {
+      "nationality_code": "066",
+      "nationality_desc": "Gambian"
+    },
+    {
+      "nationality_code": "067",
+      "nationality_desc": "Georgian"
+    },
+    {
+      "nationality_code": "068",
+      "nationality_desc": "German"
+    },
+    {
+      "nationality_code": "069",
+      "nationality_desc": "Ghanaian"
+    },
+    {
+      "nationality_code": "070",
+      "nationality_desc": "Greek"
+    },
+    {
+      "nationality_code": "071",
+      "nationality_desc": "Grenadian"
+    },
+    {
+      "nationality_code": "072",
+      "nationality_desc": "Guatemalan"
+    },
+    {
+      "nationality_code": "073",
+      "nationality_desc": "Guinea-Bissauan"
+    },
+    {
+      "nationality_code": "074",
+      "nationality_desc": "Guinean"
+    },
+    {
+      "nationality_code": "075",
+      "nationality_desc": "Guyanese"
+    },
+    {
+      "nationality_code": "076",
+      "nationality_desc": "Haitian"
+    },
+    {
+      "nationality_code": "077",
+      "nationality_desc": "Herzegovinian"
+    },
+    {
+      "nationality_code": "078",
+      "nationality_desc": "Honduran"
+    },
+    {
+      "nationality_code": "079",
+      "nationality_desc": "Hungarian"
+    },
+    {
+      "nationality_code": "080",
+      "nationality_desc": "I-Kiribati"
+    },
+    {
+      "nationality_code": "081",
+      "nationality_desc": "Icelander"
+    },
+    {
+      "nationality_code": "082",
+      "nationality_desc": "Indian"
+    },
+    {
+      "nationality_code": "083",
+      "nationality_desc": "Indonesian"
+    },
+    {
+      "nationality_code": "084",
+      "nationality_desc": "Iranian"
+    },
+    {
+      "nationality_code": "085",
+      "nationality_desc": "Iraqi"
+    },
+    {
+      "nationality_code": "086",
+      "nationality_desc": "Irish"
+    },
+    {
+      "nationality_code": "087",
+      "nationality_desc": "Israeli"
+    },
+    {
+      "nationality_code": "088",
+      "nationality_desc": "Italian"
+    },
+    {
+      "nationality_code": "089",
+      "nationality_desc": "Ivorian"
+    },
+    {
+      "nationality_code": "090",
+      "nationality_desc": "Jamaican"
+    },
+    {
+      "nationality_code": "091",
+      "nationality_desc": "Japanese"
+    },
+    {
+      "nationality_code": "092",
+      "nationality_desc": "Jordanian"
+    },
+    {
+      "nationality_code": "093",
+      "nationality_desc": "Kazakhstani"
+    },
+    {
+      "nationality_code": "094",
+      "nationality_desc": "Kenyan"
+    },
+    {
+      "nationality_code": "095",
+      "nationality_desc": "Kittian and Nevisian"
+    },
+    {
+      "nationality_code": "096",
+      "nationality_desc": "Kuwaiti"
+    },
+    {
+      "nationality_code": "097",
+      "nationality_desc": "Kyrgyz"
+    },
+    {
+      "nationality_code": "098",
+      "nationality_desc": "Laotian"
+    },
+    {
+      "nationality_code": "099",
+      "nationality_desc": "Latvian"
+    },
+    {
+      "nationality_code": "100",
+      "nationality_desc": "Lebanese"
+    },
+    {
+      "nationality_code": "101",
+      "nationality_desc": "Liberian"
+    },
+    {
+      "nationality_code": "102",
+      "nationality_desc": "Libyan"
+    },
+    {
+      "nationality_code": "103",
+      "nationality_desc": "Liechtensteiner"
+    },
+    {
+      "nationality_code": "104",
+      "nationality_desc": "Lithuanian"
+    },
+    {
+      "nationality_code": "105",
+      "nationality_desc": "Luxembourger"
+    },
+    {
+      "nationality_code": "106",
+      "nationality_desc": "Macedonian"
+    },
+    {
+      "nationality_code": "107",
+      "nationality_desc": "Malagasy"
+    },
+    {
+      "nationality_code": "108",
+      "nationality_desc": "Malawian"
+    },
+    {
+      "nationality_code": "109",
+      "nationality_desc": "Malaysian"
+    },
+    {
+      "nationality_code": "110",
+      "nationality_desc": "Maldivan"
+    },
+    {
+      "nationality_code": "111",
+      "nationality_desc": "Malian"
+    },
+    {
+      "nationality_code": "112",
+      "nationality_desc": "Maltese"
+    },
+    {
+      "nationality_code": "113",
+      "nationality_desc": "Marshallese"
+    },
+    {
+      "nationality_code": "114",
+      "nationality_desc": "Mauritanian"
+    },
+    {
+      "nationality_code": "115",
+      "nationality_desc": "Mauritian"
+    },
+    {
+      "nationality_code": "116",
+      "nationality_desc": "Mexican"
+    },
+    {
+      "nationality_code": "117",
+      "nationality_desc": "Micronesian"
+    },
+    {
+      "nationality_code": "118",
+      "nationality_desc": "Moldovan"
+    },
+    {
+      "nationality_code": "119",
+      "nationality_desc": "Monacan"
+    },
+    {
+      "nationality_code": "120",
+      "nationality_desc": "Mongolian"
+    },
+    {
+      "nationality_code": "121",
+      "nationality_desc": "Moroccan"
+    },
+    {
+      "nationality_code": "122",
+      "nationality_desc": "Mosotho"
+    },
+    {
+      "nationality_code": "123",
+      "nationality_desc": "Motswana"
+    },
+    {
+      "nationality_code": "124",
+      "nationality_desc": "Mozambican"
+    },
+    {
+      "nationality_code": "125",
+      "nationality_desc": "Namibian"
+    },
+    {
+      "nationality_code": "126",
+      "nationality_desc": "Nauruan"
+    },
+    {
+      "nationality_code": "127",
+      "nationality_desc": "Nepalese"
+    },
+    {
+      "nationality_code": "128",
+      "nationality_desc": "New Zealander"
+    },
+    {
+      "nationality_code": "129",
+      "nationality_desc": "Nicaraguan"
+    },
+    {
+      "nationality_code": "130",
+      "nationality_desc": "Nigerian"
+    },
+    {
+      "nationality_code": "131",
+      "nationality_desc": "Nigerien"
+    },
+    {
+      "nationality_code": "132",
+      "nationality_desc": "North Korean"
+    },
+    {
+      "nationality_code": "133",
+      "nationality_desc": "Northern Irish"
+    },
+    {
+      "nationality_code": "134",
+      "nationality_desc": "Norwegian"
+    },
+    {
+      "nationality_code": "135",
+      "nationality_desc": "Omani"
+    },
+    {
+      "nationality_code": "136",
+      "nationality_desc": "Pakistani"
+    },
+    {
+      "nationality_code": "137",
+      "nationality_desc": "Palauan"
+    },
+    {
+      "nationality_code": "138",
+      "nationality_desc": "Panamanian"
+    },
+    {
+      "nationality_code": "139",
+      "nationality_desc": "Papua New Guinean"
+    },
+    {
+      "nationality_code": "140",
+      "nationality_desc": "Paraguayan"
+    },
+    {
+      "nationality_code": "141",
+      "nationality_desc": "Peruvian"
+    },
+    {
+      "nationality_code": "142",
+      "nationality_desc": "Polish"
+    },
+    {
+      "nationality_code": "143",
+      "nationality_desc": "Portuguese"
+    },
+    {
+      "nationality_code": "144",
+      "nationality_desc": "Qatari"
+    },
+    {
+      "nationality_code": "145",
+      "nationality_desc": "Romanian"
+    },
+    {
+      "nationality_code": "146",
+      "nationality_desc": "Russian"
+    },
+    {
+      "nationality_code": "147",
+      "nationality_desc": "Rwandan"
+    },
+    {
+      "nationality_code": "148",
+      "nationality_desc": "Saint Lucian"
+    },
+    {
+      "nationality_code": "149",
+      "nationality_desc": "Salvadoran"
+    },
+    {
+      "nationality_code": "150",
+      "nationality_desc": "Samoan"
+    },
+    {
+      "nationality_code": "151",
+      "nationality_desc": "San Marinese"
+    },
+    {
+      "nationality_code": "152",
+      "nationality_desc": "Sao Tomean"
+    },
+    {
+      "nationality_code": "153",
+      "nationality_desc": "Saudi"
+    },
+    {
+      "nationality_code": "154",
+      "nationality_desc": "Scottish"
+    },
+    {
+      "nationality_code": "155",
+      "nationality_desc": "Senegalese"
+    },
+    {
+      "nationality_code": "156",
+      "nationality_desc": "Serbian"
+    },
+    {
+      "nationality_code": "157",
+      "nationality_desc": "Seychellois"
+    },
+    {
+      "nationality_code": "158",
+      "nationality_desc": "Sierra Leonean"
+    },
+    {
+      "nationality_code": "159",
+      "nationality_desc": "Singaporean"
+    },
+    {
+      "nationality_code": "160",
+      "nationality_desc": "Slovakian"
+    },
+    {
+      "nationality_code": "161",
+      "nationality_desc": "Slovenian"
+    },
+    {
+      "nationality_code": "162",
+      "nationality_desc": "Solomon Islander"
+    },
+    {
+      "nationality_code": "163",
+      "nationality_desc": "Somali"
+    },
+    {
+      "nationality_code": "164",
+      "nationality_desc": "South African"
+    },
+    {
+      "nationality_code": "165",
+      "nationality_desc": "South Korean"
+    },
+    {
+      "nationality_code": "166",
+      "nationality_desc": "Spanish"
+    },
+    {
+      "nationality_code": "167",
+      "nationality_desc": "Sri Lankan"
+    },
+    {
+      "nationality_code": "168",
+      "nationality_desc": "Sudanese"
+    },
+    {
+      "nationality_code": "169",
+      "nationality_desc": "Surinamer"
+    },
+    {
+      "nationality_code": "170",
+      "nationality_desc": "Swazi"
+    },
+    {
+      "nationality_code": "171",
+      "nationality_desc": "Swedish"
+    },
+    {
+      "nationality_code": "172",
+      "nationality_desc": "Swiss"
+    },
+    {
+      "nationality_code": "173",
+      "nationality_desc": "Syrian"
+    },
+    {
+      "nationality_code": "174",
+      "nationality_desc": "Taiwanese"
+    },
+    {
+      "nationality_code": "175",
+      "nationality_desc": "Tajik"
+    },
+    {
+      "nationality_code": "176",
+      "nationality_desc": "Tanzanian"
+    },
+    {
+      "nationality_code": "177",
+      "nationality_desc": "Thai"
+    },
+    {
+      "nationality_code": "178",
+      "nationality_desc": "Togolese"
+    },
+    {
+      "nationality_code": "179",
+      "nationality_desc": "Tongan"
+    },
+    {
+      "nationality_code": "180",
+      "nationality_desc": "Trinidadian or Tobagonian"
+    },
+    {
+      "nationality_code": "181",
+      "nationality_desc": "Tunisian"
+    },
+    {
+      "nationality_code": "182",
+      "nationality_desc": "Turkish"
+    },
+    {
+      "nationality_code": "183",
+      "nationality_desc": "Tuvaluan"
+    },
+    {
+      "nationality_code": "184",
+      "nationality_desc": "Ugandan"
+    },
+    {
+      "nationality_code": "185",
+      "nationality_desc": "Ukrainian"
+    },
+    {
+      "nationality_code": "186",
+      "nationality_desc": "Uruguayan"
+    },
+    {
+      "nationality_code": "187",
+      "nationality_desc": "Uzbekistani"
+    },
+    {
+      "nationality_code": "188",
+      "nationality_desc": "Venezuelan"
+    },
+    {
+      "nationality_code": "189",
+      "nationality_desc": "Vietnamese"
+    },
+    {
+      "nationality_code": "190",
+      "nationality_desc": "Welsh"
+    },
+    {
+      "nationality_code": "191",
+      "nationality_desc": "Yemenite"
+    },
+    {
+      "nationality_code": "192",
+      "nationality_desc": "Zambian"
+    },
+    {
+      "nationality_code": "193",
+      "nationality_desc": "Zimbabwean"
+    },
+    {
+      "nationality_code": "194",
+      "nationality_desc": "Palestenian"
+    },
+    {
+      "nationality_code": "196",
+      "nationality_desc": "Montenegrin"
+    },
+    {
+      "nationality_code": "197",
+      "nationality_desc": "Kosovar/Kosovan"
+    },
+    {
+      "nationality_code": "198",
+      "nationality_desc": "American Samoa"
+    },
+    {
+      "nationality_code": "199",
+      "nationality_desc": "Ethiopia"
+    },
+    {
+      "nationality_code": "200",
+      "nationality_desc": "Eritrea"
+    },
+    {
+      "nationality_code": "202",
+      "nationality_desc": "Bosnia And Herzegovina"
+    },
+    {
+      "nationality_code": "204",
+      "nationality_desc": "Germany"
+    },
+    {
+      "nationality_code": "207",
+      "nationality_desc": "Yemen"
+    },
+    {
+      "nationality_code": "209",
+      "nationality_desc": "Anguilla"
+    },
+    {
+      "nationality_code": "211",
+      "nationality_desc": "Panama"
+    },
+    {
+      "nationality_code": "213",
+      "nationality_desc": "Puerto Rico"
+    },
+    {
+      "nationality_code": "214",
+      "nationality_desc": "French Polynesia"
+    },
+    {
+      "nationality_code": "215",
+      "nationality_desc": "Bermuda"
+    },
+    {
+      "nationality_code": "216",
+      "nationality_desc": "Turkmenistan"
+    },
+    {
+      "nationality_code": "218",
+      "nationality_desc": "Tokelau"
+    },
+    {
+      "nationality_code": "219",
+      "nationality_desc": "Gibraltar"
+    },
+    {
+      "nationality_code": "220",
+      "nationality_desc": "Green Land"
+    },
+    {
+      "nationality_code": "221",
+      "nationality_desc": "Falkland Islands"
+    },
+    {
+      "nationality_code": "222",
+      "nationality_desc": "Cayman Islands"
+    },
+    {
+      "nationality_code": "223",
+      "nationality_desc": "Cook Islands"
+    },
+    {
+      "nationality_code": "224",
+      "nationality_desc": "Mariana Islands"
+    },
+    {
+      "nationality_code": "225",
+      "nationality_desc": "Norfolk Islands"
+    },
+    {
+      "nationality_code": "226",
+      "nationality_desc": "Christmas Island"
+    },
+    {
+      "nationality_code": "227",
+      "nationality_desc": "Island Of Mayotte"
+    },
+    {
+      "nationality_code": "228",
+      "nationality_desc": "Republic Of South Sudan"
+    },
+    {
+      "nationality_code": "229",
+      "nationality_desc": "Republic Of Dominica"
+    },
+    {
+      "nationality_code": "231",
+      "nationality_desc": "Guam"
+    },
+    {
+      "nationality_code": "232",
+      "nationality_desc": "Reunion"
+    },
+    {
+      "nationality_code": "233",
+      "nationality_desc": "Saint Pierre And Miquelon"
+    },
+    {
+      "nationality_code": "234",
+      "nationality_desc": "Saint Vincent"
+    },
+    {
+      "nationality_code": "236",
+      "nationality_desc": "St. Helena"
+    },
+    {
+      "nationality_code": "237",
+      "nationality_desc": "Aruba"
+    },
+    {
+      "nationality_code": "241",
+      "nationality_desc": "Palestine"
+    },
+    {
+      "nationality_code": "242",
+      "nationality_desc": "New Caledonia"
+    },
+    {
+      "nationality_code": "245",
+      "nationality_desc": "Martinique"
+    },
+    {
+      "nationality_code": "246",
+      "nationality_desc": "Macao"
+    },
+    {
+      "nationality_code": "247",
+      "nationality_desc": "Vatican City"
+    },
+    {
+      "nationality_code": "249",
+      "nationality_desc": "Montserrat"
+    },
+    {
+      "nationality_code": "250",
+      "nationality_desc": "Mauritius"
+    },
+    {
+      "nationality_code": "252",
+      "nationality_desc": "French Southern Territories"
+    },
+    {
+      "nationality_code": "253",
+      "nationality_desc": "Guernsey Island"
+    },
+    {
+      "nationality_code": "254",
+      "nationality_desc": "Turks And Caicos Islands"
+    },
+    {
+      "nationality_code": "255",
+      "nationality_desc": "British Virgin Islands"
+    },
+    {
+      "nationality_code": "256",
+      "nationality_desc": "United States Virgin Islands"
+    },
+    {
+      "nationality_code": "257",
+      "nationality_desc": "Vanuato"
+    },
+    {
+      "nationality_code": "258",
+      "nationality_desc": "Netherlands Antilles"
+    },
+    {
+      "nationality_code": "259",
+      "nationality_desc": "Bouvet Island"
+    },
+    {
+      "nationality_code": "260",
+      "nationality_desc": "Guadeloupe"
+    },
+    {
+      "nationality_code": "261",
+      "nationality_desc": "Heard Island And Mcdonald"
+    },
+    {
+      "nationality_code": "262",
+      "nationality_desc": "Niue"
+    },
+    {
+      "nationality_code": "263",
+      "nationality_desc": "Pitcairn"
+    },
+    {
+      "nationality_code": "264",
+      "nationality_desc": "Svalbard Islands"
+    },
+    {
+      "nationality_code": "267",
+      "nationality_desc": "Cyprus"
+    },
+    {
+      "nationality_code": "268",
+      "nationality_desc": "Republic of Myanmar"
+    },
+    {
+      "nationality_code": "269",
+      "nationality_desc": "Hong Kong"
+    },
+    {
+      "nationality_code": "270",
+      "nationality_desc": "Zaire"
+    }
+  ]
+}

@@ -1,0 +1,604 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehMake"
+  },
+  "records": [
+    {
+      "Code": "084",
+      "Description": "ABAZA"
+    },
+    {
+      "Code": "085",
+      "Description": "AL JABER"
+    },
+    {
+      "Code": "126",
+      "Description": "ANKAI"
+    },
+    {
+      "Code": "014",
+      "Description": "ASHOK LEYLAND"
+    },
+    {
+      "Code": "002",
+      "Description": "ASTON MARTIN"
+    },
+    {
+      "Code": "083",
+      "Description": "ATLAS"
+    },
+    {
+      "Code": "072",
+      "Description": "ATLASCO"
+    },
+    {
+      "Code": "003",
+      "Description": "AUDI"
+    },
+    {
+      "Code": "139",
+      "Description": "Acura"
+    },
+    {
+      "Code": "107",
+      "Description": "BACKHOE LOADER"
+    },
+    {
+      "Code": "053",
+      "Description": "BAJAJ"
+    },
+    {
+      "Code": "167",
+      "Description": "BAOLI"
+    },
+    {
+      "Code": "133",
+      "Description": "BAUER"
+    },
+    {
+      "Code": "077",
+      "Description": "BEML"
+    },
+    {
+      "Code": "152",
+      "Description": "BENELLI"
+    },
+    {
+      "Code": "070",
+      "Description": "BENTLEY"
+    },
+    {
+      "Code": "035",
+      "Description": "BMW"
+    },
+    {
+      "Code": "103",
+      "Description": "BNH"
+    },
+    {
+      "Code": "017",
+      "Description": "BOBCAT"
+    },
+    {
+      "Code": "124",
+      "Description": "BONLUCK"
+    },
+    {
+      "Code": "156",
+      "Description": "BW R"
+    },
+    {
+      "Code": "148",
+      "Description": "C0BILIFT C3000"
+    },
+    {
+      "Code": "056",
+      "Description": "CADILLAC"
+    },
+    {
+      "Code": "0157",
+      "Description": "CASE"
+    },
+    {
+      "Code": "036",
+      "Description": "CATERPILLAR"
+    },
+    {
+      "Code": "037",
+      "Description": "CHERY"
+    },
+    {
+      "Code": "047",
+      "Description": "CHEVROLET"
+    },
+    {
+      "Code": "065",
+      "Description": "CHRYSLER"
+    },
+    {
+      "Code": "087",
+      "Description": "CLARK"
+    },
+    {
+      "Code": "149",
+      "Description": "COBILIFT"
+    },
+    {
+      "Code": "129",
+      "Description": "CROWN"
+    },
+    {
+      "Code": "018",
+      "Description": "DAEWOO"
+    },
+    {
+      "Code": "019",
+      "Description": "DAIHATSU"
+    },
+    {
+      "Code": "0155",
+      "Description": "DALIAN"
+    },
+    {
+      "Code": "0135",
+      "Description": "DONGFENG"
+    },
+    {
+      "Code": "125",
+      "Description": "DONGYUE"
+    },
+    {
+      "Code": "038",
+      "Description": "DOOSAN"
+    },
+    {
+      "Code": "080",
+      "Description": "DYNAPAC"
+    },
+    {
+      "Code": "039",
+      "Description": "EICHER"
+    },
+    {
+      "Code": "FORD",
+      "Description": "EVEREST"
+    },
+    {
+      "Code": "0113",
+      "Description": "FERRARI"
+    },
+    {
+      "Code": "105",
+      "Description": "FIAT"
+    },
+    {
+      "Code": "104",
+      "Description": "FORCE"
+    },
+    {
+      "Code": "040",
+      "Description": "FORD"
+    },
+    {
+      "Code": "020",
+      "Description": "FOTON"
+    },
+    {
+      "Code": "132",
+      "Description": "FUWA"
+    },
+    {
+      "Code": "041",
+      "Description": "GMC"
+    },
+    {
+      "Code": "118",
+      "Description": "GOLDEN DRAGON"
+    },
+    {
+      "Code": "099",
+      "Description": "GORICA"
+    },
+    {
+      "Code": "158",
+      "Description": "GRANTON"
+    },
+    {
+      "Code": "021",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Code": "090",
+      "Description": "GROVE"
+    },
+    {
+      "Code": "119",
+      "Description": "HANGCHA"
+    },
+    {
+      "Code": "086",
+      "Description": "HARLEY"
+    },
+    {
+      "Code": "088",
+      "Description": "HCCPC"
+    },
+    {
+      "Code": "093",
+      "Description": "HELI"
+    },
+    {
+      "Code": "123",
+      "Description": "HERO"
+    },
+    {
+      "Code": "075",
+      "Description": "HIGER"
+    },
+    {
+      "Code": "023",
+      "Description": "HINO"
+    },
+    {
+      "Code": "113",
+      "Description": "HITACHI"
+    },
+    {
+      "Code": "010",
+      "Description": "HONDA"
+    },
+    {
+      "Code": "135",
+      "Description": "HOWO"
+    },
+    {
+      "Code": "042",
+      "Description": "HYSTER"
+    },
+    {
+      "Code": "011",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Code": "134",
+      "Description": "IMT A270"
+    },
+    {
+      "Code": "052",
+      "Description": "INFINITI"
+    },
+    {
+      "Code": "013",
+      "Description": "ISUZU"
+    },
+    {
+      "Code": "069",
+      "Description": "ISUZU TIPPER TRUCK"
+    },
+    {
+      "Code": "043",
+      "Description": "IVECO"
+    },
+    {
+      "Code": "161",
+      "Description": "JAC"
+    },
+    {
+      "Code": "060",
+      "Description": "JAGUAR"
+    },
+    {
+      "Code": "067",
+      "Description": "JCB"
+    },
+    {
+      "Code": "057",
+      "Description": "JEEP"
+    },
+    {
+      "Code": "168",
+      "Description": "JETOUR"
+    },
+    {
+      "Code": "024",
+      "Description": "JINBEI"
+    },
+    {
+      "Code": "025",
+      "Description": "JMC"
+    },
+    {
+      "Code": "026",
+      "Description": "JMC NKR"
+    },
+    {
+      "Code": "154",
+      "Description": "JUNGHEINRICH"
+    },
+    {
+      "Code": "159",
+      "Description": "KAWASAKI"
+    },
+    {
+      "Code": "027",
+      "Description": "KIA"
+    },
+    {
+      "Code": "028",
+      "Description": "KING LONG"
+    },
+    {
+      "Code": "029",
+      "Description": "KOMATSU"
+    },
+    {
+      "Code": "091",
+      "Description": "KTM"
+    },
+    {
+      "Code": "0114",
+      "Description": "KUBOTA"
+    },
+    {
+      "Code": "006",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Code": "082",
+      "Description": "LEEBOY"
+    },
+    {
+      "Code": "008",
+      "Description": "LEXUS"
+    },
+    {
+      "Code": "094",
+      "Description": "LIEBHERR"
+    },
+    {
+      "Code": "064",
+      "Description": "LINCOLN"
+    },
+    {
+      "Code": "112",
+      "Description": "LINDE"
+    },
+    {
+      "Code": "136",
+      "Description": "LONKING"
+    },
+    {
+      "Code": "153",
+      "Description": "LUOYANG LONGPAI"
+    },
+    {
+      "Code": "117",
+      "Description": "LUXEN"
+    },
+    {
+      "Code": "140",
+      "Description": "Longma"
+    },
+    {
+      "Code": "122",
+      "Description": "MAHINDRA"
+    },
+    {
+      "Code": "101",
+      "Description": "MAMMUT"
+    },
+    {
+      "Code": "048",
+      "Description": "MAN"
+    },
+    {
+      "Code": "0116",
+      "Description": "MAXUS"
+    },
+    {
+      "Code": "030",
+      "Description": "MERCEDES"
+    },
+    {
+      "Code": "144",
+      "Description": "MG"
+    },
+    {
+      "Code": "004",
+      "Description": "MINI"
+    },
+    {
+      "Code": "012",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Code": "110",
+      "Description": "MOTOR"
+    },
+    {
+      "Code": "115",
+      "Description": "MV"
+    },
+    {
+      "Code": "138",
+      "Description": "NEW HOLLAND"
+    },
+    {
+      "Code": "005",
+      "Description": "NISSAN"
+    },
+    {
+      "Code": "165",
+      "Description": "OAF"
+    },
+    {
+      "Code": "059",
+      "Description": "OPEL"
+    },
+    {
+      "Code": "031",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Code": "063",
+      "Description": "PORSCHE"
+    },
+    {
+      "Code": "0119",
+      "Description": "POWER BOSS"
+    },
+    {
+      "Code": "51012",
+      "Description": "RAM"
+    },
+    {
+      "Code": "032",
+      "Description": "RENAULT"
+    },
+    {
+      "Code": "079",
+      "Description": "ROLLS ROYCE"
+    },
+    {
+      "Code": "102",
+      "Description": "ROYAL ENFIELD"
+    },
+    {
+      "Code": "073",
+      "Description": "SANDVIK"
+    },
+    {
+      "Code": "097",
+      "Description": "SANY"
+    },
+    {
+      "Code": "044",
+      "Description": "SCANIA"
+    },
+    {
+      "Code": "0156",
+      "Description": "SHANGLI"
+    },
+    {
+      "Code": "089",
+      "Description": "SHANTUI"
+    },
+    {
+      "Code": "128",
+      "Description": "SHENLONG"
+    },
+    {
+      "Code": "109",
+      "Description": "SHOVEL"
+    },
+    {
+      "Code": "141",
+      "Description": "SINOTRUK"
+    },
+    {
+      "Code": "062",
+      "Description": "SKODA"
+    },
+    {
+      "Code": "114",
+      "Description": "SOILMEC"
+    },
+    {
+      "Code": "120",
+      "Description": "STILL"
+    },
+    {
+      "Code": "076",
+      "Description": "SUBARU"
+    },
+    {
+      "Code": "160",
+      "Description": "SUHIGO"
+    },
+    {
+      "Code": "0115",
+      "Description": "SUNLONG"
+    },
+    {
+      "Code": "127",
+      "Description": "SUNWIN"
+    },
+    {
+      "Code": "045",
+      "Description": "SUZUKI"
+    },
+    {
+      "Code": "108",
+      "Description": "TADANO"
+    },
+    {
+      "Code": "033",
+      "Description": "TATA"
+    },
+    {
+      "Code": "095",
+      "Description": "TATA MARACOPOLO"
+    },
+    {
+      "Code": "049",
+      "Description": "TCM"
+    },
+    {
+      "Code": "111",
+      "Description": "TENNANT"
+    },
+    {
+      "Code": "096",
+      "Description": "TEREX"
+    },
+    {
+      "Code": "009",
+      "Description": "TOYOTA"
+    },
+    {
+      "Code": "081",
+      "Description": "TRAILER - LOCAL"
+    },
+    {
+      "Code": "092",
+      "Description": "TRANS MARK"
+    },
+    {
+      "Code": "055",
+      "Description": "TVS"
+    },
+    {
+      "Code": "137",
+      "Description": "UD"
+    },
+    {
+      "Code": "147",
+      "Description": "VOGELE PAVER"
+    },
+    {
+      "Code": "034",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Code": "015",
+      "Description": "VOLVO"
+    },
+    {
+      "Code": "046",
+      "Description": "VOLVO"
+    },
+    {
+      "Code": "163",
+      "Description": "WUZHOULONG"
+    },
+    {
+      "Code": "071",
+      "Description": "XCMG"
+    },
+    {
+      "Code": "054",
+      "Description": "YAMAHA"
+    }
+  ]
+}

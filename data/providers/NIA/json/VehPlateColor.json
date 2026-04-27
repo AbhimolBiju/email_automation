@@ -1,0 +1,956 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehPlateColor"
+  },
+  "records": [
+    {
+      "Code": "1000",
+      "Description": "Red",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1001",
+      "Description": "Green",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "2",
+      "Description": "",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1165",
+      "Description": "19 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1163",
+      "Description": "50 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1162",
+      "Description": "18 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1019",
+      "Description": "17 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1002",
+      "Description": "Blue",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1003",
+      "Description": "1st Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1004",
+      "Description": "2nd Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1005",
+      "Description": "3rd Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1006",
+      "Description": "4th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1007",
+      "Description": "5th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1008",
+      "Description": "6th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1009",
+      "Description": "7th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1010",
+      "Description": "8th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1011",
+      "Description": "9th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1012",
+      "Description": "10th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1013",
+      "Description": "11th Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1014",
+      "Description": "12 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1015",
+      "Description": "13 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1016",
+      "Description": "14  Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1017",
+      "Description": "15 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1018",
+      "Description": "16 Category",
+      "Place of registration": "1000",
+      "Place of registration Desc": "ABU DHABI"
+    },
+    {
+      "Code": "1053",
+      "Description": "C",
+      "Place of registration": "4000",
+      "Place of registration Desc": "AJMAN"
+    },
+    {
+      "Code": "1052",
+      "Description": "B",
+      "Place of registration": "4000",
+      "Place of registration Desc": "AJMAN"
+    },
+    {
+      "Code": "1051",
+      "Description": "A",
+      "Place of registration": "4000",
+      "Place of registration Desc": "AJMAN"
+    },
+    {
+      "Code": "4",
+      "Description": "",
+      "Place of registration": "4000",
+      "Place of registration Desc": "AJMAN"
+    },
+    {
+      "Code": "1500",
+      "Description": "8th Category",
+      "Place of registration": "4000",
+      "Place of registration Desc": "AJMAN"
+    },
+    {
+      "Code": "9",
+      "Description": "D",
+      "Place of registration": "4000",
+      "Place of registration Desc": "AJMAN"
+    },
+    {
+      "Code": "1",
+      "Description": "",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "8",
+      "Description": "Bb",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1021",
+      "Description": "A",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1022",
+      "Description": "B",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1023",
+      "Description": "C",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1024",
+      "Description": "D",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1025",
+      "Description": "E",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1026",
+      "Description": "F",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1027",
+      "Description": "G",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1028",
+      "Description": "H",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1029",
+      "Description": "I",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1030",
+      "Description": "J",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1031",
+      "Description": "K",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1032",
+      "Description": "L",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1033",
+      "Description": "M",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1034",
+      "Description": "N",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1035",
+      "Description": "O",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1036",
+      "Description": "P",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1037",
+      "Description": "Q",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1038",
+      "Description": "R",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1039",
+      "Description": "S",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1040",
+      "Description": "T",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1041",
+      "Description": "U",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1042",
+      "Description": "V",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1043",
+      "Description": "W",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1044",
+      "Description": "X",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1045",
+      "Description": "Y",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1046",
+      "Description": "Z",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1153",
+      "Description": "Trailer",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1154",
+      "Description": "Private Transportation",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1155",
+      "Description": "Consulate Association",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1156",
+      "Description": "Public Transportation",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1157",
+      "Description": "Public Transportation 1",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1158",
+      "Description": "Aa",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1160",
+      "Description": "1st Category",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1164",
+      "Description": "2nd Category",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1020",
+      "Description": "White",
+      "Place of registration": "0001",
+      "Place of registration Desc": "DUBAI"
+    },
+    {
+      "Code": "1109",
+      "Description": "White",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1110",
+      "Description": "A",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1111",
+      "Description": "B",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1112",
+      "Description": "C",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1113",
+      "Description": "D",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1114",
+      "Description": "E",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1115",
+      "Description": "F",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1116",
+      "Description": "G",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1117",
+      "Description": "H",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1118",
+      "Description": "I",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1119",
+      "Description": "J",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1120",
+      "Description": "K",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1121",
+      "Description": "L",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1122",
+      "Description": "M",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1123",
+      "Description": "N",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1124",
+      "Description": "O",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1125",
+      "Description": "P",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1126",
+      "Description": "Q",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1127",
+      "Description": "R",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1128",
+      "Description": "S",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1129",
+      "Description": "T",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1130",
+      "Description": "U",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1131",
+      "Description": "V",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1132",
+      "Description": "W",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1133",
+      "Description": "X",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1134",
+      "Description": "Y",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1135",
+      "Description": "Z",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1161",
+      "Description": "Green",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "6",
+      "Description": "",
+      "Place of registration": "6000",
+      "Place of registration Desc": "FUJAIRAH"
+    },
+    {
+      "Code": "1081",
+      "Description": "White",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1087",
+      "Description": "E",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1084",
+      "Description": "B",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1085",
+      "Description": "C",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1086",
+      "Description": "D",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "7",
+      "Description": "",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1108",
+      "Description": "Z",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1107",
+      "Description": "Y",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1106",
+      "Description": "X",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1105",
+      "Description": "W",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1104",
+      "Description": "V",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1103",
+      "Description": "U",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1102",
+      "Description": "T",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1101",
+      "Description": "S",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1100",
+      "Description": "R",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1099",
+      "Description": "Q",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1098",
+      "Description": "P",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1097",
+      "Description": "O",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1096",
+      "Description": "N",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1095",
+      "Description": "M",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1094",
+      "Description": "L",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1093",
+      "Description": "K",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1092",
+      "Description": "J",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1091",
+      "Description": "I",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1090",
+      "Description": "H",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1089",
+      "Description": "G",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1088",
+      "Description": "F",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "1083",
+      "Description": "A",
+      "Place of registration": "7000",
+      "Place of registration Desc": "RAS AL KHAIMAH"
+    },
+    {
+      "Code": "3",
+      "Description": "",
+      "Place of registration": "3000",
+      "Place of registration Desc": "SHARJAH"
+    },
+    {
+      "Code": "1159",
+      "Description": "3rd Category",
+      "Place of registration": "3000",
+      "Place of registration Desc": "SHARJAH"
+    },
+    {
+      "Code": "1050",
+      "Description": "2nd Category",
+      "Place of registration": "3000",
+      "Place of registration Desc": "SHARJAH"
+    },
+    {
+      "Code": "1049",
+      "Description": "1st Category",
+      "Place of registration": "3000",
+      "Place of registration Desc": "SHARJAH"
+    },
+    {
+      "Code": "1047",
+      "Description": "White",
+      "Place of registration": "3000",
+      "Place of registration Desc": "SHARJAH"
+    },
+    {
+      "Code": "1048",
+      "Description": "Orange",
+      "Place of registration": "3000",
+      "Place of registration Desc": "SHARJAH"
+    },
+    {
+      "Code": "1080",
+      "Description": "Z",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "5",
+      "Description": "",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1078",
+      "Description": "X",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1077",
+      "Description": "W",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1076",
+      "Description": "V",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1075",
+      "Description": "U",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1074",
+      "Description": "T",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1073",
+      "Description": "S",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1072",
+      "Description": "R",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1071",
+      "Description": "Q",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1070",
+      "Description": "P",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1069",
+      "Description": "O",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1068",
+      "Description": "N",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1067",
+      "Description": "M",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1066",
+      "Description": "L",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1065",
+      "Description": "K",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1064",
+      "Description": "J",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1063",
+      "Description": "I",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1062",
+      "Description": "H",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1061",
+      "Description": "G",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1060",
+      "Description": "F",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1059",
+      "Description": "E",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1058",
+      "Description": "D",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1057",
+      "Description": "C",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1056",
+      "Description": "B",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1055",
+      "Description": "A",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1054",
+      "Description": "White",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    },
+    {
+      "Code": "1079",
+      "Description": "Y",
+      "Place of registration": "5000",
+      "Place of registration Desc": "UMM AL QUWAIN"
+    }
+  ]
+}

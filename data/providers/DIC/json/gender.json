@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "source_file": "Gender.xlsx"
+  },
+  "records": [
+    {
+      "code": "F",
+      "description": "Female"
+    },
+    {
+      "code": "M",
+      "description": "Male"
+    }
+  ]
+}

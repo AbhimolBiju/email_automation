@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "source_file": "No_Of_Cylinder_Bayanaty_MasterData.xlsx"
+  },
+  "records": [
+    {
+      "cylinder_code": "1001",
+      "cylinder_desc": "1",
+      "cylinder_long_desc": "One Cylinder"
+    },
+    {
+      "cylinder_code": "1002",
+      "cylinder_desc": "2",
+      "cylinder_long_desc": "Two Cylinder"
+    },
+    {
+      "cylinder_code": "1003",
+      "cylinder_desc": "3",
+      "cylinder_long_desc": "Three Cylinder"
+    },
+    {
+      "cylinder_code": "1004",
+      "cylinder_desc": "4",
+      "cylinder_long_desc": "Four Cylinder"
+    },
+    {
+      "cylinder_code": "1005",
+      "cylinder_desc": "5",
+      "cylinder_long_desc": "Five Cylinder"
+    },
+    {
+      "cylinder_code": "1006",
+      "cylinder_desc": "6",
+      "cylinder_long_desc": "Six Cylinder"
+    },
+    {
+      "cylinder_code": "1007",
+      "cylinder_desc": "8",
+      "cylinder_long_desc": "Eight Cylinder"
+    },
+    {
+      "cylinder_code": "1008",
+      "cylinder_desc": "10",
+      "cylinder_long_desc": "Ten Cylinder"
+    },
+    {
+      "cylinder_code": "1009",
+      "cylinder_desc": "12",
+      "cylinder_long_desc": "Twelve Cylinder"
+    },
+    {
+      "cylinder_code": "1010",
+      "cylinder_desc": "No Cylinders",
+      "cylinder_long_desc": "No Cylinders"
+    }
+  ]
+}

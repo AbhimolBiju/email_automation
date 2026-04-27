@@ -1,0 +1,48 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehTransType"
+  },
+  "records": [
+    {
+      "Code": "102",
+      "Description": "Change Vehicle Ownership"
+    },
+    {
+      "Code": "110",
+      "Description": "Change Vehicle Ownership/year"
+    },
+    {
+      "Code": "105",
+      "Description": "Export Certificate"
+    },
+    {
+      "Code": "104",
+      "Description": "Import Vehicle"
+    },
+    {
+      "Code": "107",
+      "Description": "Issue Trade Plate"
+    },
+    {
+      "Code": "101",
+      "Description": "New Vehicle Registration"
+    },
+    {
+      "Code": "108",
+      "Description": "Renewal Trade Plate"
+    },
+    {
+      "Code": "106",
+      "Description": "Update Registration Information"
+    },
+    {
+      "Code": "103",
+      "Description": "Vehicle Renewal"
+    },
+    {
+      "Code": "109",
+      "Description": "Vehicle Renewal with Change Number"
+    }
+  ]
+}

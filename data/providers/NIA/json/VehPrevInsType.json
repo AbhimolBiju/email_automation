@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehPrevInsType"
+  },
+  "records": [
+    {
+      "Code": "1",
+      "Description": "Comphrehensive Insurance"
+    },
+    {
+      "Code": "2",
+      "Description": "Third Party Liability Insurance"
+    }
+  ]
+}

@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+
+from django.core.management import call_command
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -6,7 +10,11 @@ from deals.models import Deal
 from insurance.models import InsuranceProvider, QuoteRequestLog, QuoteResult
 from insurance.providers.dic_masterdata import list_masterdata, lookup_code
 from insurance.providers.dic_provider import DICProvider
+from insurance.providers.nia_masterdata import load_sheet_records as load_nia_sheet_records
+from insurance.providers.nia_masterdata import lookup_code as nia_lookup_code
 from insurance.providers.nia_provider import NIAProvider
+from insurance.providers.qic_masterdata import lookup_make_model_codes
+from insurance.providers.qic_masterdata import lookup_nationality_code
 from insurance.providers.qic_provider import QICProvider
 from insurance.providers.factory import build_provider, resolve_provider_class
 from insurance.services.quote_service import get_best_quotes
@@ -414,3 +422,22 @@ class NIAProviderTests(TestCase):
         self.assertEqual(data["premium"], 2220.0)
         self.assertEqual(data["total"], 2220.0)
         self.assertEqual(data["plan_name"], "Motor Comprehensive –Non Agency")
+
+
+class ProviderMasterdataBuildTests(TestCase):
+    def test_build_provider_masterdata_command_writes_dic_json(self):
+        call_command("build_provider_masterdata", "--provider", "dic", "--force")
+
+        json_path = Path("/Users/sureshkamal/projects/promise_backend/data/providers/DIC/json/nationality.json")
+        self.assertTrue(json_path.exists())
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(payload["metadata"]["source_file"], "Nationality.xlsx")
+        self.assertGreater(len(payload["records"]), 100)
+
+    def test_runtime_masterdata_lookups_use_generated_json_shape(self):
+        self.assertEqual(lookup_code("nationality", "Indian"), "101")
+        self.assertEqual(nia_lookup_code("PolAssrSex", "Male"), "M")
+        self.assertEqual(lookup_nationality_code("Indian"), "082")
+        self.assertEqual(lookup_make_model_codes("Audi", "Q2"), ("0044", "440004"))
+        self.assertGreater(len(load_nia_sheet_records("VehMake")), 100)

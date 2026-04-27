@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehDriverExperience"
+  },
+  "records": [
+    {
+      "Code": "0",
+      "Description": "0 Year"
+    },
+    {
+      "Code": "1",
+      "Description": "1 Year"
+    },
+    {
+      "Code": "2",
+      "Description": "2 Year"
+    },
+    {
+      "Code": "3",
+      "Description": "3 Year"
+    },
+    {
+      "Code": "4",
+      "Description": "4 Year"
+    },
+    {
+      "Code": "5",
+      "Description": "More Than 4 Year"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "source_file": "Body_type_with_Bayanaty_MasterData.xlsx"
+  },
+  "records": [
+    {
+      "body_type_code": "1001",
+      "body_type_desc": "Saloon",
+      "bayanaty_body_type_code": ",500116,"
+    },
+    {
+      "body_type_code": "1002",
+      "body_type_desc": "4 X 4",
+      "bayanaty_body_type_code": ",500016,500134,500135,500136,500137,"
+    },
+    {
+      "body_type_code": "1003",
+      "body_type_desc": "Station",
+      "bayanaty_body_type_code": ",500020,500052,500133,"
+    },
+    {
+      "body_type_code": "1004",
+      "body_type_desc": "Coupe",
+      "bayanaty_body_type_code": ",500007,500031,"
+    },
+    {
+      "body_type_code": "1005",
+      "body_type_desc": "Bus",
+      "bayanaty_body_type_code": ",500001,500045,"
+    },
+    {
+      "body_type_code": "1006",
+      "body_type_desc": "Van upto 3 Ton",
+      "bayanaty_body_type_code": ",500003,500005,500023,500024,500025,500026,500030,500042,500044,500049,500053,500054,500055,500056,500057,500119,500144,500145,500152,"
+    },
+    {
+      "body_type_code": "1007",
+      "body_type_desc": "Pickup upto 2.5 Ton",
+      "bayanaty_body_type_code": ",500013,500015,500017,500022,500038,500039,500041,500058,500059,500061,500062,500064,500066,500067,500068,500069,500071,500079,500081,500082,500083,500089,500091,500096,500099,500100,500102,500103,500104,500106,500107,500110,500120,500129,500131,"
+    },
+    {
+      "body_type_code": "1011",
+      "body_type_desc": "Sports",
+      "bayanaty_body_type_code": ",500006,500125,"
+    },
+    {
+      "body_type_code": "1012",
+      "body_type_desc": "Motor Bikes Up to 200 CC",
+      "bayanaty_body_type_code": ",500051,"
+    },
+    {
+      "body_type_code": "1014",
+      "body_type_desc": "Hatchback",
+      "bayanaty_body_type_code": ",500033,"
+    },
+    {
+      "body_type_code": "1022",
+      "body_type_desc": "Equipment > 3 Ton",
+      "bayanaty_body_type_code": ",500011,500035,500050,500138,500139,"
+    }
+  ]
+}

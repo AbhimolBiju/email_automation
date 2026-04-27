@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehNoCylinder"
+  },
+  "records": [
+    {
+      "Code": "01",
+      "Description": "1 CYLINDER"
+    },
+    {
+      "Code": "10",
+      "Description": "10 CYLINDERS"
+    },
+    {
+      "Code": "11",
+      "Description": "11 CYLINDERS"
+    },
+    {
+      "Code": "12",
+      "Description": "12 CYLINDERS"
+    },
+    {
+      "Code": "14",
+      "Description": "16 CYLINDERS"
+    },
+    {
+      "Code": "02",
+      "Description": "2 CYLINDER"
+    },
+    {
+      "Code": "03",
+      "Description": "3 CYLINDER"
+    },
+    {
+      "Code": "04",
+      "Description": "4 CYLINDERS"
+    },
+    {
+      "Code": "05",
+      "Description": "5 CYLINDERS"
+    },
+    {
+      "Code": "06",
+      "Description": "6 CYLINDERS"
+    },
+    {
+      "Code": "07",
+      "Description": "7 CYLINDERS"
+    },
+    {
+      "Code": "08",
+      "Description": "8 CYLINDERS"
+    },
+    {
+      "Code": "09",
+      "Description": "9 CYLINDERS"
+    },
+    {
+      "Code": "13",
+      "Description": "N/A"
+    }
+  ]
+}

@@ -1,0 +1,655 @@
+{
+  "metadata": {
+    "source_file": "Bank Name.xlsx"
+  },
+  "records": [
+    {
+      "code": "1000",
+      "description": "mashreq alislami"
+    },
+    {
+      "code": "1001",
+      "description": "NOOR BANK"
+    },
+    {
+      "code": "1002",
+      "description": "BMW Al Batha Finance PSC"
+    },
+    {
+      "code": "1003",
+      "description": "BMW Al Batha Finance PSC"
+    },
+    {
+      "code": "1004",
+      "description": "GALADARI TRUCKS@HEAVY EQPT CO."
+    },
+    {
+      "code": "1005",
+      "description": "Al Ghandi Auto - الكندي للسيارات"
+    },
+    {
+      "code": "1006",
+      "description": "Banque Banorient France"
+    },
+    {
+      "code": "1007",
+      "description": "WIO BANK PJSC"
+    },
+    {
+      "code": "101",
+      "description": "ABN AMRO BANK"
+    },
+    {
+      "code": "102",
+      "description": "ABU DHABI COMMERCIAL BANK"
+    },
+    {
+      "code": "103",
+      "description": "ABU DHABI ISLAMIC BANK"
+    },
+    {
+      "code": "104",
+      "description": "AL AHLI BANK OF KUWAIT"
+    },
+    {
+      "code": "105",
+      "description": "AL AHLI BANK OF QATAR"
+    },
+    {
+      "code": "106",
+      "description": "ALAHLI BANK OF KUWAIT(K.S.C.)"
+    },
+    {
+      "code": "107",
+      "description": "ANZ GRINDLAYS BANK PLC"
+    },
+    {
+      "code": "108",
+      "description": "ARAB AFRICAN INT. BANK"
+    },
+    {
+      "code": "109",
+      "description": "ARAB BANK -INVEST & INT.TRADE"
+    },
+    {
+      "code": "110",
+      "description": "ARAB BANK"
+    },
+    {
+      "code": "111",
+      "description": "ARAB BANK PLC"
+    },
+    {
+      "code": "112",
+      "description": "B.N.P.PARIBAS"
+    },
+    {
+      "code": "113",
+      "description": "BANK AL MASHEREK S.A.L."
+    },
+    {
+      "code": "114",
+      "description": "BANK MELLI IRAN"
+    },
+    {
+      "code": "115",
+      "description": "BANK OF BARODA"
+    },
+    {
+      "code": "116",
+      "description": "BANK OF OMAN LTD."
+    },
+    {
+      "code": "117",
+      "description": "BANK OF SHARJAH"
+    },
+    {
+      "code": "118",
+      "description": "BANK SADERAT IRAN"
+    },
+    {
+      "code": "119",
+      "description": "BANKERS TRUST COMPANY"
+    },
+    {
+      "code": "120",
+      "description": "BANQUE BANORABE"
+    },
+    {
+      "code": "121",
+      "description": "BANQUE DU CAIRE SAE"
+    },
+    {
+      "code": "122",
+      "description": "BANQUE DU LIBAN"
+    },
+    {
+      "code": "123",
+      "description": "BANQUE LIB.POUR LE COM-FRANCE"
+    },
+    {
+      "code": "124",
+      "description": "BANQUE PARIBAS"
+    },
+    {
+      "code": "125",
+      "description": "BARCLAYS BANK"
+    },
+    {
+      "code": "126",
+      "description": "BRITISH ARAB COMMERCIAL BANK"
+    },
+    {
+      "code": "127",
+      "description": "BRITISH BANK OF MIDDLE EAST"
+    },
+    {
+      "code": "128",
+      "description": "CITIBANK"
+    },
+    {
+      "code": "129",
+      "description": "COMMERCIAL BANK INTERNATIONAL"
+    },
+    {
+      "code": "130",
+      "description": "COMMERCIAL BANK OF DUBAI"
+    },
+    {
+      "code": "131",
+      "description": "CREDIT AGRICOLE INDO SUEZ BANK"
+    },
+    {
+      "code": "132",
+      "description": "CREDIT AGRICOLE INDOSUEZ"
+    },
+    {
+      "code": "133",
+      "description": "DOHA BANK LTD."
+    },
+    {
+      "code": "134",
+      "description": "DUBAI ISLAMIC BANK"
+    },
+    {
+      "code": "135",
+      "description": "EL NILEIN BANK"
+    },
+    {
+      "code": "136",
+      "description": "EMIRATES BANK"
+    },
+    {
+      "code": "137",
+      "description": "FAYSAL ISLAMIC BANK OF BAHRAIN"
+    },
+    {
+      "code": "138",
+      "description": "FAYSAL ISLAMIC BANK-BAH.E.C"
+    },
+    {
+      "code": "139",
+      "description": "FEDERAL COMMERCIAL BANK LTD"
+    },
+    {
+      "code": "140",
+      "description": "FIRST GULF BANK"
+    },
+    {
+      "code": "141",
+      "description": "HABIB BANK AG ZURICH"
+    },
+    {
+      "code": "142",
+      "description": "HABIB BANK LIMITED"
+    },
+    {
+      "code": "143",
+      "description": "HSBC BANK MIDDLE EAST"
+    },
+    {
+      "code": "144",
+      "description": "INDUSTRIAL BANK OF KUWAIT(KSC)"
+    },
+    {
+      "code": "145",
+      "description": "INVEST BANK"
+    },
+    {
+      "code": "146",
+      "description": "JANATA BANK"
+    },
+    {
+      "code": "147",
+      "description": "LLOYDS BANK"
+    },
+    {
+      "code": "148",
+      "description": "MASHREQ BANK"
+    },
+    {
+      "code": "149",
+      "description": "MEES PIERSON NETHERLANDS"
+    },
+    {
+      "code": "150",
+      "description": "MIDDLE EAST BANK"
+    },
+    {
+      "code": "151",
+      "description": "MIDLAND INTERNATIONAL"
+    },
+    {
+      "code": "152",
+      "description": "NATIONAL BANK OF ABU DHABI"
+    },
+    {
+      "code": "153",
+      "description": "NATIONAL BANK OF DUBAI"
+    },
+    {
+      "code": "154",
+      "description": "NATIONAL BANK OF FUJAIRAH"
+    },
+    {
+      "code": "155",
+      "description": "NATIONAL BANK-RAS AL KHAIMAH"
+    },
+    {
+      "code": "156",
+      "description": "SHARJAH ISLAMIC BANK"
+    },
+    {
+      "code": "157",
+      "description": "NATIONAL BANK OF UMM AL QUWAIN"
+    },
+    {
+      "code": "158",
+      "description": "OMAN ARAB BANK S.A.O.C"
+    },
+    {
+      "code": "159",
+      "description": "OSOOL FINANCE COMPANY"
+    },
+    {
+      "code": "160",
+      "description": "QATAR INT. ISLAMIC BANK"
+    },
+    {
+      "code": "161",
+      "description": "QATAR ISLAMIC BANK"
+    },
+    {
+      "code": "162",
+      "description": "QATAR NATIONAL BANK"
+    },
+    {
+      "code": "163",
+      "description": "RAK BANK"
+    },
+    {
+      "code": "164",
+      "description": "STANDARD CHARTERED BANK"
+    },
+    {
+      "code": "165",
+      "description": "STANDARD CHARTERED GRINDLAYS"
+    },
+    {
+      "code": "166",
+      "description": "STATE BANK OF INDIA"
+    },
+    {
+      "code": "167",
+      "description": "THE CHASE MANHATTAN BANK, N.A."
+    },
+    {
+      "code": "168",
+      "description": "THE COMMERCIAL BANK OF QATAR"
+    },
+    {
+      "code": "169",
+      "description": "THE WALLSTREET BANKING CORP."
+    },
+    {
+      "code": "170",
+      "description": "UNION NATIONAL BANK"
+    },
+    {
+      "code": "171",
+      "description": "UNITED ARAB BANK"
+    },
+    {
+      "code": "172",
+      "description": "UAB - SHARJAH-2(SHARES)"
+    },
+    {
+      "code": "173",
+      "description": "UNITED BANK LIMITED"
+    },
+    {
+      "code": "174",
+      "description": "ARAB BANK FOR INVEST & FOREIGN"
+    },
+    {
+      "code": "175",
+      "description": "SHARJAH ISLAMIC BANK"
+    },
+    {
+      "code": "176",
+      "description": "BADR ISLAMIC BANK"
+    },
+    {
+      "code": "177",
+      "description": "EMIRATES  NBD"
+    },
+    {
+      "code": "178",
+      "description": "AL KHALIJI FRANCE S.A"
+    },
+    {
+      "code": "179",
+      "description": "ABU DHABI NAT.ISLAMIC FINANCE"
+    },
+    {
+      "code": "180",
+      "description": "AL TAYER MOTORS"
+    },
+    {
+      "code": "181",
+      "description": "NAJM Card MAF Finance"
+    },
+    {
+      "code": "182",
+      "description": "First Abu Dhabi Bank"
+    },
+    {
+      "code": "183",
+      "description": "MCB Bank"
+    },
+    {
+      "code": "184",
+      "description": "Galadari Automobiles Co. LTD(L.L.C)"
+    },
+    {
+      "code": "190",
+      "description": "ADC  ISLAMIC FINANCE"
+    },
+    {
+      "code": "191",
+      "description": "Al Hail ORIX Finance PSC"
+    },
+    {
+      "code": "192",
+      "description": "Bank Saderat Iran"
+    },
+    {
+      "code": "194",
+      "description": "LEGEND MULTI MOTORS"
+    },
+    {
+      "code": "501",
+      "description": "HSBC MIDDLE EAST FINANCE CO"
+    },
+    {
+      "code": "502",
+      "description": "GULF FINANCE CORPORATION PJSC"
+    },
+    {
+      "code": "503",
+      "description": "ME BANK"
+    },
+    {
+      "code": "504",
+      "description": "DUBAI BANK"
+    },
+    {
+      "code": "505",
+      "description": "OMAN FINANCE COMPANY"
+    },
+    {
+      "code": "506",
+      "description": "UNIVERSAL GROUP FOR INVESTMENT"
+    },
+    {
+      "code": "507",
+      "description": "AL KHALEEJ FINANCE"
+    },
+    {
+      "code": "508",
+      "description": "AL NABOODA MOTORS"
+    },
+    {
+      "code": "509",
+      "description": "AL FUTTAIM MOTORS"
+    },
+    {
+      "code": "510",
+      "description": "AL ROSTAMANI TRADING COMPANY"
+    },
+    {
+      "code": "511",
+      "description": "EMIRATES FINANCE COMPANY"
+    },
+    {
+      "code": "512",
+      "description": "ARABIAN AUTOMOBILES"
+    },
+    {
+      "code": "513",
+      "description": "AL HABTOOR MOTORS"
+    },
+    {
+      "code": "514",
+      "description": "JUMA AL MAJID EST"
+    },
+    {
+      "code": "515",
+      "description": "ETISALAT"
+    },
+    {
+      "code": "516",
+      "description": "MAF ORIX FINANCE PJSC"
+    },
+    {
+      "code": "517",
+      "description": "LIBERTY AUTOMOBILES"
+    },
+    {
+      "code": "518",
+      "description": "AL KHALEEJ INVESTMENT"
+    },
+    {
+      "code": "519",
+      "description": "AL MASOUD MOTORS"
+    },
+    {
+      "code": "520",
+      "description": "BLC BANK (FRANCE) SA"
+    },
+    {
+      "code": "521",
+      "description": "RAK MOTORS"
+    },
+    {
+      "code": "522",
+      "description": "EMIRATES ISLAMIC BANK"
+    },
+    {
+      "code": "523",
+      "description": "AL MAJID MOTORS CO"
+    },
+    {
+      "code": "524",
+      "description": "GENAVCO"
+    },
+    {
+      "code": "525",
+      "description": "KOJAK"
+    },
+    {
+      "code": "526",
+      "description": "SWAIDAN MOTORS"
+    },
+    {
+      "code": "527",
+      "description": "EMIRATES INDUSTRIAL BANK"
+    },
+    {
+      "code": "528",
+      "description": "TRADING ENTERPRISES"
+    },
+    {
+      "code": "529",
+      "description": "FINANCE HOUSE"
+    },
+    {
+      "code": "530",
+      "description": "AMLAK FINANCE"
+    },
+    {
+      "code": "531",
+      "description": "DYNA TRADE"
+    },
+    {
+      "code": "532",
+      "description": "AGMC"
+    },
+    {
+      "code": "533",
+      "description": "AL MASRAF"
+    },
+    {
+      "code": "534",
+      "description": "NOOR ISLAMIC BANK"
+    },
+    {
+      "code": "535",
+      "description": "BADR AL ISLAMI"
+    },
+    {
+      "code": "536",
+      "description": "AL HILAL BANK"
+    },
+    {
+      "code": "537",
+      "description": "AJMAN  BANK"
+    },
+    {
+      "code": "538",
+      "description": "DUNIA FINANCE"
+    },
+    {
+      "code": "539",
+      "description": "EMIRATES  MONEY"
+    },
+    {
+      "code": "540",
+      "description": "REEM FINANCE"
+    },
+    {
+      "code": "541",
+      "description": "KHALIFA FUND"
+    },
+    {
+      "code": "542",
+      "description": "REEM FINANCE"
+    },
+    {
+      "code": "543",
+      "description": "BLOM BANK  FRANCE"
+    },
+    {
+      "code": "544",
+      "description": "C???C?E C?C?E?C??E O??? C????"
+    },
+    {
+      "code": "545",
+      "description": "ABU DHABI NAT.ISL.FINANCE"
+    },
+    {
+      "code": "546",
+      "description": "ABU DHABI MOTORS"
+    },
+    {
+      "code": "547",
+      "description": "ARAB AFRICAN INTL BANK"
+    },
+    {
+      "code": "550",
+      "description": "AL GHANDI  MOTORS"
+    },
+    {
+      "code": "551",
+      "description": "MASHIRQ AL ISLAMIC FINANCE"
+    },
+    {
+      "code": "552",
+      "description": "RAK BANK (AMAL)"
+    },
+    {
+      "code": "555",
+      "description": "ABU DHABI PETROLIUM"
+    },
+    {
+      "code": "560",
+      "description": "RAK BANK - ISLAMIC DIVISION"
+    },
+    {
+      "code": "565",
+      "description": "????E C???C??  C?C?E?C???"
+    },
+    {
+      "code": "566",
+      "description": "BANQUE MISR"
+    },
+    {
+      "code": "567",
+      "description": "ABU DHABI COM. ISLAMIC FINANCE"
+    },
+    {
+      "code": "599",
+      "description": "AL FUTTAIM FINANCE"
+    },
+    {
+      "code": "600",
+      "description": "AAFAQ ISLAMIC FINANCE"
+    },
+    {
+      "code": "601",
+      "description": "COMMERCIAL BANK INTL (ISLAMI)"
+    },
+    {
+      "code": "602",
+      "description": "Swaidan Trading Co LLC"
+    },
+    {
+      "code": "603",
+      "description": "NATIONAL BANK OF KUWAIT"
+    },
+    {
+      "code": "662",
+      "description": "BMW  ALBATHA FINANCE PSC"
+    },
+    {
+      "code": "663",
+      "description": "AL HABTOOR ROYAL CAR"
+    },
+    {
+      "code": "996",
+      "description": "EMIRATES  NUCLEAR ENERGY  CORP"
+    },
+    {
+      "code": "997",
+      "description": "LIBERTY AUTOMOBILES"
+    },
+    {
+      "code": "998",
+      "description": "AL YOUSUF LLC"
+    },
+    {
+      "code": "999",
+      "description": "ECONOMIC DEVELOPMENT DEPT,"
+    }
+  ]
+}

@@ -1,0 +1,404 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehNoSeats"
+  },
+  "records": [
+    {
+      "Code": "1",
+      "Description": "1"
+    },
+    {
+      "Code": "10",
+      "Description": "10"
+    },
+    {
+      "Code": "11",
+      "Description": "11"
+    },
+    {
+      "Code": "12",
+      "Description": "12"
+    },
+    {
+      "Code": "13",
+      "Description": "13"
+    },
+    {
+      "Code": "14",
+      "Description": "14"
+    },
+    {
+      "Code": "15",
+      "Description": "15"
+    },
+    {
+      "Code": "16",
+      "Description": "16"
+    },
+    {
+      "Code": "17",
+      "Description": "17"
+    },
+    {
+      "Code": "18",
+      "Description": "18"
+    },
+    {
+      "Code": "19",
+      "Description": "19"
+    },
+    {
+      "Code": "2",
+      "Description": "2"
+    },
+    {
+      "Code": "20",
+      "Description": "20"
+    },
+    {
+      "Code": "21",
+      "Description": "21"
+    },
+    {
+      "Code": "22",
+      "Description": "22"
+    },
+    {
+      "Code": "23",
+      "Description": "23"
+    },
+    {
+      "Code": "24",
+      "Description": "24"
+    },
+    {
+      "Code": "25",
+      "Description": "25"
+    },
+    {
+      "Code": "26",
+      "Description": "26"
+    },
+    {
+      "Code": "27",
+      "Description": "27"
+    },
+    {
+      "Code": "28",
+      "Description": "28"
+    },
+    {
+      "Code": "29",
+      "Description": "29"
+    },
+    {
+      "Code": "3",
+      "Description": "3"
+    },
+    {
+      "Code": "30",
+      "Description": "30"
+    },
+    {
+      "Code": "31",
+      "Description": "31"
+    },
+    {
+      "Code": "32",
+      "Description": "32"
+    },
+    {
+      "Code": "33",
+      "Description": "33"
+    },
+    {
+      "Code": "34",
+      "Description": "34"
+    },
+    {
+      "Code": "35",
+      "Description": "35"
+    },
+    {
+      "Code": "36",
+      "Description": "36"
+    },
+    {
+      "Code": "37",
+      "Description": "37"
+    },
+    {
+      "Code": "38",
+      "Description": "38"
+    },
+    {
+      "Code": "39",
+      "Description": "39"
+    },
+    {
+      "Code": "4",
+      "Description": "4"
+    },
+    {
+      "Code": "40",
+      "Description": "40"
+    },
+    {
+      "Code": "41",
+      "Description": "41"
+    },
+    {
+      "Code": "42",
+      "Description": "42"
+    },
+    {
+      "Code": "43",
+      "Description": "43"
+    },
+    {
+      "Code": "44",
+      "Description": "44"
+    },
+    {
+      "Code": "45",
+      "Description": "45"
+    },
+    {
+      "Code": "46",
+      "Description": "46"
+    },
+    {
+      "Code": "47",
+      "Description": "47"
+    },
+    {
+      "Code": "48",
+      "Description": "48"
+    },
+    {
+      "Code": "49",
+      "Description": "49"
+    },
+    {
+      "Code": "5",
+      "Description": "5"
+    },
+    {
+      "Code": "50",
+      "Description": "50"
+    },
+    {
+      "Code": "51",
+      "Description": "51"
+    },
+    {
+      "Code": "52",
+      "Description": "52"
+    },
+    {
+      "Code": "53",
+      "Description": "53"
+    },
+    {
+      "Code": "54",
+      "Description": "54"
+    },
+    {
+      "Code": "55",
+      "Description": "55"
+    },
+    {
+      "Code": "56",
+      "Description": "56"
+    },
+    {
+      "Code": "57",
+      "Description": "57"
+    },
+    {
+      "Code": "58",
+      "Description": "58"
+    },
+    {
+      "Code": "59",
+      "Description": "59"
+    },
+    {
+      "Code": "6",
+      "Description": "6"
+    },
+    {
+      "Code": "60",
+      "Description": "60"
+    },
+    {
+      "Code": "61",
+      "Description": "61"
+    },
+    {
+      "Code": "62",
+      "Description": "62"
+    },
+    {
+      "Code": "63",
+      "Description": "63"
+    },
+    {
+      "Code": "64",
+      "Description": "64"
+    },
+    {
+      "Code": "65",
+      "Description": "65"
+    },
+    {
+      "Code": "66",
+      "Description": "66"
+    },
+    {
+      "Code": "67",
+      "Description": "67"
+    },
+    {
+      "Code": "68",
+      "Description": "68"
+    },
+    {
+      "Code": "69",
+      "Description": "69"
+    },
+    {
+      "Code": "7",
+      "Description": "7"
+    },
+    {
+      "Code": "70",
+      "Description": "70"
+    },
+    {
+      "Code": "71",
+      "Description": "71"
+    },
+    {
+      "Code": "72",
+      "Description": "72"
+    },
+    {
+      "Code": "73",
+      "Description": "73"
+    },
+    {
+      "Code": "74",
+      "Description": "74"
+    },
+    {
+      "Code": "75",
+      "Description": "75"
+    },
+    {
+      "Code": "76",
+      "Description": "76"
+    },
+    {
+      "Code": "77",
+      "Description": "77"
+    },
+    {
+      "Code": "78",
+      "Description": "78"
+    },
+    {
+      "Code": "79",
+      "Description": "79"
+    },
+    {
+      "Code": "8",
+      "Description": "8"
+    },
+    {
+      "Code": "80",
+      "Description": "80"
+    },
+    {
+      "Code": "81",
+      "Description": "81"
+    },
+    {
+      "Code": "82",
+      "Description": "82"
+    },
+    {
+      "Code": "83",
+      "Description": "83"
+    },
+    {
+      "Code": "84",
+      "Description": "84"
+    },
+    {
+      "Code": "85",
+      "Description": "85"
+    },
+    {
+      "Code": "86",
+      "Description": "86"
+    },
+    {
+      "Code": "87",
+      "Description": "87"
+    },
+    {
+      "Code": "88",
+      "Description": "88"
+    },
+    {
+      "Code": "89",
+      "Description": "89"
+    },
+    {
+      "Code": "9",
+      "Description": "9"
+    },
+    {
+      "Code": "90",
+      "Description": "90"
+    },
+    {
+      "Code": "91",
+      "Description": "91"
+    },
+    {
+      "Code": "92",
+      "Description": "92"
+    },
+    {
+      "Code": "93",
+      "Description": "93"
+    },
+    {
+      "Code": "94",
+      "Description": "94"
+    },
+    {
+      "Code": "95",
+      "Description": "95"
+    },
+    {
+      "Code": "96",
+      "Description": "96"
+    },
+    {
+      "Code": "97",
+      "Description": "97"
+    },
+    {
+      "Code": "98",
+      "Description": "98"
+    },
+    {
+      "Code": "99",
+      "Description": "99"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "source_file": "NcdYears.xlsx"
+  },
+  "records": [
+    {
+      "code": "0",
+      "description": "0 Year"
+    },
+    {
+      "code": "1",
+      "description": "1 Year"
+    },
+    {
+      "code": "2",
+      "description": "2 Years"
+    },
+    {
+      "code": "3",
+      "description": "3+ Years"
+    }
+  ]
+}

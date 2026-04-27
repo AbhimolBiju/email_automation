@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "PolSchemeType"
+  },
+  "records": [
+    {
+      "Code": "2",
+      "Description": "Preferred Rates",
+      "Product Code": "1002"
+    },
+    {
+      "Code": "4",
+      "Description": "Preferred Rates",
+      "Product Code": "1001"
+    },
+    {
+      "Code": "5",
+      "Description": "Preferred Rates",
+      "Product Code": "1000"
+    },
+    {
+      "Code": "6",
+      "Description": "Preferred Rates",
+      "Product Code": "1501"
+    }
+  ]
+}

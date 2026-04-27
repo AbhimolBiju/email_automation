@@ -1,0 +1,375 @@
+{
+  "metadata": {
+    "source_file": "PlateCode.xlsx"
+  },
+  "records": [
+    {
+      "code": "027",
+      "description": "Trade"
+    },
+    {
+      "code": "1",
+      "description": "1"
+    },
+    {
+      "code": "10",
+      "description": "10"
+    },
+    {
+      "code": "1001",
+      "description": "WHITE"
+    },
+    {
+      "code": "11",
+      "description": "11"
+    },
+    {
+      "code": "12",
+      "description": "12"
+    },
+    {
+      "code": "128",
+      "description": "Customs"
+    },
+    {
+      "code": "13",
+      "description": "13"
+    },
+    {
+      "code": "14",
+      "description": "14"
+    },
+    {
+      "code": "147",
+      "description": "Probation"
+    },
+    {
+      "code": "148",
+      "description": "Dubai Police"
+    },
+    {
+      "code": "15",
+      "description": "15"
+    },
+    {
+      "code": "150",
+      "description": "Yallow"
+    },
+    {
+      "code": "156",
+      "description": "Government"
+    },
+    {
+      "code": "157",
+      "description": "Protocol"
+    },
+    {
+      "code": "159",
+      "description": "Ceremonies White Red"
+    },
+    {
+      "code": "16",
+      "description": "16"
+    },
+    {
+      "code": "160",
+      "description": "Motorcycle"
+    },
+    {
+      "code": "161",
+      "description": "Classical"
+    },
+    {
+      "code": "169",
+      "description": "Blue"
+    },
+    {
+      "code": "17",
+      "description": "17"
+    },
+    {
+      "code": "176",
+      "description": "Police"
+    },
+    {
+      "code": "178",
+      "description": "Accommodation"
+    },
+    {
+      "code": "18",
+      "description": "18"
+    },
+    {
+      "code": "185",
+      "description": "Orange"
+    },
+    {
+      "code": "19",
+      "description": "19"
+    },
+    {
+      "code": "192",
+      "description": "Dubai Flag"
+    },
+    {
+      "code": "194",
+      "description": "Municipality"
+    },
+    {
+      "code": "195",
+      "description": "Learning"
+    },
+    {
+      "code": "196",
+      "description": "Trade Plate"
+    },
+    {
+      "code": "198",
+      "description": "Diplomatic association"
+    },
+    {
+      "code": "2",
+      "description": "2"
+    },
+    {
+      "code": "209",
+      "description": "Local Guard"
+    },
+    {
+      "code": "210",
+      "description": "Taxi White Green"
+    },
+    {
+      "code": "211",
+      "description": "Works"
+    },
+    {
+      "code": "213",
+      "description": "Data Migration"
+    },
+    {
+      "code": "29",
+      "description": "White"
+    },
+    {
+      "code": "3",
+      "description": "3"
+    },
+    {
+      "code": "34",
+      "description": "Motorcycle_RED"
+    },
+    {
+      "code": "35",
+      "description": "Classic"
+    },
+    {
+      "code": "4",
+      "description": "4"
+    },
+    {
+      "code": "48",
+      "description": "Trade Plate white"
+    },
+    {
+      "code": "5",
+      "description": "5"
+    },
+    {
+      "code": "50",
+      "description": "50"
+    },
+    {
+      "code": "6",
+      "description": "6"
+    },
+    {
+      "code": "7",
+      "description": "7"
+    },
+    {
+      "code": "8",
+      "description": "8"
+    },
+    {
+      "code": "9",
+      "description": "9"
+    },
+    {
+      "code": "A",
+      "description": "A"
+    },
+    {
+      "code": "AA",
+      "description": "AA"
+    },
+    {
+      "code": "B",
+      "description": "B"
+    },
+    {
+      "code": "C",
+      "description": "C"
+    },
+    {
+      "code": "CS",
+      "description": "Consulate"
+    },
+    {
+      "code": "D",
+      "description": "D"
+    },
+    {
+      "code": "E",
+      "description": "E"
+    },
+    {
+      "code": "EM",
+      "description": "EntertainmentMotorcycle"
+    },
+    {
+      "code": "EX",
+      "description": "Export"
+    },
+    {
+      "code": "F",
+      "description": "F"
+    },
+    {
+      "code": "G",
+      "description": "G"
+    },
+    {
+      "code": "H",
+      "description": "H"
+    },
+    {
+      "code": "HP",
+      "description": "Hospitality"
+    },
+    {
+      "code": "I",
+      "description": "I"
+    },
+    {
+      "code": "IM",
+      "description": "Import"
+    },
+    {
+      "code": "IO",
+      "description": "InternationalOrganization"
+    },
+    {
+      "code": "J",
+      "description": "J"
+    },
+    {
+      "code": "K",
+      "description": "K"
+    },
+    {
+      "code": "L",
+      "description": "L"
+    },
+    {
+      "code": "LR",
+      "description": "Learning"
+    },
+    {
+      "code": "M",
+      "description": "M"
+    },
+    {
+      "code": "MC1",
+      "description": "Motorcycle"
+    },
+    {
+      "code": "MC2",
+      "description": "Motorcycle2"
+    },
+    {
+      "code": "MC3",
+      "description": "Motorcycle3"
+    },
+    {
+      "code": "N",
+      "description": "N"
+    },
+    {
+      "code": "O",
+      "description": "O"
+    },
+    {
+      "code": "P",
+      "description": "P"
+    },
+    {
+      "code": "PA",
+      "description": "Political Authority"
+    },
+    {
+      "code": "PT",
+      "description": "PublicTransportation"
+    },
+    {
+      "code": "PT1",
+      "description": "Public Transportation 1"
+    },
+    {
+      "code": "PTP",
+      "description": "PrivateTransportation"
+    },
+    {
+      "code": "Q",
+      "description": "Q"
+    },
+    {
+      "code": "R",
+      "description": "R"
+    },
+    {
+      "code": "S",
+      "description": "S"
+    },
+    {
+      "code": "T",
+      "description": "T"
+    },
+    {
+      "code": "TD",
+      "description": "Trade"
+    },
+    {
+      "code": "TR",
+      "description": "Trailer"
+    },
+    {
+      "code": "TX",
+      "description": "Taxi"
+    },
+    {
+      "code": "U",
+      "description": "U"
+    },
+    {
+      "code": "V",
+      "description": "V"
+    },
+    {
+      "code": "W",
+      "description": "W"
+    },
+    {
+      "code": "X",
+      "description": "X"
+    },
+    {
+      "code": "Y",
+      "description": "Y"
+    },
+    {
+      "code": "Z",
+      "description": "Z"
+    }
+  ]
+}

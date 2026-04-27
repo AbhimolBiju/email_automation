@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "source_file": "RegnLocation _MasterData.xlsx"
+  },
+  "records": [
+    {
+      "regn_location": "Abu Dhabi",
+      "regn_location_code": "4"
+    },
+    {
+      "regn_location": "Ajman",
+      "regn_location_code": "3"
+    },
+    {
+      "regn_location": "Dubai",
+      "regn_location_code": "1"
+    },
+    {
+      "regn_location": "Fujairah",
+      "regn_location_code": "7"
+    },
+    {
+      "regn_location": "Ras Al Khaimah",
+      "regn_location_code": "5"
+    },
+    {
+      "regn_location": "Sharjah",
+      "regn_location_code": "2"
+    },
+    {
+      "regn_location": "Umm Al Quwain",
+      "regn_location_code": "6"
+    }
+  ]
+}

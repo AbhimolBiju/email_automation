@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehUsage"
+  },
+  "records": [
+    {
+      "Code": "1001",
+      "Description": "PRIVATE (Indiv./Comm.)"
+    },
+    {
+      "Code": "1002",
+      "Description": "GOODS CARRY (Comm.)"
+    },
+    {
+      "Code": "1003",
+      "Description": "PASSENGER CARRY (Comm.)"
+    },
+    {
+      "Code": "1004",
+      "Description": "MISCELLANEOUS (Comm.)"
+    }
+  ]
+}

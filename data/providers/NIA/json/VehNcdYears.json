@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehNcdYears"
+  },
+  "records": [
+    {
+      "Code": "0",
+      "Description": "0 Years"
+    },
+    {
+      "Code": "1",
+      "Description": "1 Year"
+    },
+    {
+      "Code": "2",
+      "Description": "2 Years"
+    },
+    {
+      "Code": "3",
+      "Description": "3 Years"
+    }
+  ]
+}

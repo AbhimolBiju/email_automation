@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "source_file": "TrafficTransType.xlsx"
+  },
+  "records": [
+    {
+      "code": "101",
+      "description": "New Vehicle Registration"
+    },
+    {
+      "code": "102",
+      "description": "Change Vehicle Ownership"
+    },
+    {
+      "code": "103",
+      "description": "Vehicle Renewal"
+    },
+    {
+      "code": "104",
+      "description": "Import Vehicle"
+    },
+    {
+      "code": "105",
+      "description": "Export Certificate"
+    },
+    {
+      "code": "106",
+      "description": "Update Registration Information"
+    },
+    {
+      "code": "107",
+      "description": "Issue Trade Plate"
+    },
+    {
+      "code": "108",
+      "description": "Renewal Trade Plate"
+    },
+    {
+      "code": "109",
+      "description": "Vehicle Renewal with Change Number"
+    }
+  ]
+}

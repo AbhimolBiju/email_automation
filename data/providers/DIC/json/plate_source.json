@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "source_file": "PlateSource.xlsx"
+  },
+  "records": [
+    {
+      "code": "0001",
+      "description": "DUBAI"
+    },
+    {
+      "code": "1000",
+      "description": "ABU DHABI"
+    },
+    {
+      "code": "2000",
+      "description": "AL AIN"
+    },
+    {
+      "code": "3000",
+      "description": "SHARJAH"
+    },
+    {
+      "code": "4000",
+      "description": "AJMAN"
+    },
+    {
+      "code": "5000",
+      "description": "UMM AL QUWAIN"
+    },
+    {
+      "code": "6000",
+      "description": "FUJAIRAH"
+    },
+    {
+      "code": "7000",
+      "description": "RAS AL KHAIMAH"
+    }
+  ]
+}

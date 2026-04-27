@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehAgencyType"
+  },
+  "records": [
+    {
+      "Code": "A",
+      "Description": "Agency"
+    },
+    {
+      "Code": "T",
+      "Description": "Third Party Liability"
+    },
+    {
+      "Code": "N",
+      "Description": "Non Agency"
+    }
+  ]
+}

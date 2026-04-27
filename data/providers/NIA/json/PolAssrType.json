@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "PolAssrType"
+  },
+  "records": [
+    {
+      "Code": "200",
+      "Description": "CORPORATE"
+    },
+    {
+      "Code": "100",
+      "Description": "INDIVIDUAL"
+    }
+  ]
+}

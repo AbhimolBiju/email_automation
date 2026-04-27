@@ -1,0 +1,156 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehBodyType"
+  },
+  "records": [
+    {
+      "Code": "002",
+      "Description": "4X4"
+    },
+    {
+      "Code": "049",
+      "Description": "AMBULANCE"
+    },
+    {
+      "Code": "007",
+      "Description": "BUS"
+    },
+    {
+      "Code": "047",
+      "Description": "CATERPILLAR"
+    },
+    {
+      "Code": "009",
+      "Description": "COUPE"
+    },
+    {
+      "Code": "020",
+      "Description": "CRANE"
+    },
+    {
+      "Code": "052",
+      "Description": "Diesel Tankers"
+    },
+    {
+      "Code": "040",
+      "Description": "Dozers"
+    },
+    {
+      "Code": "014",
+      "Description": "EQUIPMENTS"
+    },
+    {
+      "Code": "036",
+      "Description": "Excavator & Shovels"
+    },
+    {
+      "Code": "019",
+      "Description": "Fork lift"
+    },
+    {
+      "Code": "034",
+      "Description": "Freezer"
+    },
+    {
+      "Code": "041",
+      "Description": "GARBAGE TRUCK"
+    },
+    {
+      "Code": "051",
+      "Description": "Gas Cylinder Carrying"
+    },
+    {
+      "Code": "011",
+      "Description": "HATCH BACK"
+    },
+    {
+      "Code": "054",
+      "Description": "Hazardous Goods Carrying"
+    },
+    {
+      "Code": "023",
+      "Description": "MOTOR CYCLE"
+    },
+    {
+      "Code": "029",
+      "Description": "MPV"
+    },
+    {
+      "Code": "045",
+      "Description": "Passenger Transport Buses"
+    },
+    {
+      "Code": "005",
+      "Description": "Pick Up"
+    },
+    {
+      "Code": "018",
+      "Description": "ROLLER"
+    },
+    {
+      "Code": "044",
+      "Description": "Recovery Vehicles"
+    },
+    {
+      "Code": "001",
+      "Description": "SALOON"
+    },
+    {
+      "Code": "025",
+      "Description": "SHOVEL"
+    },
+    {
+      "Code": "022",
+      "Description": "SKID LOADER"
+    },
+    {
+      "Code": "008",
+      "Description": "STATION"
+    },
+    {
+      "Code": "030",
+      "Description": "SUV"
+    },
+    {
+      "Code": "032",
+      "Description": "School Bus"
+    },
+    {
+      "Code": "033",
+      "Description": "TIPPER"
+    },
+    {
+      "Code": "048",
+      "Description": "TIPPER/TRAILER"
+    },
+    {
+      "Code": "006",
+      "Description": "TRUCK"
+    },
+    {
+      "Code": "055",
+      "Description": "TRUCK WITH EQUIPMENT"
+    },
+    {
+      "Code": "017",
+      "Description": "TRUCK/TRAILOR"
+    },
+    {
+      "Code": "043",
+      "Description": "Tractors"
+    },
+    {
+      "Code": "013",
+      "Description": "VAN"
+    },
+    {
+      "Code": "015",
+      "Description": "WATER TANKER"
+    },
+    {
+      "Code": "035",
+      "Description": "Wheel Loaders"
+    }
+  ]
+}

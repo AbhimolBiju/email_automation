@@ -1,0 +1,960 @@
+{
+  "metadata": {
+    "source_file": "Plate Code Mapping.xlsx",
+    "sheet_name": "Sheet1"
+  },
+  "records": [
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1000",
+      "Description": "RED",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1001",
+      "Description": "GREEN",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1002",
+      "Description": "BLUE",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1003",
+      "Description": "1ST CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1004",
+      "Description": "2ND CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1005",
+      "Description": "3RD CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1006",
+      "Description": "4TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1007",
+      "Description": "5TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1008",
+      "Description": "6TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1009",
+      "Description": "7TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1010",
+      "Description": "8TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1011",
+      "Description": "9TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1012",
+      "Description": "10TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1013",
+      "Description": "11TH CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1014",
+      "Description": "12 CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1015",
+      "Description": "13 CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1016",
+      "Description": "14 CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1017",
+      "Description": "15 CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1018",
+      "Description": "16 CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1019",
+      "Description": "17 CATEGORY",
+      "Value1": "1000",
+      "Reg. City": "ABU DHABI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1020",
+      "Description": "WHITE",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1021",
+      "Description": "A",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1022",
+      "Description": "B",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1023",
+      "Description": "C",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1024",
+      "Description": "D",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1025",
+      "Description": "E",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1026",
+      "Description": "F",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1027",
+      "Description": "G",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1028",
+      "Description": "H",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1029",
+      "Description": "I",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1030",
+      "Description": "J",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1031",
+      "Description": "K",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1032",
+      "Description": "L",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1033",
+      "Description": "M",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1034",
+      "Description": "N",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1035",
+      "Description": "O",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1036",
+      "Description": "P",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1037",
+      "Description": "Q",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1038",
+      "Description": "R",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1039",
+      "Description": "S",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1040",
+      "Description": "T",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1041",
+      "Description": "U",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1042",
+      "Description": "V",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1043",
+      "Description": "W",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1044",
+      "Description": "X",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1045",
+      "Description": "Y",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1046",
+      "Description": "Z",
+      "Value1": "1",
+      "Reg. City": "DUBAI"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1047",
+      "Description": "WHITE",
+      "Value1": "3000",
+      "Reg. City": "SHARJAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1048",
+      "Description": "ORANGE",
+      "Value1": "3000",
+      "Reg. City": "SHARJAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1049",
+      "Description": "1ST CATEGORY",
+      "Value1": "3000",
+      "Reg. City": "SHARJAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1050",
+      "Description": "2ND CATEGORY",
+      "Value1": "3000",
+      "Reg. City": "SHARJAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1051",
+      "Description": "A",
+      "Value1": "4000",
+      "Reg. City": "AJMAN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1052",
+      "Description": "B",
+      "Value1": "4000",
+      "Reg. City": "AJMAN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1053",
+      "Description": "C",
+      "Value1": "4000",
+      "Reg. City": "AJMAN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1054",
+      "Description": "WHITE",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1055",
+      "Description": "A",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1056",
+      "Description": "B",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1057",
+      "Description": "C",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1058",
+      "Description": "D",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1059",
+      "Description": "E",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1060",
+      "Description": "F",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1061",
+      "Description": "G",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1062",
+      "Description": "H",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1063",
+      "Description": "I",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1064",
+      "Description": "J",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1065",
+      "Description": "K",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1066",
+      "Description": "L",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1067",
+      "Description": "M",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1068",
+      "Description": "N",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1069",
+      "Description": "O",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1070",
+      "Description": "P",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1071",
+      "Description": "Q",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1072",
+      "Description": "R",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1073",
+      "Description": "S",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1074",
+      "Description": "T",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1075",
+      "Description": "U",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1076",
+      "Description": "V",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1077",
+      "Description": "W",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1078",
+      "Description": "X",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1079",
+      "Description": "Y",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1080",
+      "Description": "Z",
+      "Value1": "5000",
+      "Reg. City": "UMM AL QUWAIN"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1081",
+      "Description": "WHITE",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1082",
+      "Description": "CASTLE",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1083",
+      "Description": "A",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1084",
+      "Description": "B",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1085",
+      "Description": "C",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1086",
+      "Description": "D",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1087",
+      "Description": "E",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1088",
+      "Description": "F",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1089",
+      "Description": "G",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1090",
+      "Description": "H",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1091",
+      "Description": "I",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1092",
+      "Description": "J",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1093",
+      "Description": "K",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1094",
+      "Description": "L",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1095",
+      "Description": "M",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1096",
+      "Description": "N",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1097",
+      "Description": "O",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1098",
+      "Description": "P",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1099",
+      "Description": "Q",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1100",
+      "Description": "R",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1101",
+      "Description": "S",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1102",
+      "Description": "T",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1103",
+      "Description": "U",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1104",
+      "Description": "V",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1105",
+      "Description": "W",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1106",
+      "Description": "X",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1107",
+      "Description": "Y",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1108",
+      "Description": "Z",
+      "Value1": "7000",
+      "Reg. City": "RAS AL KHAIMAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1109",
+      "Description": "WHITE",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1110",
+      "Description": "A",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1111",
+      "Description": "B",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1112",
+      "Description": "C",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1113",
+      "Description": "D",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1114",
+      "Description": "E",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1115",
+      "Description": "F",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1116",
+      "Description": "G",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1117",
+      "Description": "H",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1118",
+      "Description": "I",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1119",
+      "Description": "J",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1120",
+      "Description": "K",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1121",
+      "Description": "L",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1122",
+      "Description": "M",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1123",
+      "Description": "N",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1124",
+      "Description": "O",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1125",
+      "Description": "P",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1126",
+      "Description": "Q",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1127",
+      "Description": "R",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1128",
+      "Description": "S",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1129",
+      "Description": "T",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1130",
+      "Description": "U",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1131",
+      "Description": "V",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1132",
+      "Description": "W",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1133",
+      "Description": "X",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1134",
+      "Description": "Y",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    },
+    {
+      "Code Type": "PLATE_COLOR",
+      "Code": "1135",
+      "Description": "Z",
+      "Value1": "6000",
+      "Reg. City": "FUJAIRAH"
+    }
+  ]
+}

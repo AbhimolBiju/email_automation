@@ -1,0 +1,2168 @@
+{
+  "metadata": {
+    "source_file": "Mapping data.xlsx",
+    "sheet_name": "VehBodyColor1"
+  },
+  "records": [
+    {
+      "Code": "821",
+      "Description": "-"
+    },
+    {
+      "Code": "818",
+      "Description": "??? / ??? ??"
+    },
+    {
+      "Code": "426",
+      "Description": "??? / ????"
+    },
+    {
+      "Code": "40018",
+      "Description": "??? ????"
+    },
+    {
+      "Code": "232",
+      "Description": "??? ????"
+    },
+    {
+      "Code": "4004",
+      "Description": "??? ????"
+    },
+    {
+      "Code": "466",
+      "Description": "??? ????"
+    },
+    {
+      "Code": "817",
+      "Description": "??? ??????"
+    },
+    {
+      "Code": "447",
+      "Description": "??? ????????"
+    },
+    {
+      "Code": "442",
+      "Description": "??? ????????"
+    },
+    {
+      "Code": "190",
+      "Description": "???/????"
+    },
+    {
+      "Code": "401",
+      "Description": "???? - ?????"
+    },
+    {
+      "Code": "488",
+      "Description": "???? ????"
+    },
+    {
+      "Code": "444",
+      "Description": "???? ???????"
+    },
+    {
+      "Code": "445",
+      "Description": "???? ???????"
+    },
+    {
+      "Code": "439",
+      "Description": "????/???"
+    },
+    {
+      "Code": "40005",
+      "Description": "????/????"
+    },
+    {
+      "Code": "40008",
+      "Description": "????/?????"
+    },
+    {
+      "Code": "493",
+      "Description": "????/?????"
+    },
+    {
+      "Code": "452",
+      "Description": "????/?????"
+    },
+    {
+      "Code": "450",
+      "Description": "?????"
+    },
+    {
+      "Code": "420",
+      "Description": "????? / ????"
+    },
+    {
+      "Code": "486",
+      "Description": "????? / ????"
+    },
+    {
+      "Code": "812",
+      "Description": "????? / ????"
+    },
+    {
+      "Code": "40033",
+      "Description": "????? / ????"
+    },
+    {
+      "Code": "490",
+      "Description": "????? ???? /"
+    },
+    {
+      "Code": "443",
+      "Description": "????? ??????"
+    },
+    {
+      "Code": "433",
+      "Description": "?????/????"
+    },
+    {
+      "Code": "461",
+      "Description": "?????/????"
+    },
+    {
+      "Code": "427",
+      "Description": "?????/?????"
+    },
+    {
+      "Code": "391",
+      "Description": "APRICOT"
+    },
+    {
+      "Code": "014",
+      "Description": "BEIGE"
+    },
+    {
+      "Code": "113",
+      "Description": "BEIGE / RED"
+    },
+    {
+      "Code": "40024",
+      "Description": "BEIGE AND WO"
+    },
+    {
+      "Code": "419",
+      "Description": "BEIGE LINE/W"
+    },
+    {
+      "Code": "250",
+      "Description": "BEIGE METALL"
+    },
+    {
+      "Code": "389",
+      "Description": "BEIGE METTAL"
+    },
+    {
+      "Code": "108",
+      "Description": "BEIGE/ BLACK"
+    },
+    {
+      "Code": "214",
+      "Description": "BEIGE/ GREEN"
+    },
+    {
+      "Code": "030",
+      "Description": "BEIGE/ MAROO"
+    },
+    {
+      "Code": "10005",
+      "Description": "BEIGE/ RED /"
+    },
+    {
+      "Code": "258",
+      "Description": "BEIGE/BLUE"
+    },
+    {
+      "Code": "40055",
+      "Description": "BEIGE/BROWN"
+    },
+    {
+      "Code": "137",
+      "Description": "BEIGE/DARK B"
+    },
+    {
+      "Code": "504",
+      "Description": "BEIGE/DARK B"
+    },
+    {
+      "Code": "1233",
+      "Description": "BEIGE/DARK B"
+    },
+    {
+      "Code": "476",
+      "Description": "BEIGE/DARK B"
+    },
+    {
+      "Code": "053",
+      "Description": "BEIGE/DARK G"
+    },
+    {
+      "Code": "40015",
+      "Description": "BEIGE/GOLD"
+    },
+    {
+      "Code": "503",
+      "Description": "BEIGE/GRAY"
+    },
+    {
+      "Code": "449",
+      "Description": "BEIGE/LIGHT"
+    },
+    {
+      "Code": "438",
+      "Description": "BEIGE/LIGHT"
+    },
+    {
+      "Code": "480",
+      "Description": "BEIGE/MAROON"
+    },
+    {
+      "Code": "479",
+      "Description": "BEIGE/SILVER"
+    },
+    {
+      "Code": "462",
+      "Description": "BEIGE/VIOLET"
+    },
+    {
+      "Code": "105",
+      "Description": "BEIGE/WHITE"
+    },
+    {
+      "Code": "160",
+      "Description": "BETROLI"
+    },
+    {
+      "Code": "002",
+      "Description": "BLACK"
+    },
+    {
+      "Code": "065",
+      "Description": "BLACK / BEIG"
+    },
+    {
+      "Code": "083",
+      "Description": "BLACK / GOLD"
+    },
+    {
+      "Code": "382",
+      "Description": "BLACK / GREE"
+    },
+    {
+      "Code": "052",
+      "Description": "BLACK / GREY"
+    },
+    {
+      "Code": "40051",
+      "Description": "BLACK / LIGH"
+    },
+    {
+      "Code": "086",
+      "Description": "BLACK / LIGH"
+    },
+    {
+      "Code": "40031",
+      "Description": "BLACK / MARO"
+    },
+    {
+      "Code": "049",
+      "Description": "BLACK / SILV"
+    },
+    {
+      "Code": "128",
+      "Description": "BLACK / SILV"
+    },
+    {
+      "Code": "251",
+      "Description": "BLACK / WHIT"
+    },
+    {
+      "Code": "40010",
+      "Description": "BLACK / WHIT"
+    },
+    {
+      "Code": "10006",
+      "Description": "BLACK /RED /"
+    },
+    {
+      "Code": "392",
+      "Description": "BLACK BLUE"
+    },
+    {
+      "Code": "831",
+      "Description": "BLACK BROWN"
+    },
+    {
+      "Code": "131",
+      "Description": "BLACK BROWN"
+    },
+    {
+      "Code": "468",
+      "Description": "BLACK SILVER"
+    },
+    {
+      "Code": "10064",
+      "Description": "BLACK/ RED W"
+    },
+    {
+      "Code": "10027",
+      "Description": "BLACK/ADVERT"
+    },
+    {
+      "Code": "10057",
+      "Description": "BLACK/ADVERT"
+    },
+    {
+      "Code": "40004",
+      "Description": "BLACK/BLUE"
+    },
+    {
+      "Code": "815",
+      "Description": "BLACK/BRONZE"
+    },
+    {
+      "Code": "10078",
+      "Description": "BLACK/BROWN/"
+    },
+    {
+      "Code": "441",
+      "Description": "BLACK/GREEN"
+    },
+    {
+      "Code": "424",
+      "Description": "BLACK/IVORY"
+    },
+    {
+      "Code": "483",
+      "Description": "BLACK/MAROON"
+    },
+    {
+      "Code": "492",
+      "Description": "BLACK/ORANGE"
+    },
+    {
+      "Code": "491",
+      "Description": "BLACK/ORANGE"
+    },
+    {
+      "Code": "485",
+      "Description": "BLACK/PINK"
+    },
+    {
+      "Code": "40027",
+      "Description": "BLACK/RED"
+    },
+    {
+      "Code": "494",
+      "Description": "BLACK/WHITE"
+    },
+    {
+      "Code": "170",
+      "Description": "BLAK / YELLO"
+    },
+    {
+      "Code": "005",
+      "Description": "BLUE"
+    },
+    {
+      "Code": "163",
+      "Description": "BLUE / BROWN"
+    },
+    {
+      "Code": "162",
+      "Description": "BLUE / GREEN"
+    },
+    {
+      "Code": "215",
+      "Description": "BLUE / LIGHT"
+    },
+    {
+      "Code": "076",
+      "Description": "BLUE / NAVY"
+    },
+    {
+      "Code": "40045",
+      "Description": "BLUE / SILVE"
+    },
+    {
+      "Code": "051",
+      "Description": "BLUE / SILVER"
+    },
+    {
+      "Code": "40021",
+      "Description": "BLUE / WHITE"
+    },
+    {
+      "Code": "056",
+      "Description": "BLUE / YELLO"
+    },
+    {
+      "Code": "247",
+      "Description": "BLUE /BLACK"
+    },
+    {
+      "Code": "10069",
+      "Description": "BLUE ADVERTI"
+    },
+    {
+      "Code": "4020",
+      "Description": "BLUE LINE/GR"
+    },
+    {
+      "Code": "068",
+      "Description": "BLUE METALLI"
+    },
+    {
+      "Code": "10055",
+      "Description": "BLUE/ YELLOW"
+    },
+    {
+      "Code": "10045",
+      "Description": "BLUE/ADVERTI"
+    },
+    {
+      "Code": "147",
+      "Description": "BLUE/BEIGE"
+    },
+    {
+      "Code": "511",
+      "Description": "BLUE/GOLD"
+    },
+    {
+      "Code": "10034",
+      "Description": "BLUE/GREEN/A"
+    },
+    {
+      "Code": "072",
+      "Description": "BLUE/GREY"
+    },
+    {
+      "Code": "478",
+      "Description": "BLUE/LIGHT B"
+    },
+    {
+      "Code": "481",
+      "Description": "BLUE/LIGHT B"
+    },
+    {
+      "Code": "40016",
+      "Description": "BLUE/RED"
+    },
+    {
+      "Code": "203",
+      "Description": "BLUE/VIOLET"
+    },
+    {
+      "Code": "10015",
+      "Description": "BLUE/WHITE/A"
+    },
+    {
+      "Code": "10041",
+      "Description": "BLUE/YELLOW/"
+    },
+    {
+      "Code": "10056",
+      "Description": "BLUE/YELLOW/"
+    },
+    {
+      "Code": "4021",
+      "Description": "BOLD DARK BL"
+    },
+    {
+      "Code": "029",
+      "Description": "BRONZE"
+    },
+    {
+      "Code": "356",
+      "Description": "BRONZE BROWN"
+    },
+    {
+      "Code": "360",
+      "Description": "BRONZE GOLD"
+    },
+    {
+      "Code": "182",
+      "Description": "BRONZE GREEN"
+    },
+    {
+      "Code": "370",
+      "Description": "BRONZE GREEN"
+    },
+    {
+      "Code": "355",
+      "Description": "BRONZE MAROO"
+    },
+    {
+      "Code": "138",
+      "Description": "BRONZE/ MARO"
+    },
+    {
+      "Code": "142",
+      "Description": "BRONZE/BEIGE"
+    },
+    {
+      "Code": "484",
+      "Description": "BRONZE/BLACK"
+    },
+    {
+      "Code": "146",
+      "Description": "BRONZE/GOLD"
+    },
+    {
+      "Code": "390",
+      "Description": "BRONZE/GRAY"
+    },
+    {
+      "Code": "159",
+      "Description": "BRONZE/GREY"
+    },
+    {
+      "Code": "308",
+      "Description": "BRONZE/SILVE"
+    },
+    {
+      "Code": "469",
+      "Description": "BRONZE/WHITE"
+    },
+    {
+      "Code": "008",
+      "Description": "BROWN"
+    },
+    {
+      "Code": "9998",
+      "Description": "BROWN / BEIGE ADVR"
+    },
+    {
+      "Code": "111",
+      "Description": "BROWN / BIEG"
+    },
+    {
+      "Code": "312",
+      "Description": "BROWN / BLAK"
+    },
+    {
+      "Code": "026",
+      "Description": "BROWN / GOLD"
+    },
+    {
+      "Code": "257",
+      "Description": "BROWN / GREY"
+    },
+    {
+      "Code": "10077",
+      "Description": "BROWN /BEIGE"
+    },
+    {
+      "Code": "252",
+      "Description": "BROWN MATTE"
+    },
+    {
+      "Code": "9997",
+      "Description": "BROWN/ GOLDE"
+    },
+    {
+      "Code": "10040",
+      "Description": "BROWN/ YELLO"
+    },
+    {
+      "Code": "422",
+      "Description": "BROWN/RED"
+    },
+    {
+      "Code": "071",
+      "Description": "BROWN/WHITE"
+    },
+    {
+      "Code": "826",
+      "Description": "Beige/Orange"
+    },
+    {
+      "Code": "829",
+      "Description": "Black/Silver"
+    },
+    {
+      "Code": "836",
+      "Description": "Black/Yellow/Advert"
+    },
+    {
+      "Code": "40025",
+      "Description": "CHERRY RED"
+    },
+    {
+      "Code": "112",
+      "Description": "CREAM"
+    },
+    {
+      "Code": "472",
+      "Description": "DARK BEIGE"
+    },
+    {
+      "Code": "041",
+      "Description": "DARK BLACK"
+    },
+    {
+      "Code": "007",
+      "Description": "DARK BLUE"
+    },
+    {
+      "Code": "078",
+      "Description": "DARK BLUE"
+    },
+    {
+      "Code": "317",
+      "Description": "DARK BLUE/ B"
+    },
+    {
+      "Code": "1111",
+      "Description": "DARK BLUE/GR"
+    },
+    {
+      "Code": "405",
+      "Description": "DARK BLUE/RE"
+    },
+    {
+      "Code": "470",
+      "Description": "DARK BLUE/RE"
+    },
+    {
+      "Code": "813",
+      "Description": "DARK BLUE/SI"
+    },
+    {
+      "Code": "388",
+      "Description": "DARK BLUE/SI"
+    },
+    {
+      "Code": "351",
+      "Description": "DARK BLUE/YE"
+    },
+    {
+      "Code": "094",
+      "Description": "DARK BRONZE"
+    },
+    {
+      "Code": "038",
+      "Description": "DARK BROWN"
+    },
+    {
+      "Code": "126",
+      "Description": "DARK GOLD"
+    },
+    {
+      "Code": "016",
+      "Description": "DARK GREEN"
+    },
+    {
+      "Code": "070",
+      "Description": "DARK GREEN /"
+    },
+    {
+      "Code": "222",
+      "Description": "DARK GREEN /"
+    },
+    {
+      "Code": "212",
+      "Description": "DARK GREEN /"
+    },
+    {
+      "Code": "40049",
+      "Description": "DARK GREEN /"
+    },
+    {
+      "Code": "122",
+      "Description": "DARK GREEN /"
+    },
+    {
+      "Code": "132",
+      "Description": "DARK GREEN S"
+    },
+    {
+      "Code": "141",
+      "Description": "DARK GREEN/"
+    },
+    {
+      "Code": "477",
+      "Description": "DARK GREEN/B"
+    },
+    {
+      "Code": "064",
+      "Description": "DARK GREEN/B"
+    },
+    {
+      "Code": "201",
+      "Description": "DARK GREEN/B"
+    },
+    {
+      "Code": "319",
+      "Description": "DARK GREEN/S"
+    },
+    {
+      "Code": "464",
+      "Description": "DARK GREEN/W"
+    },
+    {
+      "Code": "383",
+      "Description": "DARK GREY"
+    },
+    {
+      "Code": "034",
+      "Description": "DARK GREY"
+    },
+    {
+      "Code": "233",
+      "Description": "DARK GREY /"
+    },
+    {
+      "Code": "234",
+      "Description": "DARK GREY/BI"
+    },
+    {
+      "Code": "039",
+      "Description": "DARK MAROON"
+    },
+    {
+      "Code": "40056",
+      "Description": "DARK MAROON"
+    },
+    {
+      "Code": "235",
+      "Description": "DARK NAVY"
+    },
+    {
+      "Code": "475",
+      "Description": "DARK VIOLET"
+    },
+    {
+      "Code": "260",
+      "Description": "DARK YELLOW"
+    },
+    {
+      "Code": "509",
+      "Description": "Dark Blue ma"
+    },
+    {
+      "Code": "011",
+      "Description": "GOLD"
+    },
+    {
+      "Code": "118",
+      "Description": "GOLD / GREEN"
+    },
+    {
+      "Code": "110",
+      "Description": "GOLD / MAROO"
+    },
+    {
+      "Code": "259",
+      "Description": "GOLD / RED"
+    },
+    {
+      "Code": "306",
+      "Description": "GOLD/ BLUE"
+    },
+    {
+      "Code": "40052",
+      "Description": "GOLD/BEIGE"
+    },
+    {
+      "Code": "084",
+      "Description": "GOLD/BLACK"
+    },
+    {
+      "Code": "101",
+      "Description": "GOLD/BROWN"
+    },
+    {
+      "Code": "436",
+      "Description": "GOLD/DARK BL"
+    },
+    {
+      "Code": "123",
+      "Description": "GOLD/DARK GR"
+    },
+    {
+      "Code": "411",
+      "Description": "GOLD/GRAY"
+    },
+    {
+      "Code": "40043",
+      "Description": "GOLD/TURQUOI"
+    },
+    {
+      "Code": "489",
+      "Description": "GOLD/VIOLET"
+    },
+    {
+      "Code": "314",
+      "Description": "GOLD/WHITE"
+    },
+    {
+      "Code": "10047",
+      "Description": "GOLDEN/BROWN"
+    },
+    {
+      "Code": "320",
+      "Description": "GOLDEN/GREY"
+    },
+    {
+      "Code": "013",
+      "Description": "GRAY"
+    },
+    {
+      "Code": "400",
+      "Description": "GRAY BEIGE"
+    },
+    {
+      "Code": "249",
+      "Description": "GRAY MATTE"
+    },
+    {
+      "Code": "180",
+      "Description": "GRAY/BLACK"
+    },
+    {
+      "Code": "135",
+      "Description": "GREAN/GOLD"
+    },
+    {
+      "Code": "004",
+      "Description": "GREEN"
+    },
+    {
+      "Code": "40041",
+      "Description": "GREEN / DARK"
+    },
+    {
+      "Code": "062",
+      "Description": "GREEN / GREY"
+    },
+    {
+      "Code": "148",
+      "Description": "GREEN / LIGH"
+    },
+    {
+      "Code": "241",
+      "Description": "GREEN / MARO"
+    },
+    {
+      "Code": "500",
+      "Description": "GREEN / ORAN"
+    },
+    {
+      "Code": "048",
+      "Description": "GREEN / SILV"
+    },
+    {
+      "Code": "218",
+      "Description": "GREEN / SILV"
+    },
+    {
+      "Code": "103",
+      "Description": "GREEN / WHIT"
+    },
+    {
+      "Code": "10042",
+      "Description": "GREEN / YELL"
+    },
+    {
+      "Code": "406",
+      "Description": "GREEN / YELL"
+    },
+    {
+      "Code": "157",
+      "Description": "GREEN /OLIVE"
+    },
+    {
+      "Code": "10023",
+      "Description": "GREEN ADVERT"
+    },
+    {
+      "Code": "10049",
+      "Description": "GREEN ADVERT"
+    },
+    {
+      "Code": "10009",
+      "Description": "GREEN BLUE W"
+    },
+    {
+      "Code": "412",
+      "Description": "GREEN LINE/W"
+    },
+    {
+      "Code": "321",
+      "Description": "GREEN TURQUO"
+    },
+    {
+      "Code": "018",
+      "Description": "GREEN/BEIGE"
+    },
+    {
+      "Code": "050",
+      "Description": "GREEN/BLUE"
+    },
+    {
+      "Code": "10072",
+      "Description": "GREEN/BROWN"
+    },
+    {
+      "Code": "145",
+      "Description": "GREEN/GREY"
+    },
+    {
+      "Code": "415",
+      "Description": "GREEN/ORANGE"
+    },
+    {
+      "Code": "9999",
+      "Description": "GREEN/RED/ADVERT"
+    },
+    {
+      "Code": "136",
+      "Description": "GREEN/SILVER"
+    },
+    {
+      "Code": "409",
+      "Description": "GREEN/VILET"
+    },
+    {
+      "Code": "505",
+      "Description": "GREEN/YELLOW"
+    },
+    {
+      "Code": "10059",
+      "Description": "GREEN/YELLOW"
+    },
+    {
+      "Code": "020",
+      "Description": "GREY"
+    },
+    {
+      "Code": "153",
+      "Description": "GREY  /  BRO"
+    },
+    {
+      "Code": "205",
+      "Description": "GREY / BIEGE"
+    },
+    {
+      "Code": "104",
+      "Description": "GREY / BLACK"
+    },
+    {
+      "Code": "047",
+      "Description": "GREY / BLACK"
+    },
+    {
+      "Code": "059",
+      "Description": "GREY / BLUE"
+    },
+    {
+      "Code": "156",
+      "Description": "GREY / BLUE"
+    },
+    {
+      "Code": "043",
+      "Description": "GREY / MAROO"
+    },
+    {
+      "Code": "106",
+      "Description": "GREY / NAVY"
+    },
+    {
+      "Code": "019",
+      "Description": "GREY / NAVY"
+    },
+    {
+      "Code": "024",
+      "Description": "GREY / RED"
+    },
+    {
+      "Code": "169",
+      "Description": "GREY / SILVE"
+    },
+    {
+      "Code": "217",
+      "Description": "GREY / WHITE"
+    },
+    {
+      "Code": "40057",
+      "Description": "GREY / WHITE"
+    },
+    {
+      "Code": "077",
+      "Description": "GREY / YELLO"
+    },
+    {
+      "Code": "10012",
+      "Description": "GREY BLUE OR"
+    },
+    {
+      "Code": "10003",
+      "Description": "GREY/ADVERTI"
+    },
+    {
+      "Code": "066",
+      "Description": "GREY/GREY"
+    },
+    {
+      "Code": "384",
+      "Description": "GREY/RED"
+    },
+    {
+      "Code": "40020",
+      "Description": "HONEY/BEIGE"
+    },
+    {
+      "Code": "410",
+      "Description": "INDIGO"
+    },
+    {
+      "Code": "090",
+      "Description": "IVORY"
+    },
+    {
+      "Code": "303",
+      "Description": "IVORY/ORANGE"
+    },
+    {
+      "Code": "431",
+      "Description": "KHAKI"
+    },
+    {
+      "Code": "1000",
+      "Description": "LIGH VIOLET"
+    },
+    {
+      "Code": "040",
+      "Description": "LIGHT BLACK"
+    },
+    {
+      "Code": "028",
+      "Description": "LIGHT BLUE"
+    },
+    {
+      "Code": "015",
+      "Description": "LIGHT BLUE"
+    },
+    {
+      "Code": "127",
+      "Description": "LIGHT BLUE"
+    },
+    {
+      "Code": "054",
+      "Description": "LIGHT BLUE /"
+    },
+    {
+      "Code": "116",
+      "Description": "LIGHT BLUE /"
+    },
+    {
+      "Code": "223",
+      "Description": "LIGHT BLUE /"
+    },
+    {
+      "Code": "40014",
+      "Description": "LIGHT BLUE /"
+    },
+    {
+      "Code": "042",
+      "Description": "LIGHT BLUE/B"
+    },
+    {
+      "Code": "501",
+      "Description": "LIGHT BLUE/O"
+    },
+    {
+      "Code": "037",
+      "Description": "LIGHT BROWN"
+    },
+    {
+      "Code": "120",
+      "Description": "LIGHT BROWN"
+    },
+    {
+      "Code": "253",
+      "Description": "LIGHT BROWN"
+    },
+    {
+      "Code": "092",
+      "Description": "LIGHT BROWN"
+    },
+    {
+      "Code": "046",
+      "Description": "LIGHT BROWN"
+    },
+    {
+      "Code": "301",
+      "Description": "LIGHT BROWN/"
+    },
+    {
+      "Code": "421",
+      "Description": "LIGHT BROWN/"
+    },
+    {
+      "Code": "085",
+      "Description": "LIGHT GOLD"
+    },
+    {
+      "Code": "10008",
+      "Description": "LIGHT GOLD /"
+    },
+    {
+      "Code": "140",
+      "Description": "LIGHT GRAY"
+    },
+    {
+      "Code": "033",
+      "Description": "LIGHT GRAY"
+    },
+    {
+      "Code": "417",
+      "Description": "LIGHT GRAY/G"
+    },
+    {
+      "Code": "035",
+      "Description": "LIGHT GREEN"
+    },
+    {
+      "Code": "40035",
+      "Description": "LIGHT GREEN"
+    },
+    {
+      "Code": "166",
+      "Description": "LIGHT GREEN"
+    },
+    {
+      "Code": "144",
+      "Description": "LIGHT GREEN"
+    },
+    {
+      "Code": "313",
+      "Description": "LIGHT GREEN/"
+    },
+    {
+      "Code": "2000",
+      "Description": "LIGHT GREEN/"
+    },
+    {
+      "Code": "310",
+      "Description": "LIGHT GREEP"
+    },
+    {
+      "Code": "036",
+      "Description": "LIGHT MAROON"
+    },
+    {
+      "Code": "385",
+      "Description": "LIGHT PETROL"
+    },
+    {
+      "Code": "124",
+      "Description": "LIGHT RED"
+    },
+    {
+      "Code": "315",
+      "Description": "LIGHT YELLOW"
+    },
+    {
+      "Code": "40006",
+      "Description": "MARON/GRAY"
+    },
+    {
+      "Code": "021",
+      "Description": "MAROON"
+    },
+    {
+      "Code": "010",
+      "Description": "MAROON"
+    },
+    {
+      "Code": "40046",
+      "Description": "MAROON + SIL"
+    },
+    {
+      "Code": "117",
+      "Description": "MAROON / BEI"
+    },
+    {
+      "Code": "055",
+      "Description": "MAROON / BRO"
+    },
+    {
+      "Code": "121",
+      "Description": "MAROON / GOL"
+    },
+    {
+      "Code": "119",
+      "Description": "MAROON / GOL"
+    },
+    {
+      "Code": "168",
+      "Description": "MAROON / GRA"
+    },
+    {
+      "Code": "40011",
+      "Description": "MAROON / GRE"
+    },
+    {
+      "Code": "082",
+      "Description": "MAROON/BEIGE"
+    },
+    {
+      "Code": "423",
+      "Description": "MAROON/ORANG"
+    },
+    {
+      "Code": "302",
+      "Description": "MAROON/PINK"
+    },
+    {
+      "Code": "202",
+      "Description": "MAROON/RED"
+    },
+    {
+      "Code": "154",
+      "Description": "MAROON/SILVE"
+    },
+    {
+      "Code": "40037",
+      "Description": "MAROON/WHITE"
+    },
+    {
+      "Code": "087",
+      "Description": "MARRON/SILVE"
+    },
+    {
+      "Code": "225",
+      "Description": "METALLIC BEI"
+    },
+    {
+      "Code": "40009",
+      "Description": "METALLIC GRE"
+    },
+    {
+      "Code": "403",
+      "Description": "METALLIC SIL"
+    },
+    {
+      "Code": "074",
+      "Description": "METTALIC WIN"
+    },
+    {
+      "Code": "155",
+      "Description": "NAVY  /  GOL"
+    },
+    {
+      "Code": "091",
+      "Description": "NAVY / BLUE"
+    },
+    {
+      "Code": "152",
+      "Description": "NAVY / BRONZ"
+    },
+    {
+      "Code": "044",
+      "Description": "NAVY / GRAY"
+    },
+    {
+      "Code": "40034",
+      "Description": "NAVY / LIGHT"
+    },
+    {
+      "Code": "40048",
+      "Description": "NAVY / SILVE"
+    },
+    {
+      "Code": "069",
+      "Description": "NAVY / SILVE"
+    },
+    {
+      "Code": "40028",
+      "Description": "NAVY / SILVE"
+    },
+    {
+      "Code": "40029",
+      "Description": "NAVY / WHITE"
+    },
+    {
+      "Code": "149",
+      "Description": "NAVY GOLD LI"
+    },
+    {
+      "Code": "045",
+      "Description": "NAVY/ NAVY"
+    },
+    {
+      "Code": "307",
+      "Description": "NAVY/ WHIT"
+    },
+    {
+      "Code": "181",
+      "Description": "NAVY/GOLD"
+    },
+    {
+      "Code": "823",
+      "Description": "Nacreous Mat"
+    },
+    {
+      "Code": "017",
+      "Description": "OLIVE GREEN"
+    },
+    {
+      "Code": "10067",
+      "Description": "ORANG/ RED W"
+    },
+    {
+      "Code": "009",
+      "Description": "ORANGE"
+    },
+    {
+      "Code": "40022",
+      "Description": "ORANGE / BLA"
+    },
+    {
+      "Code": "10032",
+      "Description": "ORANGE / BLU"
+    },
+    {
+      "Code": "40054",
+      "Description": "ORANGE / BLU"
+    },
+    {
+      "Code": "40038",
+      "Description": "ORANGE / GRA"
+    },
+    {
+      "Code": "200",
+      "Description": "ORANGE / GRE"
+    },
+    {
+      "Code": "318",
+      "Description": "ORANGE / RED"
+    },
+    {
+      "Code": "022",
+      "Description": "ORANGE / WHI"
+    },
+    {
+      "Code": "10051",
+      "Description": "ORANGE /WHIT"
+    },
+    {
+      "Code": "246",
+      "Description": "ORANGE /YELL"
+    },
+    {
+      "Code": "10062",
+      "Description": "ORANGE/ SILV"
+    },
+    {
+      "Code": "10074",
+      "Description": "ORANGE/ADVER"
+    },
+    {
+      "Code": "10025",
+      "Description": "ORANGE/BLACK"
+    },
+    {
+      "Code": "435",
+      "Description": "ORANGE/BLUE"
+    },
+    {
+      "Code": "10038",
+      "Description": "ORANGE/BLUE/"
+    },
+    {
+      "Code": "129",
+      "Description": "ORANGE/BROWN"
+    },
+    {
+      "Code": "473",
+      "Description": "ORANGE/GRAY"
+    },
+    {
+      "Code": "40007",
+      "Description": "ORANGE/GRAY"
+    },
+    {
+      "Code": "430",
+      "Description": "ORANGE/GREEN"
+    },
+    {
+      "Code": "40050",
+      "Description": "ORANGE/LIGHT"
+    },
+    {
+      "Code": "432",
+      "Description": "ORANGE/SILVE"
+    },
+    {
+      "Code": "10050",
+      "Description": "ORANGE/WHITE"
+    },
+    {
+      "Code": "248",
+      "Description": "ORANGE/WHITE"
+    },
+    {
+      "Code": "10019",
+      "Description": "ORANGE/WHITE"
+    },
+    {
+      "Code": "830",
+      "Description": "PEARL BLACK"
+    },
+    {
+      "Code": "10000",
+      "Description": "PEARL WHITE"
+    },
+    {
+      "Code": "465",
+      "Description": "PEARL WHITE"
+    },
+    {
+      "Code": "838",
+      "Description": "PHYTONIC BLUE"
+    },
+    {
+      "Code": "057",
+      "Description": "PINK"
+    },
+    {
+      "Code": "165",
+      "Description": "PINK / BROWN"
+    },
+    {
+      "Code": "240",
+      "Description": "PINK / YELLO"
+    },
+    {
+      "Code": "381",
+      "Description": "PINK/GREY"
+    },
+    {
+      "Code": "828",
+      "Description": "PLATNIUM GRAPHITE"
+    },
+    {
+      "Code": "239",
+      "Description": "PURBLE / YEL"
+    },
+    {
+      "Code": "031",
+      "Description": "PURPLE"
+    },
+    {
+      "Code": "238",
+      "Description": "PURPLE / PIN"
+    },
+    {
+      "Code": "824",
+      "Description": "PURPLE / SILVER"
+    },
+    {
+      "Code": "003",
+      "Description": "RED"
+    },
+    {
+      "Code": "080",
+      "Description": "RED DARK"
+    },
+    {
+      "Code": "10076",
+      "Description": "RED WHITE AD"
+    },
+    {
+      "Code": "10011",
+      "Description": "RED WITH ADV"
+    },
+    {
+      "Code": "40039",
+      "Description": "RED/ GOLD"
+    },
+    {
+      "Code": "067",
+      "Description": "RED/ GREEN"
+    },
+    {
+      "Code": "40032",
+      "Description": "RED/ GREY"
+    },
+    {
+      "Code": "107",
+      "Description": "RED/ GREY"
+    },
+    {
+      "Code": "095",
+      "Description": "RED/ MAROON"
+    },
+    {
+      "Code": "099",
+      "Description": "RED/ ORANGE"
+    },
+    {
+      "Code": "221",
+      "Description": "RED/ SILVER"
+    },
+    {
+      "Code": "027",
+      "Description": "RED/ WHITE"
+    },
+    {
+      "Code": "10033",
+      "Description": "RED/ YELLOW"
+    },
+    {
+      "Code": "098",
+      "Description": "RED/BEIGE"
+    },
+    {
+      "Code": "40013",
+      "Description": "RED/BLACK"
+    },
+    {
+      "Code": "10021",
+      "Description": "RED/BLACK/WH"
+    },
+    {
+      "Code": "10004",
+      "Description": "RED/BLACK/WH"
+    },
+    {
+      "Code": "161",
+      "Description": "RED/BLUE"
+    },
+    {
+      "Code": "10053",
+      "Description": "RED/BLUE/ADV"
+    },
+    {
+      "Code": "10020",
+      "Description": "RED/BLUE/WHI"
+    },
+    {
+      "Code": "10058",
+      "Description": "RED/BLUE/WHI"
+    },
+    {
+      "Code": "025",
+      "Description": "RED/BRONZE"
+    },
+    {
+      "Code": "414",
+      "Description": "RED/PETROL"
+    },
+    {
+      "Code": "428",
+      "Description": "RED/PINK"
+    },
+    {
+      "Code": "404",
+      "Description": "RED/PURPLE"
+    },
+    {
+      "Code": "416",
+      "Description": "RED/SILVER"
+    },
+    {
+      "Code": "305",
+      "Description": "RED/YELLOW"
+    },
+    {
+      "Code": "150",
+      "Description": "RED/YELLOW"
+    },
+    {
+      "Code": "837",
+      "Description": "ROSE GOLD METALLIC"
+    },
+    {
+      "Code": "012",
+      "Description": "SILVER"
+    },
+    {
+      "Code": "316",
+      "Description": "SILVER"
+    },
+    {
+      "Code": "093",
+      "Description": "SILVER / 2 B"
+    },
+    {
+      "Code": "230",
+      "Description": "SILVER / BEI"
+    },
+    {
+      "Code": "40040",
+      "Description": "SILVER / BLA"
+    },
+    {
+      "Code": "097",
+      "Description": "SILVER / BLU"
+    },
+    {
+      "Code": "387",
+      "Description": "SILVER / BROWN"
+    },
+    {
+      "Code": "245",
+      "Description": "SILVER / DAR"
+    },
+    {
+      "Code": "089",
+      "Description": "SILVER / DAR"
+    },
+    {
+      "Code": "125",
+      "Description": "SILVER / GRA"
+    },
+    {
+      "Code": "115",
+      "Description": "SILVER / MAR"
+    },
+    {
+      "Code": "088",
+      "Description": "SILVER / MAR"
+    },
+    {
+      "Code": "40019",
+      "Description": "SILVER / MAR"
+    },
+    {
+      "Code": "096",
+      "Description": "SILVER / NAV"
+    },
+    {
+      "Code": "220",
+      "Description": "SILVER / RED"
+    },
+    {
+      "Code": "211",
+      "Description": "SILVER / RED"
+    },
+    {
+      "Code": "109",
+      "Description": "SILVER / RED"
+    },
+    {
+      "Code": "224",
+      "Description": "SILVER /GRAY"
+    },
+    {
+      "Code": "10054",
+      "Description": "SILVER ADVRI"
+    },
+    {
+      "Code": "130",
+      "Description": "SILVER BLACK"
+    },
+    {
+      "Code": "352",
+      "Description": "SILVER GRAY"
+    },
+    {
+      "Code": "350",
+      "Description": "SILVER GRAY"
+    },
+    {
+      "Code": "437",
+      "Description": "SILVER LINE/"
+    },
+    {
+      "Code": "300",
+      "Description": "SILVER NAVY"
+    },
+    {
+      "Code": "10065",
+      "Description": "SILVER/ BLUE"
+    },
+    {
+      "Code": "100",
+      "Description": "SILVER/ GRAY"
+    },
+    {
+      "Code": "075",
+      "Description": "SILVER/ GREE"
+    },
+    {
+      "Code": "413",
+      "Description": "SILVER/GOLD"
+    },
+    {
+      "Code": "325",
+      "Description": "SILVER/GOLDE"
+    },
+    {
+      "Code": "151",
+      "Description": "SILVER/GREEN"
+    },
+    {
+      "Code": "429",
+      "Description": "SILVER/LIGHT"
+    },
+    {
+      "Code": "440",
+      "Description": "SILVER/LIGHT"
+    },
+    {
+      "Code": "425",
+      "Description": "SILVER/ORANG"
+    },
+    {
+      "Code": "216",
+      "Description": "SILVER/RED"
+    },
+    {
+      "Code": "40026",
+      "Description": "SILVER/VIOLE"
+    },
+    {
+      "Code": "10037",
+      "Description": "SILVER/YELLO"
+    },
+    {
+      "Code": "311",
+      "Description": "SLIVER/GOLD"
+    },
+    {
+      "Code": "237",
+      "Description": "SMOKE"
+    },
+    {
+      "Code": "032",
+      "Description": "TURQUOISE"
+    },
+    {
+      "Code": "139",
+      "Description": "TURQUOISE/BE"
+    },
+    {
+      "Code": "467",
+      "Description": "TURQUOISE/BR"
+    },
+    {
+      "Code": "386",
+      "Description": "TURQUOISE/GO"
+    },
+    {
+      "Code": "309",
+      "Description": "TURQUOISE/SI"
+    },
+    {
+      "Code": "167",
+      "Description": "TURQUOISE/SI"
+    },
+    {
+      "Code": "1008",
+      "Description": "VIOLET/BEIGE"
+    },
+    {
+      "Code": "487",
+      "Description": "VIOLET/BLACK"
+    },
+    {
+      "Code": "474",
+      "Description": "VIOLET/BLUE"
+    },
+    {
+      "Code": "402",
+      "Description": "VIOLET/GRAY"
+    },
+    {
+      "Code": "380",
+      "Description": "VIOLET/GREY"
+    },
+    {
+      "Code": "1002",
+      "Description": "VIOLET/WHITE"
+    },
+    {
+      "Code": "1003",
+      "Description": "VIOLET/WHITE"
+    },
+    {
+      "Code": "1004",
+      "Description": "VIOLET/WHITE"
+    },
+    {
+      "Code": "832",
+      "Description": "Violet"
+    },
+    {
+      "Code": "10080",
+      "Description": "WHIT/ BLUE/"
+    },
+    {
+      "Code": "001",
+      "Description": "WHITE"
+    },
+    {
+      "Code": "102",
+      "Description": "WHITE / (RED"
+    },
+    {
+      "Code": "079",
+      "Description": "WHITE / BEIG"
+    },
+    {
+      "Code": "058",
+      "Description": "WHITE / BLAC"
+    },
+    {
+      "Code": "40047",
+      "Description": "WHITE / BLUE"
+    },
+    {
+      "Code": "158",
+      "Description": "WHITE / BROW"
+    },
+    {
+      "Code": "133",
+      "Description": "WHITE / GOLD"
+    },
+    {
+      "Code": "063",
+      "Description": "WHITE / GRAY"
+    },
+    {
+      "Code": "081",
+      "Description": "WHITE / GRAY"
+    },
+    {
+      "Code": "023",
+      "Description": "WHITE / GREE"
+    },
+    {
+      "Code": "40053",
+      "Description": "WHITE / MARO"
+    },
+    {
+      "Code": "40030",
+      "Description": "WHITE / NAVY"
+    },
+    {
+      "Code": "40042",
+      "Description": "WHITE / ORAN"
+    },
+    {
+      "Code": "114",
+      "Description": "WHITE / PINK"
+    },
+    {
+      "Code": "060",
+      "Description": "WHITE / RED"
+    },
+    {
+      "Code": "40036",
+      "Description": "WHITE / SILV"
+    },
+    {
+      "Code": "40058",
+      "Description": "WHITE / YELL"
+    },
+    {
+      "Code": "446",
+      "Description": "WHITE ALABAS"
+    },
+    {
+      "Code": "10007",
+      "Description": "WHITE BROWN"
+    },
+    {
+      "Code": "10075",
+      "Description": "WHITE MAROON"
+    },
+    {
+      "Code": "10001",
+      "Description": "WHITE PEARL"
+    },
+    {
+      "Code": "10071",
+      "Description": "WHITE PEARL"
+    },
+    {
+      "Code": "822",
+      "Description": "WHITE PEARL"
+    },
+    {
+      "Code": "10044",
+      "Description": "WHITE/ ADVER"
+    },
+    {
+      "Code": "10066",
+      "Description": "WHITE/ GREEN"
+    },
+    {
+      "Code": "10048",
+      "Description": "WHITE/ MAROO"
+    },
+    {
+      "Code": "10016",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10013",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10014",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10030",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10017",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10018",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10029",
+      "Description": "WHITE/ADVERT"
+    },
+    {
+      "Code": "10002",
+      "Description": "WHITE/BEIGE/"
+    },
+    {
+      "Code": "10026",
+      "Description": "WHITE/BLACK/"
+    },
+    {
+      "Code": "10068",
+      "Description": "WHITE/BLACK/"
+    },
+    {
+      "Code": "1005",
+      "Description": "WHITE/BLUE"
+    },
+    {
+      "Code": "10052",
+      "Description": "WHITE/BLUE/G"
+    },
+    {
+      "Code": "835",
+      "Description": "WHITE/BLUE/ORANGE"
+    },
+    {
+      "Code": "10073",
+      "Description": "WHITE/BLUE/R"
+    },
+    {
+      "Code": "10022",
+      "Description": "WHITE/BROWN/ADV"
+    },
+    {
+      "Code": "10046",
+      "Description": "WHITE/GOLDEN"
+    },
+    {
+      "Code": "330",
+      "Description": "WHITE/GREEN"
+    },
+    {
+      "Code": "061",
+      "Description": "WHITE/GREEN"
+    },
+    {
+      "Code": "460",
+      "Description": "WHITE/GREEN"
+    },
+    {
+      "Code": "10028",
+      "Description": "WHITE/GREEN/"
+    },
+    {
+      "Code": "10024",
+      "Description": "WHITE/GREY/A"
+    },
+    {
+      "Code": "1600",
+      "Description": "WHITE/LIGHT"
+    },
+    {
+      "Code": "482",
+      "Description": "WHITE/LIGHT"
+    },
+    {
+      "Code": "40044",
+      "Description": "WHITE/LIGHT"
+    },
+    {
+      "Code": "40012",
+      "Description": "WHITE/LIGHT"
+    },
+    {
+      "Code": "10070",
+      "Description": "WHITE/MAROON"
+    },
+    {
+      "Code": "814",
+      "Description": "WHITE/OLIVE"
+    },
+    {
+      "Code": "10036",
+      "Description": "WHITE/ORANGE"
+    },
+    {
+      "Code": "40023",
+      "Description": "WHITE/PEARL"
+    },
+    {
+      "Code": "10063",
+      "Description": "WHITE/PINK/A"
+    },
+    {
+      "Code": "434",
+      "Description": "WHITE/PURPLE"
+    },
+    {
+      "Code": "10035",
+      "Description": "WHITE/PURPLE"
+    },
+    {
+      "Code": "408",
+      "Description": "WHITE/RED"
+    },
+    {
+      "Code": "340",
+      "Description": "WHITE/RED LI"
+    },
+    {
+      "Code": "10031",
+      "Description": "WHITE/SILVER"
+    },
+    {
+      "Code": "463",
+      "Description": "WHITE/TURQUO"
+    },
+    {
+      "Code": "10043",
+      "Description": "WHITE/YELLOW"
+    },
+    {
+      "Code": "418",
+      "Description": "WHITE/YELLOW"
+    },
+    {
+      "Code": "508",
+      "Description": "White  matte"
+    },
+    {
+      "Code": "512",
+      "Description": "White Blue Advertising"
+    },
+    {
+      "Code": "827",
+      "Description": "White-blue-red-advertising"
+    },
+    {
+      "Code": "833",
+      "Description": "White/Pink"
+    },
+    {
+      "Code": "825",
+      "Description": "White/Yellow/Brown/Advertising"
+    },
+    {
+      "Code": "006",
+      "Description": "YELLOW"
+    },
+    {
+      "Code": "143",
+      "Description": "YELLOW / BIEGE"
+    },
+    {
+      "Code": "834",
+      "Description": "YELLOW / BROWN / ADVERTISEMENT"
+    },
+    {
+      "Code": "219",
+      "Description": "YELLOW / IVO"
+    },
+    {
+      "Code": "134",
+      "Description": "YELLOW / WHI"
+    },
+    {
+      "Code": "10010",
+      "Description": "YELLOW GREEN"
+    },
+    {
+      "Code": "10079",
+      "Description": "YELLOW/ADVER"
+    },
+    {
+      "Code": "10039",
+      "Description": "YELLOW/BLACK"
+    },
+    {
+      "Code": "073",
+      "Description": "YELLOW/BLACK"
+    },
+    {
+      "Code": "242",
+      "Description": "YELLOW/BLUE"
+    },
+    {
+      "Code": "10060",
+      "Description": "YELLOW/BLUE"
+    },
+    {
+      "Code": "471",
+      "Description": "YELLOW/GRAY"
+    },
+    {
+      "Code": "164",
+      "Description": "YELLOW/GRAY"
+    },
+    {
+      "Code": "304",
+      "Description": "YELLOW/ORANG"
+    },
+    {
+      "Code": "207",
+      "Description": "YELLOW/PURPL"
+    },
+    {
+      "Code": "407",
+      "Description": "YELLOW/RED"
+    },
+    {
+      "Code": "10061",
+      "Description": "YELLOW/RED/A"
+    },
+    {
+      "Code": "40017",
+      "Description": "YELLOW/SILVE"
+    },
+    {
+      "Code": "816",
+      "Description": "YELLOW/TURQU"
+    },
+    {
+      "Code": "502",
+      "Description": "YELLOW/VIOLE"
+    },
+    {
+      "Code": "820",
+      "Description": "blak matte"
+    },
+    {
+      "Code": "819",
+      "Description": "blue matte"
+    },
+    {
+      "Code": "507",
+      "Description": "white  matte"
+    },
+    {
+      "Code": "506",
+      "Description": "white blue m"
+    }
+  ]
+}

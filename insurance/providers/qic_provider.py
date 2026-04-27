@@ -41,6 +41,15 @@ class QICProvider(BaseInsuranceProvider):
     def _company_code(self) -> str:
         return str(self.get_extra_config().get("company_code", "002"))
 
+    def get_base_url(self) -> str:
+        base_url = super().get_base_url()
+        if "www.devapi.anoudapps.com" in base_url and self.get_extra_config().get(
+            "prefer_non_www_host",
+            True,
+        ):
+            return base_url.replace("://www.devapi.anoudapps.com", "://devapi.anoudapps.com")
+        return base_url
+
     def _basic_auth_value(self, username: str, password: str) -> str:
         return base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("ascii")
 
@@ -110,8 +119,10 @@ class QICProvider(BaseInsuranceProvider):
             "driverDOB": str(payload.get("date_of_birth") or customer.get("date_of_birth") or ""),
             "insuredAge": int(payload.get("insured_age") or customer.get("insured_age") or 0),
             "noClaimYear": str(payload.get("ncd_years") or vehicle.get("ncd_years") or 0),
+            "selfDeclarationYear": int(payload.get("self_declaration_year") or 0),
             "chassisNo": str(payload.get("chassis_number") or vehicle.get("chassis_number") or ""),
             "driverExp": int(payload.get("driver_experience") or 0),
+            "admeId": int(self.get_extra_config().get("adme_id", payload.get("adme_id") or 401369)),
             "civilId": str(payload.get("civil_id") or customer.get("emirates_id") or ""),
             "firstRegDate": str(payload.get("reg_dt") or vehicle.get("registration_date") or ""),
             "mobileNo": str(payload.get("mobile_number") or customer.get("mobile_number") or ""),
@@ -211,12 +222,11 @@ class QICProvider(BaseInsuranceProvider):
             for scheme in schemes:
                 premium_payload = {
                     "quoteNo": quote_no,
-                    "prodCode": str(product.get("productCode") or product.get("prodCode") or ""),
-                    "schemeCode": str(scheme.get("schemeCode") or ""),
-                    "optionalCovers": [
-                        {"coverCode": str(cover.get("coverCode") or cover.get("code") or "")}
-                        for cover in (scheme.get("optionalCovers") or [])
-                        if cover.get("selected") in (True, "Y", "1")
+                    "schemes": [
+                        {
+                            "schemeCode": str(scheme.get("schemeCode") or ""),
+                            "productCode": str(product.get("productCode") or product.get("prodCode") or ""),
+                        }
                     ],
                 }
                 premium_data = self.get_net_premium(premium_payload)

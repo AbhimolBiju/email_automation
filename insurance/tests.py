@@ -273,9 +273,12 @@ class DICProviderTests(TestCase):
         self.assertEqual(request_payload["nationality"], "101")
         self.assertEqual(request_payload["gender"], "F")
         self.assertEqual(request_payload["emirate"], "03")
+        self.assertEqual(request_payload["PlateSource"], "0001")
         self.assertEqual(request_payload["plateSource"], "0001")
         self.assertEqual(request_payload["ncdYears"], "2")
         self.assertEqual(request_payload["trafficTranType"], "101")
+        self.assertEqual(request_payload["dateOfBirth"], "14/10/1997")
+        self.assertEqual(request_payload["licenseFmDt"], "21/05/2017")
         self.assertEqual(len(request_payload["documentLists"]), 1)
 
     def test_dic_get_quote_selects_cheapest_scheme(self):
@@ -356,7 +359,12 @@ class QICProviderTests(TestCase):
             ("0110", "0297"): {"netPremium": 1386.53, "taxAmount": 66.03},
             ("0150", "0401"): {"netPremium": 1155, "taxAmount": 55},
         }
-        self.provider.get_net_premium = lambda payload: premiums[(payload["prodCode"], payload["schemeCode"])]
+        self.provider.get_net_premium = lambda payload: premiums[
+            (
+                payload["schemes"][0]["productCode"],
+                payload["schemes"][0]["schemeCode"],
+            )
+        ]
 
         quote = self.provider.get_quote(
             {

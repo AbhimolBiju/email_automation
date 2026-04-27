@@ -9,6 +9,20 @@ from insurance.models import InsuranceProvider
 
 PROVIDER_SEEDS = [
     {
+        "code": "DIC",
+        "defaults": {
+            "name": "DIC",
+            "base_url": "https://uatbrokerportal.dubins.ae",
+            "username": "PROMISE_API",
+            "password": "Prom#26@1SE",
+            "timeout": 30,
+            "priority": 10,
+            "is_active": True,
+            "provider_class": "dic_provider.DICProvider",
+            "extra_config": {},
+        },
+    },
+    {
         "code": "QIC",
         "defaults": {
             "name": "QIC",
@@ -52,7 +66,7 @@ PROVIDER_SEEDS = [
 
 
 class Command(BaseCommand):
-    help = "Seed or update InsuranceProvider rows for QIC and NIA using local integration materials."
+    help = "Seed or update InsuranceProvider rows for DIC, QIC, and NIA using local integration materials."
 
     def handle(self, *args, **options):
         for seed in PROVIDER_SEEDS:
@@ -61,7 +75,7 @@ class Command(BaseCommand):
             if seed["code"] == "NIA":
                 defaults["base_url"] = (
                     os.environ.get("NIA_BASE_URL")
-                    or (existing.base_url if existing and existing.base_url else "")
+                    or (existing.base_url if existing and existing.base_url else defaults.get("base_url", ""))
                 )
             provider, created = InsuranceProvider.objects.update_or_create(
                 code=seed["code"],

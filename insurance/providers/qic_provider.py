@@ -41,6 +41,9 @@ class QICProvider(BaseInsuranceProvider):
     def _company_code(self) -> str:
         return str(self.get_extra_config().get("company_code", "002"))
 
+    def _basic_auth_value(self, username: str, password: str) -> str:
+        return base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("ascii")
+
     def authenticate(self) -> str | None:
         username = self.resolve_config_value("username", "")
         password = self.resolve_config_value("password", "")
@@ -48,11 +51,21 @@ class QICProvider(BaseInsuranceProvider):
             raise ProviderAuthenticationError(
                 "QIC requires username and password for basic authentication."
             )
-        return base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("ascii")
+        return self._basic_auth_value(username, password)
 
     def get_auth_headers(self) -> dict[str, str]:
         return {
             "Authorization": f"Basic {self.authenticate()}",
+            "company": self._company_code(),
+        }
+
+    def _bayanaty_auth_headers(self) -> dict[str, str]:
+        username = str(self.get_extra_config().get("bayanaty_username") or self.resolve_config_value("username", ""))
+        password = str(self.get_extra_config().get("bayanaty_password") or self.resolve_config_value("password", ""))
+        if not username or not password:
+            raise ProviderAuthenticationError("QIC Bayanaty integration requires username and password.")
+        return {
+            "Authorization": f"Basic {self._basic_auth_value(username, password)}",
             "company": self._company_code(),
         }
 
@@ -250,6 +263,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_VEHICLE_DETAILS_ENDPOINT),
             json_payload={"Vin": vin},
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def bayanaty_imported_details(self, vin: str) -> dict[str, Any]:
@@ -257,6 +271,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_IMPORTED_DETAILS_ENDPOINT),
             json_payload={"Vin": vin},
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def bayanaty_vehicle_spec(self, vin: str) -> dict[str, Any]:
@@ -264,6 +279,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_SPEC_DETAILS_ENDPOINT),
             json_payload={"Vin": vin},
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def bayanaty_vehicle_valuation(self, payload: dict[str, Any]) -> dict[str, Any]:
@@ -271,6 +287,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_VALUATION_ENDPOINT),
             json_payload=payload,
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def bayanaty_body_type(self, payload: dict[str, Any]) -> dict[str, Any]:
@@ -278,6 +295,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_BODY_TYPE_ENDPOINT),
             json_payload=payload,
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def bayanaty_engine_capacities(self, payload: dict[str, Any]) -> dict[str, Any]:
@@ -285,6 +303,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_ENGINE_CAPACITIES_ENDPOINT),
             json_payload=payload,
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def bayanaty_trims(self, payload: dict[str, Any]) -> dict[str, Any]:
@@ -292,6 +311,7 @@ class QICProvider(BaseInsuranceProvider):
             method="POST",
             path=self._with_company(self.BAYANATY_TRIMS_ENDPOINT),
             json_payload=payload,
+            extra_headers=self._bayanaty_auth_headers(),
         )
 
     def health_check(self) -> dict[str, Any]:

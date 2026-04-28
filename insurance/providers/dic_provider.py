@@ -86,6 +86,23 @@ class DICProvider(BaseInsuranceProvider):
             raise ProviderRequestError(f"DIC requires '{field_name}' in the quote payload.")
         return text
 
+    def _to_dic_yn(self, value: Any) -> str:
+        """
+        Normalize common truthy/falsey inputs to DIC's expected "Y"/"N".
+        Important: strings like "N" are truthy in Python, so do not use bool(value).
+        """
+        if value in (True, 1):
+            return "Y"
+        if value in (False, 0, None, ""):
+            return "N"
+        if isinstance(value, str):
+            v = value.strip().lower()
+            if v in ("y", "yes", "true", "1"):
+                return "Y"
+            if v in ("n", "no", "false", "0"):
+                return "N"
+        return "Y" if bool(value) else "N"
+
     def _normalize_document_list(self, payload: dict[str, Any]) -> list[dict[str, str]]:
         document_lists = payload.get("document_lists") or payload.get("documentLists") or []
         if not document_lists:
@@ -196,8 +213,10 @@ class DICProvider(BaseInsuranceProvider):
             ),
             "ncdYears": self._coerce_required_value(ncd_years, "ncd_years"),
             "trafficTranType": self._coerce_required_value(traffic_type, "traffic_tran_type"),
-            "isVehBrandNew": "Y" if payload.get("is_veh_brand_new") or vehicle.get("is_vehicle_brand_new") else "N",
-            "agencyRepairYn": "Y" if payload.get("agency_repair") or vehicle.get("agency_repair") else "N",
+            "isVehBrandNew": self._to_dic_yn(
+                payload.get("is_veh_brand_new", vehicle.get("is_vehicle_brand_new"))
+            ),
+            "agencyRepairYn": self._to_dic_yn(payload.get("agency_repair", vehicle.get("agency_repair"))),
             "bankName": bank_name,
             "documentLists": self._normalize_document_list(payload),
         }

@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import include, path
 from .views import *
 
 urlpatterns = [
@@ -23,4 +23,6 @@ urlpatterns = [
     path("providers/", list_insurance_providers),
     path("providers/<int:provider_id>/health-check/", provider_health_check),
     path("deals/<int:deal_id>/quotes/", get_deal_quotes),
+    # DIC provider feature APIs (additive; does not modify provider logic)
+    path("dic/", include("insurance.dic_urls")),
 ]

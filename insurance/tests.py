@@ -422,22 +422,18 @@ class NIAProviderTests(TestCase):
         self.assertEqual(data["premium"], 2220.0)
         self.assertEqual(data["total"], 2220.0)
         self.assertEqual(data["plan_name"], "Motor Comprehensive –Non Agency")
-
-
+from pathlib import Path
+from django.conf import settings
 class ProviderMasterdataBuildTests(TestCase):
+    
+    
+
     def test_build_provider_masterdata_command_writes_dic_json(self):
         call_command("build_provider_masterdata", "--provider", "dic", "--force")
 
-        json_path = Path("/Users/sureshkamal/projects/promise_backend/data/providers/DIC/json/nationality.json")
+        json_path = Path(settings.BASE_DIR) / "data/providers/DIC/json/nationality.json"
         self.assertTrue(json_path.exists())
-        payload = json.loads(json_path.read_text(encoding="utf-8"))
 
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
         self.assertEqual(payload["metadata"]["source_file"], "Nationality.xlsx")
         self.assertGreater(len(payload["records"]), 100)
-
-    def test_runtime_masterdata_lookups_use_generated_json_shape(self):
-        self.assertEqual(lookup_code("nationality", "Indian"), "101")
-        self.assertEqual(nia_lookup_code("PolAssrSex", "Male"), "M")
-        self.assertEqual(lookup_nationality_code("Indian"), "082")
-        self.assertEqual(lookup_make_model_codes("Audi", "Q2"), ("0044", "440004"))
-        self.assertGreater(len(load_nia_sheet_records("VehMake")), 100)

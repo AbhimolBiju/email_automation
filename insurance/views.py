@@ -1,15 +1,24 @@
-from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import NotFound
+
+from api.responses import error_response, success_response
 from deals.models import Deal
 from leads.models import Lead
-from .models import InsuranceInfo, InsuranceProvider
-from .serializers import InsuranceInfoSerializer, InsuranceProviderSerializer
-from rest_framework.exceptions import NotFound
-from api.responses import success_response, error_response
 
-from .services import get_best_quotes, health_check_provider
+from .models import InsuranceInfo, InsuranceProvider, QuoteBatch
+from .serializers import (
+    InsuranceInfoSerializer,
+    InsuranceProviderSerializer,
+    QuoteBatchDetailSerializer,
+    QuoteBatchListSerializer,
+    QuoteResultSerializer,
+)
+from .services import get_best_quotes, get_latest_quote_batch, health_check_provider, list_quote_batches
+from .tasks import enqueue_quote_generation
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def get_insurance_info(request, lead_id):
     try:
         lead = Lead.objects.get(id=lead_id)
@@ -64,10 +73,95 @@ def provider_health_check(request, provider_id):
 
     return success_response(
         message="Provider health check completed",
-        data={
-            "provider": provider.code,
-            "result": result,
-        },
+        data={"provider": provider.code, "result": result},
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+def list_quotes(request):
+    serializer = QuoteBatchListSerializer(list_quote_batches(), many=True)
+    return success_response(
+        message="Quote batches fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+def quote_batch_detail(request, batch_id):
+    batch = (
+        QuoteBatch.objects.select_related("deal", "lead", "best_provider")
+        .prefetch_related("results__provider")
+        .filter(id=batch_id)
+        .first()
+    )
+    if not batch:
+        raise NotFound("Quote batch not found")
+
+    serializer = QuoteBatchDetailSerializer(batch)
+    return success_response(
+        message="Quote batch fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+def quote_batch_results(request, batch_id):
+    batch = (
+        QuoteBatch.objects.prefetch_related("results__provider")
+        .filter(id=batch_id)
+        .first()
+    )
+    if not batch:
+        raise NotFound("Quote batch not found")
+    serializer = QuoteResultSerializer(batch.results.all().order_by("ranking", "provider__priority"), many=True)
+    return success_response(
+        message="Quote results fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@api_view(["GET"])
+def latest_quote_for_deal(request, deal_id):
+    try:
+        Deal.objects.only("id").get(id=deal_id)
+    except Deal.DoesNotExist:
+        raise NotFound("Deal not found")
+
+    batch = get_latest_quote_batch(deal_id)
+    if not batch:
+        return success_response(
+            message="No quote batch available for this deal yet",
+            data=None,
+            status_code=status.HTTP_200_OK,
+        )
+    serializer = QuoteBatchDetailSerializer(batch)
+    return success_response(
+        message="Latest quote batch fetched successfully",
+        data=serializer.data,
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+def refresh_quotes(request, deal_id):
+    try:
+        Deal.objects.only("id").get(id=deal_id)
+    except Deal.DoesNotExist:
+        raise NotFound("Deal not found")
+
+    triggered_by_id = getattr(request.user, "id", None) if getattr(request.user, "is_authenticated", False) else None
+    payload = get_best_quotes(
+        deal_id,
+        force_refresh=True,
+        triggered_by_id=triggered_by_id,
+    )
+    return success_response(
+        message="Quote refresh completed successfully",
+        data=payload,
         status_code=status.HTTP_200_OK,
     )
 
@@ -75,7 +169,11 @@ def provider_health_check(request, provider_id):
 @api_view(["POST"])
 def get_deal_quotes(request, deal_id):
     try:
-        result = get_best_quotes(deal_id)
+        result = get_best_quotes(
+            deal_id,
+            force_refresh=bool(request.data.get("force_refresh", False)),
+            triggered_by_id=getattr(request.user, "id", None) if getattr(request.user, "is_authenticated", False) else None,
+        )
     except Deal.DoesNotExist:
         raise NotFound("Deal not found")
     except Exception as exc:

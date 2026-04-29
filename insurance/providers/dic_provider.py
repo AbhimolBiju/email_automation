@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import time
 import uuid
+from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
@@ -86,22 +87,38 @@ class DICProvider(BaseInsuranceProvider):
             raise ProviderRequestError(f"DIC requires '{field_name}' in the quote payload.")
         return text
 
-    def _to_dic_yn(self, value: Any) -> str:
-        """
-        Normalize common truthy/falsey inputs to DIC's expected "Y"/"N".
-        Important: strings like "N" are truthy in Python, so do not use bool(value).
-        """
-        if value in (True, 1):
-            return "Y"
-        if value in (False, 0, None, ""):
-            return "N"
-        if isinstance(value, str):
-            v = value.strip().lower()
-            if v in ("y", "yes", "true", "1"):
-                return "Y"
-            if v in ("n", "no", "false", "0"):
-                return "N"
-        return "Y" if bool(value) else "N"
+    def _format_date(self, value: Any) -> str:
+        text = str(value).strip() if value not in (None, "") else ""
+        if not text:
+            return ""
+        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y", "%Y/%m/%d"):
+            try:
+                return datetime.strptime(text, fmt).strftime("%d/%m/%Y")
+            except ValueError:
+                continue
+        return text
+
+    def _format_mobile_number(self, value: Any) -> str:
+        text = str(value).strip() if value not in (None, "") else ""
+        if not text:
+            return ""
+        return text.replace("+", "").replace(" ", "")
+
+    def _resolve_emirate_code(self, payload: dict[str, Any], customer: dict[str, Any], vehicle: dict[str, Any]) -> str:
+        candidates = [
+            payload.get("emirate"),
+            customer.get("emirate"),
+            payload.get("plate_source"),
+            vehicle.get("plate_source"),
+            payload.get("registration_location"),
+            vehicle.get("registration_location"),
+        ]
+        for candidate in candidates:
+            code = lookup_code("emirate", candidate)
+            text = str(code).strip() if code not in (None, "") else ""
+            if text:
+                return text
+        return ""
 
     def _normalize_document_list(self, payload: dict[str, Any]) -> list[dict[str, str]]:
         document_lists = payload.get("document_lists") or payload.get("documentLists") or []
@@ -139,7 +156,7 @@ class DICProvider(BaseInsuranceProvider):
         insured_name = payload.get("insured_name") or customer.get("insured_name") or customer.get("name")
         nationality = lookup_code("nationality", payload.get("nationality") or customer.get("nationality"))
         gender = lookup_code("gender", payload.get("gender") or customer.get("gender"))
-        emirate = lookup_code("emirate", payload.get("emirate") or customer.get("emirate"))
+        emirate = self._resolve_emirate_code(payload, customer, vehicle)
         plate_code = lookup_code("plate_code", payload.get("plate_code") or vehicle.get("plate_code"))
         plate_source = lookup_code("plate_source", payload.get("plate_source") or vehicle.get("plate_source"))
         bank_name = lookup_code("bank_name", payload.get("bank_name") or vehicle.get("bank_name"))
@@ -162,13 +179,15 @@ class DICProvider(BaseInsuranceProvider):
                 "national_id",
             ),
             "idExpiryDt": self._coerce_required_value(
-                payload.get("id_expiry_dt")
-                or customer.get("emirates_id_expiry_date")
-                or customer.get("id_expiry_dt"),
+                self._format_date(
+                    payload.get("id_expiry_dt")
+                    or customer.get("emirates_id_expiry_date")
+                    or customer.get("id_expiry_dt")
+                ),
                 "id_expiry_dt",
             ),
             "dateOfBirth": self._coerce_required_value(
-                payload.get("date_of_birth") or customer.get("date_of_birth"),
+                self._format_date(payload.get("date_of_birth") or customer.get("date_of_birth")),
                 "date_of_birth",
             ),
             "gender": self._coerce_required_value(gender, "gender"),
@@ -178,7 +197,9 @@ class DICProvider(BaseInsuranceProvider):
                 "email_address",
             ),
             "mobileNumber": self._coerce_required_value(
-                payload.get("mobile_number") or customer.get("mobile_number"),
+                self._format_mobile_number(
+                    payload.get("mobile_number") or customer.get("mobile_number")
+                ),
                 "mobile_number",
             ),
             "licenseNo": self._coerce_required_value(
@@ -186,11 +207,11 @@ class DICProvider(BaseInsuranceProvider):
                 "license_no",
             ),
             "licenseFmDt": self._coerce_required_value(
-                payload.get("license_fm_dt") or vehicle.get("license_from_date"),
+                self._format_date(payload.get("license_fm_dt") or vehicle.get("license_from_date")),
                 "license_fm_dt",
             ),
             "licenseToDt": self._coerce_required_value(
-                payload.get("license_to_dt") or vehicle.get("license_to_date"),
+                self._format_date(payload.get("license_to_dt") or vehicle.get("license_to_date")),
                 "license_to_dt",
             ),
             "chassisNumber": self._coerce_required_value(
@@ -202,24 +223,23 @@ class DICProvider(BaseInsuranceProvider):
                 "reg_number",
             ),
             "regDt": self._coerce_required_value(
-                payload.get("reg_dt") or vehicle.get("registration_date"),
+                self._format_date(payload.get("reg_dt") or vehicle.get("registration_date")),
                 "reg_dt",
             ),
             "plateCode": self._coerce_required_value(plate_code, "plate_code"),
-            "plateSource": self._coerce_required_value(plate_source, "plate_source"),
+            "PlateSource": self._coerce_required_value(plate_source, "plate_source"),
             "tcfNumber": self._coerce_required_value(
                 payload.get("tcf_number") or vehicle.get("tcf_number"),
                 "tcf_number",
             ),
             "ncdYears": self._coerce_required_value(ncd_years, "ncd_years"),
             "trafficTranType": self._coerce_required_value(traffic_type, "traffic_tran_type"),
-            "isVehBrandNew": self._to_dic_yn(
-                payload.get("is_veh_brand_new", vehicle.get("is_vehicle_brand_new"))
-            ),
-            "agencyRepairYn": self._to_dic_yn(payload.get("agency_repair", vehicle.get("agency_repair"))),
+            "isVehBrandNew": "Y" if payload.get("is_veh_brand_new") or vehicle.get("is_vehicle_brand_new") else "N",
+            "agencyRepairYn": "Y" if payload.get("agency_repair") or vehicle.get("agency_repair") else "N",
             "bankName": bank_name,
             "documentLists": self._normalize_document_list(payload),
         }
+        request_payload["plateSource"] = request_payload["PlateSource"]
         return request_payload
 
     def generate_quote(self, payload: dict[str, Any], *, request_id: str | None = None) -> dict[str, Any]:

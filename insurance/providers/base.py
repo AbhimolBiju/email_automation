@@ -190,6 +190,13 @@ class BaseInsuranceProvider(ABC):
             currency=str(payload.get("currency", "AED")),
             plan_name=str(payload.get("plan_name", "Standard Plan")),
             response_time_ms=response_time_ms,
+            status=str(payload.get("status", "SUCCESS")).upper(),
+            benefits=payload.get("benefits", {}) if isinstance(payload.get("benefits"), dict) else {},
+            optional_covers=payload.get("optional_covers", {}) if isinstance(payload.get("optional_covers"), dict) else {},
+            vehicle_details=payload.get("vehicle_details", {}) if isinstance(payload.get("vehicle_details"), dict) else {},
+            coverage_amount=str(payload.get("coverage_amount")) if payload.get("coverage_amount") not in (None, "") else None,
+            deductible=str(payload.get("deductible")) if payload.get("deductible") not in (None, "") else None,
+            coverage_score=float(payload.get("coverage_score", 0) or 0),
             raw_response=payload,
         )
 

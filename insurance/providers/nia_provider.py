@@ -87,7 +87,16 @@ class NIAProvider(BaseInsuranceProvider):
         return self._token
 
     def get_auth_headers(self) -> dict[str, str]:
-        return {"Authorization": self.authenticate()}
+        if self.get_extra_config().get("use_authorization_header", False):
+            token = self.authenticate()
+            template = str(
+                self.get_extra_config().get(
+                    "authorization_header_template",
+                    "{token}",
+                )
+            )
+            return {"Authorization": template.format(token=token)}
+        return {}
 
     def _user_id(self) -> str:
         user_id = self.get_extra_config().get("user_id") or self.resolve_config_value("username", "")
@@ -98,6 +107,14 @@ class NIAProvider(BaseInsuranceProvider):
             "Authentication": {"Token": self.authenticate(), "UserId": self._user_id()},
             section_name: section_value,
         }
+
+    def _post_with_auth_body(self, path: str, section_name: str, section_value: Any) -> dict[str, Any]:
+        return self._request(
+            method="POST",
+            path=path,
+            json_payload=self._request_payload(section_name, section_value),
+            authenticated=False,
+        )
 
     def _map_product_code(self, insurance_type: str | None, agency_repair: bool) -> str:
         if insurance_type == "third_party":
@@ -166,10 +183,10 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_create_quote_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("create_quote_endpoint", self.CREATE_QUOTE_ENDPOINT),
-            json_payload=self._build_create_quote_request(payload),
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("create_quote_endpoint", self.CREATE_QUOTE_ENDPOINT),
+            "Data",
+            self._build_create_quote_request(payload),
         )
         return self._ensure_success(response)
 
@@ -177,10 +194,10 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_save_quote_with_plan_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("save_quote_with_plan_endpoint", self.SAVE_QUOTE_WITH_PLAN_ENDPOINT),
-            json_payload=payload,
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("save_quote_with_plan_endpoint", self.SAVE_QUOTE_WITH_PLAN_ENDPOINT),
+            "SelectedCoverData",
+            [payload],
         )
         return self._ensure_success(response)
 
@@ -188,10 +205,10 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_save_additional_info_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("save_addl_info_endpoint", self.SAVE_ADDL_INFO_ENDPOINT),
-            json_payload=payload,
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("save_addl_info_endpoint", self.SAVE_ADDL_INFO_ENDPOINT),
+            "AdditionalDetailsData",
+            payload,
         )
         return self._ensure_success(response)
 
@@ -199,21 +216,36 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_save_document_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("save_document_endpoint", self.SAVE_DOCUMENT_ENDPOINT),
-            json_payload=payload,
-        )
+        documents = payload.get("docUpload") or []
+        if not documents:
+            return {"Status": 1}
+        doc_results = []
+        for document in documents:
+            response = self._post_with_auth_body(
+                self.get_extra_config().get("save_document_endpoint", self.SAVE_DOCUMENT_ENDPOINT),
+                "DocumentUploadData",
+                {
+                    "Base64ImageString": document.get("docFile") or "",
+                    "QuotNo": payload.get("polRefNo") or "",
+                    "FileExtension": f".{document.get('imgType') or 'png'}",
+                    "FileName": document.get("docDesc") or document.get("docCode") or "Document",
+                    "Remarks": document.get("docDesc") or "",
+                    "SequenceNo": str(document.get("docSrlNo") or 1),
+                    "DocumentIdNo": document.get("docCode") or "",
+                },
+            )
+            doc_results.append(self._ensure_success(response))
+        return {"Status": 1, "DocumentResponses": doc_results}
         return self._ensure_success(response)
 
     def proposal_summary(self, payload: dict[str, Any]) -> dict[str, Any]:
         mock = self.get_extra_config().get("mock_proposal_summary_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method=self.get_extra_config().get("proposal_summary_method", "POST"),
-            path=self.get_extra_config().get("proposal_summary_endpoint", self.PROPOSAL_SUMMARY_ENDPOINT),
-            json_payload=payload,
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("proposal_summary_endpoint", self.PROPOSAL_SUMMARY_ENDPOINT),
+            "ViewPolicySummaryData",
+            {"QuotNo": payload.get("PolRefNo") or payload.get("quotation_no") or payload.get("QuotNo") or ""},
         )
         return self._ensure_success(response)
 
@@ -221,10 +253,10 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_approve_policy_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("approve_policy_endpoint", self.APPROVE_POLICY_ENDPOINT),
-            json_payload=payload,
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("approve_policy_endpoint", self.APPROVE_POLICY_ENDPOINT),
+            "ApprovePolicyData",
+            payload,
         )
         return self._ensure_success(response)
 
@@ -232,10 +264,10 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_generate_payment_link_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("generate_payment_link_endpoint", self.GENERATE_PAYMENT_LINK_ENDPOINT),
-            json_payload=payload,
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("generate_payment_link_endpoint", self.GENERATE_PAYMENT_LINK_ENDPOINT),
+            "GeneratePaymentLinkData",
+            payload,
         )
         return self._ensure_success(response)
 
@@ -243,10 +275,10 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_get_payment_details_response")
         if isinstance(mock, dict):
             return mock
-        response = self._request(
-            method="POST",
-            path=self.get_extra_config().get("get_payment_details_endpoint", self.GET_PAYMENT_DETAILS_ENDPOINT),
-            json_payload=payload,
+        response = self._post_with_auth_body(
+            self.get_extra_config().get("get_payment_details_endpoint", self.GET_PAYMENT_DETAILS_ENDPOINT),
+            "PaymentDetailsData",
+            payload,
         )
         return self._ensure_success(response)
 

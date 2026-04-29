@@ -7,7 +7,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from deals.models import Deal
-from insurance.models import InsuranceProvider, QuoteRequestLog, QuoteResult
+from insurance.models import InsuranceProvider, QuoteBatch, QuoteRequestLog, QuoteResult
 from insurance.providers.dic_masterdata import list_masterdata, lookup_code
 from insurance.providers.dic_provider import DICProvider
 from insurance.providers.nia_masterdata import load_sheet_records as load_nia_sheet_records
@@ -94,7 +94,9 @@ class InsuranceQuoteIntegrationTests(TestCase):
 
         self.assertEqual(result["requested_provider_count"], 3)
         self.assertEqual(result["successful_provider_count"], 3)
-        self.assertEqual([quote["provider"] for quote in result["quotes"]], ["DIC", "QIC", "NIA"])
+        self.assertEqual(result["batch"]["best_provider"], "DIC")
+        self.assertEqual([quote["provider"] for quote in result["results"]], ["DIC", "QIC", "NIA"])
+        self.assertEqual(QuoteBatch.objects.count(), 1)
         self.assertEqual(QuoteRequestLog.objects.count(), 3)
         self.assertEqual(QuoteResult.objects.count(), 3)
 
@@ -114,11 +116,12 @@ class InsuranceQuoteIntegrationTests(TestCase):
         self.assertEqual(result["requested_provider_count"], 2)
         self.assertEqual(result["successful_provider_count"], 1)
         self.assertEqual(len(result["failures"]), 1)
-        self.assertEqual(result["quotes"][0]["provider"], "NIA")
+        self.assertEqual(result["results"][0]["provider"], "NIA")
         self.assertEqual(
             QuoteRequestLog.objects.filter(status=QuoteRequestLog.STATUS_FAILED).count(),
             1,
         )
+        self.assertEqual(QuoteBatch.objects.first().status, QuoteBatch.STATUS_PARTIAL_SUCCESS)
 
     def test_quote_endpoint_returns_normalized_output(self):
         self._create_provider(name="NIA", code="NIA", priority=1, quote_total=1450)
@@ -131,16 +134,29 @@ class InsuranceQuoteIntegrationTests(TestCase):
         self.assertTrue(payload["success"])
         self.assertEqual(payload["data"]["successful_provider_count"], 2)
         self.assertEqual(
-            sorted(payload["data"]["quotes"][0].keys()),
+            sorted(payload["data"]["results"][0].keys()),
             sorted(
                 [
                     "provider",
+                    "provider_name",
+                    "logo",
                     "premium",
                     "vat",
                     "total",
                     "currency",
                     "plan_name",
                     "response_time_ms",
+                    "ranking",
+                    "coverage_score",
+                    "status",
+                    "error_message",
+                    "normalized_response",
+                    "raw_response",
+                    "recommended",
+                    "is_cheapest",
+                    "is_best_value",
+                    "created_at",
+                    "id",
                 ]
             ),
         )
@@ -257,9 +273,12 @@ class DICProviderTests(TestCase):
         self.assertEqual(request_payload["nationality"], "101")
         self.assertEqual(request_payload["gender"], "F")
         self.assertEqual(request_payload["emirate"], "03")
+        self.assertEqual(request_payload["PlateSource"], "0001")
         self.assertEqual(request_payload["plateSource"], "0001")
         self.assertEqual(request_payload["ncdYears"], "2")
         self.assertEqual(request_payload["trafficTranType"], "101")
+        self.assertEqual(request_payload["dateOfBirth"], "14/10/1997")
+        self.assertEqual(request_payload["licenseFmDt"], "21/05/2017")
         self.assertEqual(len(request_payload["documentLists"]), 1)
 
     def test_dic_get_quote_selects_cheapest_scheme(self):
@@ -340,7 +359,12 @@ class QICProviderTests(TestCase):
             ("0110", "0297"): {"netPremium": 1386.53, "taxAmount": 66.03},
             ("0150", "0401"): {"netPremium": 1155, "taxAmount": 55},
         }
-        self.provider.get_net_premium = lambda payload: premiums[(payload["prodCode"], payload["schemeCode"])]
+        self.provider.get_net_premium = lambda payload: premiums[
+            (
+                payload["schemes"][0]["productCode"],
+                payload["schemes"][0]["schemeCode"],
+            )
+        ]
 
         quote = self.provider.get_quote(
             {

@@ -31,7 +31,7 @@ PROVIDER_SEEDS = [
             "password": "promise_api#2026$",
             "timeout": 30,
             "priority": 20,
-            "is_active": True,
+            "is_active": False,
             "provider_class": "qic_provider.QICProvider",
             "extra_config": {
                 "company_code": "002",
@@ -49,7 +49,7 @@ PROVIDER_SEEDS = [
             "password": "Mfapidxb!2025",
             "timeout": 30,
             "priority": 30,
-            "is_active": True,
+            "is_active": False,
             "provider_class": "nia_provider.NIAProvider",
             "extra_config": {
                 "login_mode": "EMAIL",

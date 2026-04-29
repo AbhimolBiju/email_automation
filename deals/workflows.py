@@ -68,4 +68,12 @@ def maybe_move_deal_to_quotation_after_document_verification(deal_id: int | None
             "Deal #%s moved from Awaiting Additional Documents to Quotation after all required motor docs verified.",
             deal.id,
         )
+        from insurance.tasks import enqueue_quote_generation
+
+        transaction.on_commit(
+            lambda: enqueue_quote_generation(
+                deal.id,
+                force_refresh=True,
+            )
+        )
         return True

@@ -1,6 +1,6 @@
 from django.contrib import admin, messages
 
-from .models import InsuranceInfo, InsuranceProvider, QuoteRequestLog, QuoteResult
+from .models import InsuranceInfo, InsuranceProvider, QuoteBatch, QuoteRequestLog, QuoteResult
 from .services import health_check_provider
 
 
@@ -61,7 +61,7 @@ class InsuranceProviderAdmin(admin.ModelAdmin):
 
 @admin.register(QuoteRequestLog)
 class QuoteRequestLogAdmin(admin.ModelAdmin):
-    list_display = ("deal", "provider", "status", "latency_ms", "created_at")
+    list_display = ("deal", "provider", "batch", "status", "latency_ms", "created_at")
     list_filter = ("status", "provider")
     search_fields = ("deal__id", "provider__code", "error_message")
     readonly_fields = (
@@ -76,14 +76,35 @@ class QuoteRequestLogAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(QuoteBatch)
+class QuoteBatchAdmin(admin.ModelAdmin):
+    list_display = ("reference_no", "deal", "lead", "best_provider", "best_total", "status", "requested_at")
+    list_filter = ("status",)
+    search_fields = ("reference_no", "deal__id", "lead__name", "lead__email")
+    readonly_fields = (
+        "reference_no",
+        "deal",
+        "lead",
+        "triggered_by",
+        "best_provider",
+        "best_total",
+        "status",
+        "cache_expires_at",
+        "requested_at",
+        "updated_at",
+    )
+
+
 @admin.register(QuoteResult)
 class QuoteResultAdmin(admin.ModelAdmin):
-    list_display = ("deal", "provider", "plan_name", "total", "currency", "created_at")
-    list_filter = ("provider", "currency")
-    search_fields = ("deal__id", "provider__code", "plan_name")
+    list_display = ("batch", "provider", "plan_name", "total", "status", "ranking", "created_at")
+    list_filter = ("provider", "currency", "status")
+    search_fields = ("batch__reference_no", "deal__id", "provider__code", "plan_name")
     readonly_fields = (
+        "batch",
         "deal",
         "provider",
+        "provider_name",
         "request_log",
         "premium",
         "vat",
@@ -91,6 +112,11 @@ class QuoteResultAdmin(admin.ModelAdmin):
         "currency",
         "plan_name",
         "response_time_ms",
+        "ranking",
+        "coverage_score",
+        "status",
+        "error_message",
+        "normalized_response",
         "raw_response",
         "created_at",
     )

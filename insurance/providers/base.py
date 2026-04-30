@@ -6,6 +6,7 @@ from decimal import Decimal
 from typing import Any
 
 import requests
+from requests import HTTPError
 from django.core.cache import cache
 
 from .exceptions import (
@@ -17,6 +18,51 @@ from .exceptions import (
 from .schemas import NormalizedQuote
 
 logger = logging.getLogger(__name__)
+
+_REDACT_KEYS = {
+    "authorization",
+    "x-api-key",
+    "api_key",
+    "password",
+    "token",
+    "access_token",
+    "refresh_token",
+    "emirates_id",
+    "national_id",
+    "civil_id",
+    "mobile_number",
+    "phone_number",
+    "email",
+    "emailAddress",
+}
+
+
+def _redact(value: Any) -> Any:
+    if value is None:
+        return None
+    if isinstance(value, (int, float, bool)):
+        return value
+    text = str(value)
+    if not text:
+        return value
+    if len(text) <= 6:
+        return "***"
+    return f"{text[:2]}***{text[-2:]}"
+
+
+def _redact_payload(obj: Any) -> Any:
+    if isinstance(obj, dict):
+        sanitized: dict[str, Any] = {}
+        for key, value in obj.items():
+            key_text = str(key)
+            if key_text.strip().lower() in _REDACT_KEYS:
+                sanitized[key_text] = _redact(value)
+            else:
+                sanitized[key_text] = _redact_payload(value)
+        return sanitized
+    if isinstance(obj, list):
+        return [_redact_payload(item) for item in obj[:50]]
+    return obj
 
 
 class BaseInsuranceProvider(ABC):
@@ -140,6 +186,18 @@ class BaseInsuranceProvider(ABC):
         for attempt in range(retries + 1):
             started = time.perf_counter()
             try:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(
+                        "Provider %s request %s %s (attempt %s/%s) headers=%s params=%s json=%s",
+                        self.provider_code,
+                        method,
+                        url,
+                        attempt + 1,
+                        retries + 1,
+                        _redact_payload(headers),
+                        _redact_payload(params),
+                        _redact_payload(json_payload),
+                    )
                 response = self.session.request(
                     method=method,
                     url=url,
@@ -155,12 +213,72 @@ class BaseInsuranceProvider(ABC):
                     raise ProviderRequestError(
                         f"{self.provider_code} returned non-object JSON payload."
                     )
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(
+                        "Provider %s response %s %s in %sms payload=%s",
+                        self.provider_code,
+                        method,
+                        url,
+                        int((time.perf_counter() - started) * 1000),
+                        _redact_payload(payload),
+                    )
                 logger.info(
                     "Provider %s request succeeded in %sms",
                     self.provider_code,
                     int((time.perf_counter() - started) * 1000),
                 )
                 return payload
+            except HTTPError as exc:
+                # Don't retry auth / client-side validation errors.
+                status_code = getattr(getattr(exc, "response", None), "status_code", None)
+                if status_code in (401, 403):
+                    self._record_failure()
+                    body = ""
+                    try:
+                        body = (exc.response.text or "")[:2000] if exc.response is not None else ""
+                    except Exception:
+                        body = ""
+                    logger.warning(
+                        "Provider %s request failed with HTTP %s (no retry). body=%s",
+                        self.provider_code,
+                        status_code,
+                        body,
+                    )
+                    print(f"{self.provider_code} response:", body)
+                    raise ProviderRequestError(
+                        f"{self.provider_code} unauthorized (HTTP {status_code}). {body}".strip()
+                    )
+
+                # For other 4xx errors, don't retry unless explicitly allowed (429/408).
+                if status_code and status_code < 500 and status_code not in (408, 429):
+                    self._record_failure()
+                    body = ""
+                    try:
+                        body = (exc.response.text or "")[:2000] if exc.response is not None else ""
+                    except Exception:
+                        body = ""
+                    logger.warning(
+                        "Provider %s request failed with HTTP %s (no retry). body=%s",
+                        self.provider_code,
+                        status_code,
+                        body,
+                    )
+                    print(f"{self.provider_code} response:", body)
+                    raise ProviderRequestError(
+                        f"{self.provider_code} request failed (HTTP {status_code}). {body}".strip()
+                    )
+
+                last_error = exc
+                if attempt < retries:
+                    time.sleep(backoff_seconds * (attempt + 1))
+                    continue
+                self._record_failure()
+                logger.warning(
+                    "Provider %s request failed after %s attempts: %s",
+                    self.provider_code,
+                    retries + 1,
+                    exc,
+                )
             except Exception as exc:  # requests + json parsing
                 last_error = exc
                 if attempt < retries:

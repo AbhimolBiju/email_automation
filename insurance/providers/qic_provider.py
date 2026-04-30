@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import base64
+from datetime import date, datetime
+import re
 import time
 import uuid
 from decimal import Decimal
@@ -93,6 +95,63 @@ class QICProvider(BaseInsuranceProvider):
             raise ProviderRequestError(str(payload.get("errMessage") or f"QIC request failed with respCode {resp_code}."))
         return payload
 
+    def _format_first_registration_date(self, value: Any) -> str:
+        """
+        QIC requires `firstRegDate` as `YYYY-MM-DD`, not future-dated.
+        Accepts: date/datetime objects, ISO strings, or `YYYY`.
+        """
+        if value is None:
+            return ""
+        if isinstance(value, datetime):
+            parsed = value.date()
+        elif isinstance(value, date):
+            parsed = value
+        else:
+            text = str(value).strip()
+            if not text:
+                return ""
+            # Common ISO date formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS...
+            try:
+                parsed = datetime.fromisoformat(text.replace("Z", "+00:00")).date()
+            except Exception:
+                # Fallback: `YYYY` only
+                if re.fullmatch(r"\d{4}", text):
+                    parsed = date(int(text), 1, 1)
+                else:
+                    return ""
+
+        if parsed > date.today():
+            return ""
+        return parsed.isoformat()
+
+    def _resolve_first_registration_date(self, payload: dict[str, Any], vehicle: dict[str, Any]) -> str:
+        # Priority requested by user: vehicle.first_registration_date OR registration_date OR manufacture_year/year.
+        candidates = [
+            vehicle.get("first_registration_date"),
+            payload.get("first_registration_date"),
+            vehicle.get("registration_date"),
+            payload.get("reg_dt"),
+            vehicle.get("registration_year"),
+            vehicle.get("manufacture_year"),
+            vehicle.get("year"),
+            vehicle.get("model_year"),
+            payload.get("model_year"),
+        ]
+        for candidate in candidates:
+            formatted = self._format_first_registration_date(candidate)
+            if formatted:
+                return formatted
+
+        # Final fallback: `{vehicle.year}-01-01`
+        year = vehicle.get("year") or vehicle.get("model_year") or payload.get("model_year")
+        try:
+            year_int = int(str(year).strip())
+        except Exception:
+            year_int = 0
+        if 1900 <= year_int <= date.today().year:
+            return date(year_int, 1, 1).isoformat()
+        return ""
+
     def _build_tariff_request(self, payload: dict[str, Any]) -> dict[str, Any]:
         customer = payload.get("customer") if isinstance(payload.get("customer"), dict) else payload
         vehicle = payload.get("vehicle") if isinstance(payload.get("vehicle"), dict) else payload
@@ -100,13 +159,22 @@ class QICProvider(BaseInsuranceProvider):
             payload.get("make_id") or vehicle.get("make_id"),
             payload.get("model_id") or vehicle.get("model_id"),
         )
+        sum_insured = float(payload.get("sum_insured") or vehicle.get("sum_insured") or 0)
+        if sum_insured <= 0:
+            default_sum_insured = self.get_extra_config().get("default_sum_insured")
+            if default_sum_insured not in (None, "", 0, "0"):
+                sum_insured = float(default_sum_insured)
+            else:
+                raise ProviderRequestError(
+                    "QIC requires sum_insured (vehicle valuation) in the quote payload."
+                )
         return {
             "insuredName": str(customer.get("name") or payload.get("insured_name") or "Insured"),
             "policyFromDate": str(payload.get("policy_from_date") or ""),
             "makeCode": make_code,
             "modelCode": model_code,
             "modelYear": str(vehicle.get("model_year") or payload.get("model_year") or ""),
-            "sumInsured": float(payload.get("sum_insured") or vehicle.get("sum_insured") or 0),
+            "sumInsured": sum_insured,
             "vehicleType": lookup_body_type_code(payload.get("body_type_id") or vehicle.get("body_type_id")),
             "vehicleUsage": str(payload.get("vehicle_usage") or vehicle.get("vehicle_usage") or "1001"),
             "noOfCylinder": lookup_cylinder_code(payload.get("no_of_cylinder") or vehicle.get("engine_capacity_id") or "1004"),
@@ -124,7 +192,7 @@ class QICProvider(BaseInsuranceProvider):
             "driverExp": int(payload.get("driver_experience") or 0),
             "admeId": int(self.get_extra_config().get("adme_id", payload.get("adme_id") or 401369)),
             "civilId": str(payload.get("civil_id") or customer.get("emirates_id") or ""),
-            "firstRegDate": str(payload.get("reg_dt") or vehicle.get("registration_date") or ""),
+            "firstRegDate": self._resolve_first_registration_date(payload, vehicle),
             "mobileNo": str(payload.get("mobile_number") or customer.get("mobile_number") or ""),
             "emailId": str(payload.get("email_address") or customer.get("email") or ""),
             "engineNo": str(payload.get("engine_no") or vehicle.get("engine_no") or ""),
@@ -139,10 +207,16 @@ class QICProvider(BaseInsuranceProvider):
         mock_payload = self.get_extra_config().get("mock_tariff_response")
         if isinstance(mock_payload, dict):
             return mock_payload
+        tariff_payload = self._build_tariff_request(payload)
+        if not str(tariff_payload.get("firstRegDate") or "").strip():
+            raise ProviderRequestError(
+                "QIC requires first_registration_date (firstRegDate) in YYYY-MM-DD format (not future-dated)."
+            )
+        print("QIC payload:", tariff_payload)
         response = self._request(
             method="POST",
             path=self._with_company(self.get_extra_config().get("tariff_endpoint", self.TARIFF_ENDPOINT)),
-            json_payload=self._build_tariff_request(payload),
+            json_payload=tariff_payload,
         )
         return self._ensure_success(response)
 

@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import logging
 import mimetypes
+import json
 from base64 import b64encode
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 from typing import Any
 
@@ -37,6 +38,66 @@ def _as_decimal(value: Any, default: str = "0") -> Decimal:
         return Decimal(default)
 
 
+def _extract_sum_insured(deal: Deal) -> int:
+    """
+    Best-effort valuation extraction for providers that require it (e.g. QIC/NIA).
+    Priority:
+      - Deal attributes if present (vehicle_value, sum_insured)
+      - JSON encoded in additional_field (vehicle_value, declared_value, sum_insured)
+      - fallback default
+    """
+    for attr in ("vehicle_value", "sum_insured"):
+        value = getattr(deal, attr, None)
+        if value not in (None, "", 0, "0"):
+            try:
+                numeric = int(float(value))
+                if numeric > 0:
+                    return numeric
+            except Exception:
+                pass
+
+    extra = getattr(deal, "additional_field", None)
+    if isinstance(extra, str) and extra.strip():
+        try:
+            parsed = json.loads(extra)
+            if isinstance(parsed, dict):
+                for key in ("vehicle_value", "declared_value", "sum_insured"):
+                    value = parsed.get(key)
+                    if value not in (None, "", 0, "0"):
+                        numeric = int(float(value))
+                        if numeric > 0:
+                            return numeric
+        except Exception:
+            pass
+
+    return 10000
+
+
+def _derive_first_registration_date(deal: Deal) -> str | None:
+    """
+    Best-effort `YYYY-MM-DD` for providers that require first registration date.
+    Priority:
+      - deal.reg_dt
+      - fallback to deal.model_year-01-01
+    Must not be future dated.
+    """
+    if deal.reg_dt:
+        value = deal.reg_dt
+    elif deal.model_year:
+        try:
+            value = date(int(deal.model_year), 1, 1)
+        except Exception:
+            value = None
+    else:
+        value = None
+
+    if not value:
+        return None
+    if value > date.today():
+        return None
+    return value.isoformat()
+
+
 def build_deal_document_payloads(deal: Deal) -> list[dict[str, Any]]:
     try:
         from documents.models import Document
@@ -67,12 +128,26 @@ def build_deal_document_payloads(deal: Deal) -> list[dict[str, Any]]:
 
 def build_deal_quote_payload(deal: Deal) -> dict[str, Any]:
     lead = deal.lead
+    policy_from = timezone.now().date()
+    policy_to = policy_from + timedelta(days=365)
+    insured_age: int | None = None
+    if deal.date_of_birth:
+        try:
+            insured_age = int((policy_from - deal.date_of_birth).days // 365.25)
+        except Exception:
+            insured_age = None
+    sum_insured = _extract_sum_insured(deal)
+    first_registration_date = _derive_first_registration_date(deal)
     return {
         "deal_id": deal.id,
         "stage_id": deal.stage_id,
         "product_type": "motor" if deal.insurance_type else (getattr(lead, "product_type", None) or "unknown"),
         "insurance_type": deal.insurance_type,
         "sub_type": deal.sub_type,
+        "policy_from_date": policy_from.isoformat(),
+        "policy_to_date": policy_to.isoformat(),
+        "insured_age": insured_age or 0,
+        "sum_insured": sum_insured,
         "customer": {
             "lead_id": lead.id if lead else None,
             "name": lead.name if lead else "",
@@ -90,6 +165,8 @@ def build_deal_quote_payload(deal: Deal) -> dict[str, Any]:
             "chassis_number": deal.chassis_number,
             "registration_number": deal.reg_number,
             "registration_date": deal.reg_dt.isoformat() if deal.reg_dt else None,
+            "registration_year": deal.reg_dt.year if deal.reg_dt else None,
+            "first_registration_date": first_registration_date,
             "plate_code": deal.plate_code,
             "plate_source": deal.plate_source,
             "license_number": deal.license_no,
@@ -99,6 +176,7 @@ def build_deal_quote_payload(deal: Deal) -> dict[str, Any]:
             "is_vehicle_brand_new": deal.is_veh_brand_new,
             "agency_repair": deal.agency_repair,
             "model_year": deal.model_year,
+            "year": deal.model_year,
             "make_id": deal.make_id,
             "model_id": deal.model_id,
             "trim_id": deal.trim_id,
@@ -110,9 +188,47 @@ def build_deal_quote_payload(deal: Deal) -> dict[str, Any]:
             "valuation_date": deal.valuation_date.isoformat() if deal.valuation_date else None,
             "ncd_years": deal.ncd_years,
             "tcf_number": deal.tcf_number,
+            "sum_insured": sum_insured,
         },
         "documents": build_deal_document_payloads(deal),
     }
+
+
+def _validate_payload_for_provider(provider_code: str, payload: dict[str, Any]) -> None:
+    """
+    Validate the minimal fields per provider so we fail fast with clear errors,
+    but without breaking other providers.
+    """
+    code = (provider_code or "").upper()
+    customer = payload.get("customer") if isinstance(payload.get("customer"), dict) else {}
+    vehicle = payload.get("vehicle") if isinstance(payload.get("vehicle"), dict) else {}
+
+    # Baseline (common in most motor quote flows).
+    missing: list[str] = []
+    if not str(customer.get("emirates_id") or "").strip():
+        missing.append("customer.emirates_id")
+    if not str(vehicle.get("chassis_number") or "").strip():
+        missing.append("vehicle.chassis_number")
+    if missing:
+        raise InsuranceProviderError(f"{code} missing required fields: {', '.join(missing)}")
+
+    # Provider-specific
+    if code == "QIC":
+        value = payload.get("sum_insured") or vehicle.get("sum_insured")
+        try:
+            if float(value or 0) <= 0:
+                raise ValueError
+        except Exception:
+            raise InsuranceProviderError("QIC missing required field: sum_insured (> 0)")
+        first_reg = vehicle.get("first_registration_date") or payload.get("first_registration_date")
+        if not str(first_reg or "").strip():
+            raise InsuranceProviderError("QIC missing required field: first_registration_date (YYYY-MM-DD)")
+        try:
+            parsed = date.fromisoformat(str(first_reg))
+        except Exception:
+            raise InsuranceProviderError("QIC invalid first_registration_date format (expected YYYY-MM-DD)")
+        if parsed > date.today():
+            raise InsuranceProviderError("QIC first_registration_date cannot be a future date")
 
 
 def _normalize_flag(value: Any) -> bool:
@@ -330,6 +446,8 @@ def _fetch_provider_quote(
     payload: dict[str, Any],
 ) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
     try:
+        logger.info("Fetching quote for deal %s from provider %s", deal.id, provider.code)
+        _validate_payload_for_provider(provider.code, payload)
         provider_instance = build_provider(provider)
         normalized_quote = provider_instance.get_quote(payload)
         return {"provider": provider, "quote": normalized_quote}, None
@@ -483,6 +601,36 @@ def get_best_quotes(
     serialized["requested_provider_count"] = len(providers)
     serialized["successful_provider_count"] = len(quotes)
     serialized["failures"] = failures
+    # Always include a per-provider status block so callers never have to infer
+    # "missing provider" vs "provider attempted but failed".
+    results_by_provider: dict[str, dict[str, Any]] = {
+        str(item.get("provider") or "").upper(): item for item in (serialized.get("results") or []) if isinstance(item, dict)
+    }
+    provider_statuses: list[dict[str, Any]] = []
+    for provider in providers:
+        code = provider.code.upper()
+        result = results_by_provider.get(code)
+        if result:
+            provider_statuses.append(
+                {
+                    "provider": code,
+                    "provider_name": result.get("provider_name") or provider.name,
+                    "status": str(result.get("status") or "").lower() or "unknown",
+                    "result_id": result.get("id"),
+                    "error": result.get("error_message") or "",
+                }
+            )
+        else:
+            provider_statuses.append(
+                {
+                    "provider": code,
+                    "provider_name": provider.name,
+                    "status": "missing",
+                    "result_id": None,
+                    "error": "Provider did not produce a persisted result.",
+                }
+            )
+    serialized["providers"] = provider_statuses
     return serialized
 
 

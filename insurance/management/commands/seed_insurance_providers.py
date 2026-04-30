@@ -31,7 +31,7 @@ PROVIDER_SEEDS = [
             "password": "promise_api#2026$",
             "timeout": 30,
             "priority": 20,
-            "is_active": False,
+            "is_active": True,
             "provider_class": "qic_provider.QICProvider",
             "extra_config": {
                 "company_code": "002",

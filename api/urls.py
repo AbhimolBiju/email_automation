@@ -28,6 +28,7 @@ urlpatterns = [
     path('logout/', logout_user),
     path('protected/', protected_view),
     path('user_profile/', user_profile),
+    path("users/create/", CreateUserView.as_view(), name="create-user"),
 
   
     path("dashboard/stats/", DashboardStatsView.as_view()),

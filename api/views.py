@@ -351,3 +351,27 @@ class ConversionFunnelView(APIView):
             message="Conversion funnel fetched successfully",
             data={"invoices": total_invoices, "converted": total_transactions},
         )
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import UserCreateSerializer
+
+
+class CreateUserView(APIView):
+
+    def post(self, request):
+        serializer = UserCreateSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "success": True,
+                "message": "User created successfully"
+            }, status=status.HTTP_201_CREATED)
+
+        return Response({
+            "success": False,
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)

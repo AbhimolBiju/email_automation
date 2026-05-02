@@ -26,11 +26,10 @@ urlpatterns = [
 
     # DIC provider feature APIs (additive; does not modify provider logic)
     path("dic/", include("insurance.dic_urls")),
-# =======
+    
     path("quotes/", list_quotes),
     path("quotes/<int:batch_id>/", quote_batch_detail),
     path("quotes/<int:batch_id>/results/", quote_batch_results),
     path("quotes/deal/<int:deal_id>/latest/", latest_quote_for_deal),
     path("quotes/<int:deal_id>/refresh/", refresh_quotes),
-# >>>>>>> a5d5ec55a3909ada860a68580d8bff930cc3bdb5
 ]

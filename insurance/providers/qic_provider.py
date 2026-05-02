@@ -102,7 +102,7 @@ class QICProvider(BaseInsuranceProvider):
         )
         return {
             "insuredName": str(customer.get("name") or payload.get("insured_name") or "Insured"),
-            "policyFromDate": str(payload.get("policy_from_date") or ""),
+            "policyFromDate": self._format_date(payload.get("policy_from_date")),
             "makeCode": make_code,
             "modelCode": model_code,
             "modelYear": str(vehicle.get("model_year") or payload.get("model_year") or ""),
@@ -116,7 +116,7 @@ class QICProvider(BaseInsuranceProvider):
             "gccSpec": "1" if payload.get("is_gcc_spec") or vehicle.get("is_gcc_spec") else "0",
             "previousInsuranceValid": "1" if payload.get("previous_insurance_valid") else "0",
             "totalLoss": "1" if payload.get("total_loss") else "0",
-            "driverDOB": str(payload.get("date_of_birth") or customer.get("date_of_birth") or ""),
+           "driverDOB": self._format_date(payload.get("date_of_birth") or customer.get("date_of_birth")),
             "insuredAge": int(payload.get("insured_age") or customer.get("insured_age") or 0),
             "noClaimYear": str(payload.get("ncd_years") or vehicle.get("ncd_years") or 0),
             "selfDeclarationYear": int(payload.get("self_declaration_year") or 0),
@@ -124,7 +124,7 @@ class QICProvider(BaseInsuranceProvider):
             "driverExp": int(payload.get("driver_experience") or 0),
             "admeId": int(self.get_extra_config().get("adme_id", payload.get("adme_id") or 401369)),
             "civilId": str(payload.get("civil_id") or customer.get("emirates_id") or ""),
-            "firstRegDate": str(payload.get("reg_dt") or vehicle.get("registration_date") or ""),
+            "firstRegDate": self._format_date(payload.get("reg_dt") or vehicle.get("registration_date")),
             "mobileNo": str(payload.get("mobile_number") or customer.get("mobile_number") or ""),
             "emailId": str(payload.get("email_address") or customer.get("email") or ""),
             "engineNo": str(payload.get("engine_no") or vehicle.get("engine_no") or ""),

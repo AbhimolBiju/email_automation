@@ -31,6 +31,17 @@ class DICProvider(BaseInsuranceProvider):
         super().__init__(provider_config)
         self._token: str | None = None
 
+    def _format_date(self, value: Any) -> str:
+        text = str(value).strip() if value not in (None, "") else ""
+        if not text:
+            return ""
+        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y", "%Y/%m/%d"):
+            try:
+                return datetime.strptime(text, fmt).strftime("%d/%m/%Y")
+            except ValueError:
+                continue
+        raise ValueError(f"Invalid date format: {value}")
+
     def _generate_request_id(self, provided: str | None = None) -> str:
         return provided or str(uuid.uuid4())
 

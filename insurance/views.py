@@ -114,7 +114,7 @@ def quote_batch_results(request, batch_id):
         .filter(id=batch_id)
         .first()
     )
-    if not batch:
+    if not batch: 
         raise NotFound("Quote batch not found")
     serializer = QuoteResultSerializer(batch.results.all().order_by("ranking", "provider__priority"), many=True)
     return success_response(

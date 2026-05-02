@@ -3,7 +3,7 @@ from __future__ import annotations
 import time
 from decimal import Decimal
 from typing import Any
-
+from datetime import datetime
 from .base import BaseInsuranceProvider
 from .exceptions import ProviderAuthenticationError, ProviderRequestError
 from .nia_masterdata import (
@@ -97,6 +97,19 @@ class NIAProvider(BaseInsuranceProvider):
             )
             return {"Authorization": template.format(token=token)}
         return {}
+    
+    from typing import Any
+
+    def _format_date(self, value: Any) -> str:
+        text = str(value).strip() if value not in (None, "") else ""
+        if not text:
+            return ""
+        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y", "%Y/%m/%d"):
+            try:
+                return datetime.strptime(text, fmt).strftime("%d/%m/%Y")
+            except ValueError:
+                continue
+        raise ValueError(f"Invalid date format: {value}")
 
     def _user_id(self) -> str:
         user_id = self.get_extra_config().get("user_id") or self.resolve_config_value("username", "")
@@ -144,7 +157,7 @@ class NIAProvider(BaseInsuranceProvider):
             "PolAssrName": str(customer.get("name") or ""),
             "PolAssrLastName": str(customer.get("last_name") or ""),
             "PolAssrType": lookup_code("PolAssrType", customer.get("assured_type") or "INDIVIDUAL"),
-            "PolAssrDob": str(customer.get("date_of_birth") or ""),
+            "PolAssrDob": self._format_date(customer.get("date_of_birth")),
             "PolAssrAge": int(customer.get("insured_age") or payload.get("insured_age") or 0),
             "PolAssrCivilId": str(customer.get("emirates_id") or ""),
             "TradeLicNo": str(customer.get("trade_license_no") or ""),
@@ -168,13 +181,13 @@ class NIAProvider(BaseInsuranceProvider):
             "VehFcValue": str(vehicle.get("sum_insured") or payload.get("sum_insured") or "0"),
             "VehLoadCapacity": lookup_code("VehLoadCapacity", vehicle.get("load_capacity") or "No Loading"),
             "VehRegion": lookup_description("VehRegion", "GCC" if vehicle.get("is_gcc_spec") else "Non-GCC"),
-            "VehRegnDt": str(vehicle.get("registration_date") or ""),
+           "VehRegnDt": self._format_date(vehicle.get("registration_date")),
             "VehAge": int(payload.get("vehicle_age") or 0),
             "VehPrevInsType": lookup_code("VehPrevInsType", payload.get("previous_insurance_type") or 1),
             "VehAccident": lookup_code("VehAccident", "Yes" if payload.get("total_loss") else "No"),
             "VehRegnCardExp": lookup_code("VehRegnCardExp", "Yes" if payload.get("registration_card_expired") else "No"),
             "VehOffroadYn": lookup_code("VehOffroadYn", "Yes" if vehicle.get("offroad_cover") else "No"),
-            "PolPrevExpDt": str(payload.get("previous_policy_expiry_date") or ""),
+            "PolPrevExpDt": self._format_date(payload.get("previous_policy_expiry_date")),
             "VehTransType": lookup_code("VehTransType", vehicle.get("traffic_transaction_type") or "Vehicle Renewal"),
             "VehPrevClaimHisYn": "Y" if payload.get("previous_claim_history") else "N",
         }

@@ -77,3 +77,43 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+from django.contrib.auth.models import User
+from rest_framework import serializers
+from .models import CustomUser
+
+
+class UserCreateSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+    mobile = serializers.CharField()
+    gender = serializers.CharField(required=False, allow_blank=True)
+    role = serializers.ChoiceField(choices=CustomUser.ROLE_CHOICES)
+
+    def create(self, validated_data):
+        # Extract custom fields
+        mobile = validated_data.pop("mobile")
+        gender = validated_data.pop("gender", None)
+        role = validated_data.pop("role")
+
+        # Create Django User (NO PASSWORD)
+        user = User.objects.create(
+            username=validated_data["email"],  # use email as username
+            email=validated_data["email"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+        )
+
+        # Disable password login for now
+        user.set_unusable_password()
+        user.save()
+
+        # Create CustomUser profile
+        CustomUser.objects.create(
+            user=user,
+            mobile=mobile,
+            gender=gender,
+            role=role
+        )
+
+        return user

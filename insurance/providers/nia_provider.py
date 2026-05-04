@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import logging
 import time
 from decimal import Decimal
 from typing import Any
 from datetime import datetime
+
+from django.core.cache import cache
+
 from .base import BaseInsuranceProvider
 from .exceptions import ProviderAuthenticationError, ProviderRequestError
 from .nia_masterdata import (
@@ -40,6 +44,13 @@ class NIAProvider(BaseInsuranceProvider):
         super().__init__(provider_config)
         self._token: str | None = None
 
+    def _token_cache_key(self) -> str:
+        return f"insurance-provider-token:{self.provider_code}"
+
+    def _clear_token(self) -> None:
+        self._token = None
+        cache.delete(self._token_cache_key())
+
     def _ensure_success(self, payload: dict[str, Any]) -> dict[str, Any]:
         status_value = payload.get("Status")
         if isinstance(status_value, list):
@@ -59,6 +70,10 @@ class NIAProvider(BaseInsuranceProvider):
     def authenticate(self) -> str | None:
         if self._token:
             return self._token
+        cached = cache.get(self._token_cache_key())
+        if cached:
+            self._token = str(cached)
+            return self._token
         mock = self.get_extra_config().get("mock_token")
         if mock:
             self._token = str(mock)
@@ -76,6 +91,7 @@ class NIAProvider(BaseInsuranceProvider):
                 "loginMode": self.get_extra_config().get("login_mode", "EMAIL"),
             },
             authenticated=False,
+            extra_headers={"Content-Type": "application/json"},
         )
         self._ensure_success(response)
         token = response.get("Data")
@@ -84,6 +100,11 @@ class NIAProvider(BaseInsuranceProvider):
         if not token:
             raise ProviderAuthenticationError("NIA login did not return a token.")
         self._token = str(token)
+        cache.set(
+            self._token_cache_key(),
+            self._token,
+            timeout=int(self.get_extra_config().get("token_ttl_seconds", 3300)),
+        )
         return self._token
 
     def get_auth_headers(self) -> dict[str, str]:
@@ -110,6 +131,22 @@ class NIAProvider(BaseInsuranceProvider):
             except ValueError:
                 continue
         raise ValueError(f"Invalid date format: {value}")
+        # Default to using Authorization header; can be disabled via config.
+    def _get_headers(self) -> dict:
+    # Default to using Authorization header; can be disabled via config.
+            if self.get_extra_config().get("use_authorization_header", True) is False:
+                return {"Content-Type": "application/json"}
+
+            token = self.authenticate()
+            template = str(
+            self.get_extra_config().get("authorization_header_template", "Bearer {token}")
+    )
+
+            return {
+                "Authorization": template.format(token=token),
+                "Content-Type": "application/json",
+    }
+
 
     def _user_id(self) -> str:
         user_id = self.get_extra_config().get("user_id") or self.resolve_config_value("username", "")
@@ -122,12 +159,33 @@ class NIAProvider(BaseInsuranceProvider):
         }
 
     def _post_with_auth_body(self, path: str, section_name: str, section_value: Any) -> dict[str, Any]:
-        return self._request(
-            method="POST",
-            path=path,
-            json_payload=self._request_payload(section_name, section_value),
-            authenticated=False,
-        )
+        # Some NIA environments require token both in body AND Authorization header.
+        # `get_auth_headers()` is config-driven and may return {}.
+        extra_headers = self.get_auth_headers()
+        print("NIA headers:", extra_headers)
+        try:
+            return self._request(
+                method="POST",
+                path=path,
+                json_payload=self._request_payload(section_name, section_value),
+                authenticated=False,
+                extra_headers=extra_headers if extra_headers else None,
+            )
+        except ProviderRequestError as exc:
+            # If token expired / invalid, refresh once and retry.
+            if "unauthorized" in str(exc).lower() or "401" in str(exc):
+                logging.getLogger(__name__).warning("NIA request unauthorized; refreshing token and retrying once.")
+                self._clear_token()
+                extra_headers = self.get_auth_headers()
+                print("NIA headers:", extra_headers)
+                return self._request(
+                    method="POST",
+                    path=path,
+                    json_payload=self._request_payload(section_name, section_value),
+                    authenticated=False,
+                    extra_headers=extra_headers if extra_headers else None,
+                )
+            raise
 
     def _map_product_code(self, insurance_type: str | None, agency_repair: bool) -> str:
         if insurance_type == "third_party":
@@ -147,6 +205,11 @@ class NIAProvider(BaseInsuranceProvider):
         customer = payload.get("customer") if isinstance(payload.get("customer"), dict) else payload
         vehicle = payload.get("vehicle") if isinstance(payload.get("vehicle"), dict) else payload
         product_code = self._map_product_code(payload.get("sub_type"), bool(vehicle.get("agency_repair")))
+        sum_insured = vehicle.get("sum_insured") or payload.get("sum_insured") or ""
+        if str(sum_insured).strip() in ("", "0", "0.0"):
+            default_sum_insured = self.get_extra_config().get("default_sum_insured")
+            if default_sum_insured not in (None, "", 0, "0"):
+                sum_insured = default_sum_insured
         return {
             "PolBchCode": str(self.get_extra_config().get("business_channel_code", "101")),
             "PolPrtnrCode": str(self.get_extra_config().get("partner_code", "201001")),
@@ -178,7 +241,7 @@ class NIAProvider(BaseInsuranceProvider):
             "VehMfgYear": str(vehicle.get("model_year") or ""),
             "VehBrandNew": "Y" if vehicle.get("is_vehicle_brand_new") else "N",
             "VehAgencyRep1Yn": lookup_code("VehAgencyType", "Agency" if vehicle.get("agency_repair") else "Non Agency"),
-            "VehFcValue": str(vehicle.get("sum_insured") or payload.get("sum_insured") or "0"),
+            "VehFcValue": str(sum_insured or "0"),
             "VehLoadCapacity": lookup_code("VehLoadCapacity", vehicle.get("load_capacity") or "No Loading"),
             "VehRegion": lookup_description("VehRegion", "GCC" if vehicle.get("is_gcc_spec") else "Non-GCC"),
            "VehRegnDt": self._format_date(vehicle.get("registration_date")),
@@ -249,7 +312,6 @@ class NIAProvider(BaseInsuranceProvider):
             )
             doc_results.append(self._ensure_success(response))
         return {"Status": 1, "DocumentResponses": doc_results}
-        return self._ensure_success(response)
 
     def proposal_summary(self, payload: dict[str, Any]) -> dict[str, Any]:
         mock = self.get_extra_config().get("mock_proposal_summary_response")

@@ -117,3 +117,20 @@ class UserCreateSerializer(serializers.Serializer):
         )
 
         return user
+    
+class UserListSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    email = serializers.EmailField(source='user.email')
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'mobile',
+            'role',
+            'gender'
+        ]

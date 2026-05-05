@@ -356,7 +356,7 @@ class ConversionFunnelView(APIView):
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserCreateSerializer
+from .serializers import UserCreateSerializer,UserListSerializer
 
 
 class CreateUserView(APIView):
@@ -375,3 +375,10 @@ class CreateUserView(APIView):
             "success": False,
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class UserListView(APIView):
+    def get(self, request):
+        users = CustomUser.objects.select_related('user').all()
+        serializer = UserListSerializer(users, many=True)
+        return Response(serializer.data)

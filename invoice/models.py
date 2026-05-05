@@ -132,9 +132,6 @@ class Attachment(models.Model):
     debit_note = models.FileField(upload_to="documents/", blank=True, null=True)
     other_documents = models.FileField(upload_to="documents/", blank=True, null=True)
 
-    system_generated_1 = models.BooleanField(default=False)
-    system_generated_2 = models.BooleanField(default=False)
-    system_generated_3 = models.BooleanField(default=False)
 
 class StatusOverview(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="status_logs")

@@ -31,6 +31,7 @@ urlpatterns = [
     path("users/create/", CreateUserView.as_view(), name="create-user"),
     path('users/list/', UserListView.as_view()),
     path('users/update-role/<int:pk>/', UpdateUserRoleView.as_view()),
+    path('user/update/<int:user_id>/', UserUpdateAPIView.as_view()),
 
   
     path("dashboard/stats/", DashboardStatsView.as_view()),

@@ -40,22 +40,31 @@ def _as_decimal(value: Any, default: str = "0") -> Decimal:
 
 def _extract_sum_insured(deal: Deal) -> int:
     """
-    Best-effort valuation extraction for providers that require it (e.g. QIC/NIA).
+    Extract vehicle valuation (sum_insured) from deal for providers that require it (e.g. QIC/NIA).
     Priority:
-      - Deal attributes if present (vehicle_value, sum_insured)
+      - deal.sum_insured (newly added field for Bayanaty valuation or manual entry)
+      - Deal attributes if present (vehicle_value)
       - JSON encoded in additional_field (vehicle_value, declared_value, sum_insured)
-      - fallback default
+      - fallback default (10000)
     """
-    for attr in ("vehicle_value", "sum_insured"):
+    # First check the dedicated sum_insured field (highest priority)
+    for attr in ("sum_insured", "vehicle_value"):
         value = getattr(deal, attr, None)
         if value not in (None, "", 0, "0"):
             try:
-                numeric = int(float(value))
+                # Handle Decimal from database
+                if hasattr(value, '__float__'):
+                    numeric = int(float(value))
+                else:
+                    numeric = int(value)
                 if numeric > 0:
+                    logger.info("Extracted sum_insured from deal.%s: %d", attr, numeric)
                     return numeric
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to extract %s from deal: %s", attr, e)
                 pass
 
+    # Check additional_field JSON (fallback)
     extra = getattr(deal, "additional_field", None)
     if isinstance(extra, str) and extra.strip():
         try:
@@ -66,10 +75,13 @@ def _extract_sum_insured(deal: Deal) -> int:
                     if value not in (None, "", 0, "0"):
                         numeric = int(float(value))
                         if numeric > 0:
+                            logger.info("Extracted sum_insured from additional_field.%s: %d", key, numeric)
                             return numeric
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to parse additional_field JSON: %s", e)
             pass
 
+    logger.warning("No sum_insured found on deal %d; using default 10000", deal.id)
     return 10000
 
 

@@ -134,3 +134,12 @@ class UserListSerializer(serializers.ModelSerializer):
             'role',
             'gender'
         ]
+
+
+from rest_framework import serializers
+
+class UserRoleUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['role']
+

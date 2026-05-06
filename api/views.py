@@ -382,3 +382,21 @@ class UserListView(APIView):
         users = CustomUser.objects.select_related('user').all()
         serializer = UserListSerializer(users, many=True)
         return Response(serializer.data)
+    
+from .serializers import UserRoleUpdateSerializer
+
+class UpdateUserRoleView(APIView):
+
+    def patch(self, request, pk):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+
+        serializer = UserRoleUpdateSerializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Role updated successfully", "data": serializer.data})
+        
+        return Response(serializer.errors, status=400)

@@ -263,7 +263,6 @@ class UserCreateSerializer(serializers.Serializer):
 
         return user
     
-<<<<<<< HEAD
 
 # api/serializers.py
 
@@ -271,8 +270,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import CustomUser
 
-=======
->>>>>>> 3836df40c4d15afcc358336604021a55c033060b
+
 class UserListSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
@@ -288,9 +286,6 @@ class UserListSerializer(serializers.ModelSerializer):
             'mobile',
             'role',
             'gender'
-<<<<<<< HEAD
-        ]
-=======
         ]
 
 
@@ -334,4 +329,4 @@ class UserUpdateSerializer(serializers.Serializer):
         custom_user.save()
 
         return instance
->>>>>>> 3836df40c4d15afcc358336604021a55c033060b
+

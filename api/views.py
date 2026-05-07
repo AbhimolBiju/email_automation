@@ -785,9 +785,9 @@ class UserListView(APIView):
     def get(self, request):
         users = CustomUser.objects.select_related('user').all()
         serializer = UserListSerializer(users, many=True)
-<<<<<<< HEAD
+
         return Response(serializer.data)
-=======
+
         return Response(serializer.data)
     
 from .serializers import UserRoleUpdateSerializer
@@ -826,4 +826,4 @@ class UserUpdateAPIView(APIView):
             return Response({"message": "User updated successfully"})
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> 3836df40c4d15afcc358336604021a55c033060b
+

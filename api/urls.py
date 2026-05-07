@@ -32,6 +32,13 @@ urlpatterns = [
     path('users/list/', UserListView.as_view()),
     path('users/update/<int:id>/', update_user),
     path('users/update-role/<int:pk>/', UpdateUserRoleView.as_view()),
+    path("users/<int:pk>/toggle-active/",ToggleUserActiveAPIView.as_view(),name="toggle-user-active"),
+
+    path('profile/',ProfileView.as_view(),name='profile'),
+
+    path('profile/update/',ProfileUpdateView.as_view(),name='profile-update'),
+
+    # path('profile/upload-picture/',ProfilePictureUploadView.as_view(),name='upload-picture'),
   
     path("dashboard/stats/", DashboardStatsView.as_view()),
     path("dashboard/sales-trend/", SalesTrendView.as_view()),

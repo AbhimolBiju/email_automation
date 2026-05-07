@@ -359,3 +359,98 @@ class UserUpdateSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+    
+# serializers.py
+
+from rest_framework import serializers
+from django.contrib.auth.models import User
+
+from .models import CustomUser
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    first_name = serializers.CharField(
+        source='user.first_name',
+        required=False
+    )
+
+    last_name = serializers.CharField(
+        source='user.last_name',
+        required=False
+    )
+
+    email = serializers.EmailField(
+        source='user.email',
+        required=False
+    )
+
+    date_joined = serializers.DateTimeField(
+        source='user.date_joined',
+        read_only=True
+    )
+
+    class Meta:
+        model = CustomUser
+
+        fields = [
+            'id',
+
+            'first_name',
+            'last_name',
+            'email',
+            'date_joined',
+
+            'mobile',
+            'date_of_birth',
+            'gender',
+            'address',
+            'city',
+            'zip_code',
+            'country',
+            'emirates_of_visa',
+            'insurance_company',
+            'currently_insured',
+            'salary_band',
+            'profile_pic',
+            'role',
+            'modified_on',
+        ]
+
+        read_only_fields = [
+            'role',
+            'modified_on',
+            'date_joined'
+        ]
+
+    def update(self, instance, validated_data):
+
+        user_data = validated_data.pop('user', {})
+
+        # Update Django User table
+        user = instance.user
+
+        user.first_name = user_data.get(
+            'first_name',
+            user.first_name
+        )
+
+        user.last_name = user_data.get(
+            'last_name',
+            user.last_name
+        )
+
+        user.email = user_data.get(
+            'email',
+            user.email
+        )
+
+        user.save()
+
+        # Update CustomUser table
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+
+        return instance

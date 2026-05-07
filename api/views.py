@@ -840,4 +840,127 @@ def update_user(request, id):
         serializer.errors,
         status=status.HTTP_400_BAD_REQUEST
     )
+    # views.py
+
+from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+User = get_user_model()
+
+
+class ToggleUserActiveAPIView(APIView):
+
+    def post(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "User not found"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Toggle value
+        user.is_active = not user.is_active
+        user.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": f"User {'activated' if user.is_active else 'deactivated'} successfully",
+                "data": {
+                    "id": user.id,
+                    "is_active": user.is_active
+                }
+            },
+            status=status.HTTP_200_OK
+        )
     
+
+# views.py
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+from .models import CustomUser
+from .serializers import ProfileSerializer
+
+
+class ProfileView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        profile = CustomUser.objects.get(
+            user=request.user
+        )
+
+        serializer = ProfileSerializer(profile)
+
+        return Response({
+            "success": True,
+            "data": serializer.data
+        })
+    
+class ProfileUpdateView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+
+        profile = CustomUser.objects.get(
+            user=request.user
+        )
+
+        serializer = ProfileSerializer(
+            profile,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response({
+                "success": True,
+                "message": "Profile updated successfully",
+                "data": serializer.data
+            })
+
+        return Response({
+            "success": False,
+            "errors": serializer.errors
+        }, status=400)
+
+class ProfilePictureUploadView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        profile = CustomUser.objects.get(
+            user=request.user
+        )
+
+        if 'profile_pic' not in request.FILES:
+
+            return Response({
+                "success": False,
+                "message": "No image uploaded"
+            }, status=400)
+
+        profile.profile_pic = request.FILES['profile_pic']
+        profile.save()
+
+        return Response({
+            "success": True,
+            "message": "Profile picture updated",
+            "profile_pic": profile.profile_pic.url
+        })

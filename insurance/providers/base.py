@@ -234,10 +234,15 @@ class BaseInsuranceProvider(ABC):
                 if status_code in (401, 403):
                     self._record_failure()
                     body = ""
+                    json_body: dict[str, Any] | None = None
                     try:
                         body = (exc.response.text or "")[:2000] if exc.response is not None else ""
                     except Exception:
                         body = ""
+                    try:
+                        json_body = exc.response.json() if exc.response is not None and exc.response.content else None
+                    except Exception:
+                        json_body = None
                     logger.warning(
                         "Provider %s request failed with HTTP %s (no retry). body=%s",
                         self.provider_code,
@@ -245,8 +250,22 @@ class BaseInsuranceProvider(ABC):
                         body,
                     )
                     print(f"{self.provider_code} response:", body)
-                    raise ProviderRequestError(
-                        f"{self.provider_code} unauthorized (HTTP {status_code}). {body}".strip()
+
+                    # 401 is always auth.
+                    if status_code == 401:
+                        raise ProviderAuthenticationError(
+                            f"{self.provider_code} unauthorized (HTTP 401). {body}".strip()
+                        )
+
+                    # Some providers (e.g. QIC) return business-rule errors using HTTP 403.
+                    # If we can parse an errMessage, treat it as a request error instead of auth.
+                    if isinstance(json_body, dict):
+                        err_message = json_body.get("errMessage") or json_body.get("message")
+                        if err_message:
+                            raise ProviderRequestError(str(err_message))
+
+                    raise ProviderAuthenticationError(
+                        f"{self.provider_code} forbidden (HTTP 403). {body}".strip()
                     )
 
                 # For other 4xx errors, don't retry unless explicitly allowed (429/408).

@@ -78,6 +78,13 @@ class Deal(models.Model):
     mileage = models.IntegerField(blank=True, null=True)
 
     valuation_date = models.DateField(blank=True, null=True)
+    sum_insured = models.DecimalField(
+        max_digits=12, 
+        decimal_places=2, 
+        blank=True, 
+        null=True,
+        help_text="Market valuation (from Bayanaty) or manually entered sum insured for insurance providers"
+    )
 
     stage_id = models.IntegerField(
         choices=STAGE_CHOICES,

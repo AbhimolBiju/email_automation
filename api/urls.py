@@ -30,6 +30,11 @@ urlpatterns = [
     path('user_profile/', user_profile),
     path("users/create/", CreateUserView.as_view(), name="create-user"),
     path('users/list/', UserListView.as_view()),
+<<<<<<< HEAD
+=======
+    path('users/update-role/<int:pk>/', UpdateUserRoleView.as_view()),
+    path('user/update/<int:user_id>/', UserUpdateAPIView.as_view()),
+>>>>>>> 3836df40c4d15afcc358336604021a55c033060b
 
   
     path("dashboard/stats/", DashboardStatsView.as_view()),

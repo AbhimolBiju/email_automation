@@ -262,7 +262,6 @@ class UserCreateSerializer(serializers.Serializer):
         )
 
         return user
-    
 
 # api/serializers.py
 
@@ -296,37 +295,67 @@ class UserRoleUpdateSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['role']
 
-
-from rest_framework import serializers
-from django.contrib.auth.models import User
-from .models import CustomUser
-
 class UserUpdateSerializer(serializers.Serializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     mobile = serializers.CharField(required=False)
     gender = serializers.CharField(required=False, allow_blank=True)
-    role = serializers.ChoiceField(choices=CustomUser.ROLE_CHOICES, required=False)
+    role = serializers.ChoiceField(
+        choices=CustomUser.ROLE_CHOICES,
+        required=False
+    )
+
+    def validate_email(self, value):
+        instance = self.instance
+
+        # Check username already exists in another user
+        if User.objects.exclude(id=instance.user.id).filter(
+            username=value
+        ).exists():
+            raise serializers.ValidationError(
+                "Email already exists"
+            )
+
+        return value
 
     def update(self, instance, validated_data):
-        """
-        instance = User object
-        """
-        custom_user = CustomUser.objects.get(user=instance)
 
-        # Update User fields
-        instance.first_name = validated_data.get("first_name", instance.first_name)
-        instance.last_name = validated_data.get("last_name", instance.last_name)
-        instance.email = validated_data.get("email", instance.email)
-        instance.username = validated_data.get("email", instance.username)
+        user = instance.user
+
+        user.first_name = validated_data.get(
+            "first_name",
+            user.first_name
+        )
+
+        user.last_name = validated_data.get(
+            "last_name",
+            user.last_name
+        )
+
+        # Update email + username
+        if "email" in validated_data:
+            user.email = validated_data["email"]
+            user.username = validated_data["email"]
+
+        user.save()
+
+        # CustomUser fields
+        instance.mobile = validated_data.get(
+            "mobile",
+            instance.mobile
+        )
+
+        instance.gender = validated_data.get(
+            "gender",
+            instance.gender
+        )
+
+        instance.role = validated_data.get(
+            "role",
+            instance.role
+        )
+
         instance.save()
 
-        # Update CustomUser fields
-        custom_user.mobile = validated_data.get("mobile", custom_user.mobile)
-        custom_user.gender = validated_data.get("gender", custom_user.gender)
-        custom_user.role = validated_data.get("role", custom_user.role)
-        custom_user.save()
-
         return instance
-

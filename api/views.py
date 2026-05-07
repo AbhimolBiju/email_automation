@@ -807,23 +807,37 @@ class UpdateUserRoleView(APIView):
             return Response({"message": "Role updated successfully", "data": serializer.data})
         
         return Response(serializer.errors, status=400)
-    
 
 from .serializers import UserUpdateSerializer
 
-class UserUpdateAPIView(APIView):
 
-    def put(self, request, user_id):
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
+@api_view(['PUT'])
+def update_user(request, id):
+    try:
+        custom_user = CustomUser.objects.get(id=id)
 
-        serializer = UserUpdateSerializer(instance=user, data=request.data, partial=True)
+    except CustomUser.DoesNotExist:
+        return Response(
+            {"error": "User not found"},
+            status=status.HTTP_404_NOT_FOUND
+        )
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User updated successfully"})
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = UserUpdateSerializer(
+        custom_user,
+        data=request.data,
+        partial=True
+    )
 
+    if serializer.is_valid():
+        serializer.save()
+
+        return Response({
+            "message": "User updated successfully",
+            "data": serializer.data
+        })
+
+    return Response(
+        serializer.errors,
+        status=status.HTTP_400_BAD_REQUEST
+    )
+    

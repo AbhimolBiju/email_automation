@@ -231,3 +231,94 @@ class QuoteBatch(models.Model):
 
     def __str__(self):
         return self.reference_no or f"QuoteBatch({self.pk})"
+
+
+class PolicyIssuance(models.Model):
+    """Queued policy checkout after user confirms add-ons (linked to deal / quote batch)."""
+
+    PAYMENT_PENDING = "pending"
+    PAYMENT_PAID = "paid"
+    PAYMENT_EXPIRED = "expired"
+    PAYMENT_STATUS_CHOICES = [
+        (PAYMENT_PENDING, "Pending"),
+        (PAYMENT_PAID, "Paid"),
+        (PAYMENT_EXPIRED, "Expired"),
+    ]
+
+    ISSUANCE_PENDING = "pending"
+    ISSUANCE_PAYMENT_LINK_REQUESTED = "payment_link_requested"
+    ISSUANCE_PAYMENT_LINK_RECEIVED = "payment_link_received"
+    ISSUANCE_ISSUED = "issued"
+    ISSUANCE_ACTIVE = "active"
+    ISSUANCE_STATUS_CHOICES = [
+        (ISSUANCE_PENDING, "Pending"),
+        (ISSUANCE_PAYMENT_LINK_REQUESTED, "Payment link requested"),
+        (ISSUANCE_PAYMENT_LINK_RECEIVED, "Payment link received"),
+        (ISSUANCE_ISSUED, "Issued"),
+        (ISSUANCE_ACTIVE, "Active"),
+    ]
+
+    deal = models.ForeignKey(
+        "deals.Deal",
+        on_delete=models.CASCADE,
+        related_name="policy_issuances",
+    )
+    quote_batch = models.ForeignKey(
+        QuoteBatch,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="policy_issuances",
+    )
+    quote_result = models.ForeignKey(
+        QuoteResult,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="policy_issuances",
+    )
+
+    customer_name = models.CharField(max_length=255, blank=True)
+    customer_phone = models.CharField(max_length=50, blank=True)
+    customer_email = models.CharField(max_length=254, blank=True)
+    product_type = models.CharField(max_length=255, blank=True)
+
+    provider_code = models.CharField(max_length=50, blank=True)
+    provider_display_name = models.CharField(max_length=255, blank=True)
+    plan_name = models.CharField(max_length=255, blank=True)
+    currency = models.CharField(max_length=10, default="AED")
+    base_premium = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    grand_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    addon_line_items = models.JSONField(default=list, blank=True)
+
+    dic_scheme_payload = models.JSONField(null=True, blank=True)
+    choose_scheme_response = models.JSONField(null=True, blank=True)
+    quotation_no = models.CharField(max_length=128, blank=True)
+    payment_url = models.CharField(max_length=2048, blank=True)
+
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default=PAYMENT_PENDING,
+    )
+    issuance_status = models.CharField(
+        max_length=40,
+        choices=ISSUANCE_STATUS_CHOICES,
+        default=ISSUANCE_PENDING,
+    )
+
+    checkout_submit_skipped = models.BooleanField(default=False)
+    choose_scheme_error = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["deal", "-created_at"], name="pissue_deal_ctd_idx"),
+            models.Index(fields=["-created_at"], name="pissue_ctd_idx"),
+        ]
+
+    def __str__(self) -> str:
+        return f"PolicyIssuance({self.pk}, deal={self.deal_id})"

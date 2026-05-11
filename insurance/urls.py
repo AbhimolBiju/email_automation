@@ -16,6 +16,7 @@ Including another URLconf
 """
 
 from django.urls import include, path
+from .policy_issuance_views import policy_issuance_detail, policy_issuances
 from .views import *
 
 urlpatterns = [
@@ -27,6 +28,8 @@ urlpatterns = [
     # DIC provider feature APIs (additive; does not modify provider logic)
     path("dic/", include("insurance.dic_urls")),
     
+    path("policy-issuances/", policy_issuances),
+    path("policy-issuances/<int:pk>/", policy_issuance_detail),
     path("quotes/", list_quotes),
     path("quotes/<int:batch_id>/", quote_batch_detail),
     path("quotes/<int:batch_id>/results/", quote_batch_results),

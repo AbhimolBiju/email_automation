@@ -22,10 +22,13 @@ class CookieTokenRefreshView(APIView):
     """
 
     permission_classes = [AllowAny]
+    # Do not run JWT auth here: clients call refresh specifically when access
+    # token is expired/invalid.
+    authentication_classes = []
 
     def post(self, request, *args, **kwargs):
         name = getattr(settings, "JWT_REFRESH_COOKIE_NAME", "refresh_token")
-        refresh = request.COOKIES.get(name)
+        refresh = request.COOKIES.get(name) or request.data.get("refresh")
         if not refresh:
             raise AuthenticationFailed("Unauthorized")
 

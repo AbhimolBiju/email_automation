@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Any
 
 from .masterdata_json import ProviderJsonMasterdata, normalize_masterdata_value
+
+
 from .xlsx_loader import load_workbook_rows
 
 
@@ -117,4 +119,3 @@ def lookup_plate_color_code(value: Any, reg_city: Any) -> str:
         ):
             return record.get("Code", "")
     return str(value).strip() if value not in (None, "") else ""
-

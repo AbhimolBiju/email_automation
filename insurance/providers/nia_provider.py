@@ -1206,6 +1206,47 @@ class NIAProvider(BaseInsuranceProvider):
             )
         return {"polRefNo": quotation_no, "docUpload": doc_upload}
 
+    def _extract_benefits_from_raw(self, payload: dict[str, Any]) -> dict[str, bool]:
+        """NIA benefits come from ``create_quote.Data.PlanDetails[].Covers[]``.
+
+        We include every cover EXCEPT:
+          - ``CoverFlag == "OC"`` (Optional Cover -> add-on, sold separately)
+          - ``CoverFlag == "MC"`` (Mandatory Charge / Deductible -> not a benefit)
+        """
+        benefits: dict[str, bool] = {}
+        create_quote = payload.get("create_quote")
+        if not isinstance(create_quote, dict):
+            return benefits
+
+        data = create_quote.get("Data")
+        if not isinstance(data, dict):
+            return benefits
+
+        plan_details = data.get("PlanDetails")
+        if not isinstance(plan_details, list):
+            return benefits
+
+        excluded_flags = {"OC", "MC"}
+        for plan in plan_details:
+            if not isinstance(plan, dict):
+                continue
+            covers = plan.get("Covers")
+            if not isinstance(covers, list):
+                continue
+            for cover in covers:
+                if not isinstance(cover, dict):
+                    continue
+                flag = str(cover.get("CoverFlag") or "").strip().upper()
+                if flag in excluded_flags:
+                    continue
+                name = str(
+                    cover.get("Description") or cover.get("DescriptionL2") or ""
+                ).strip()
+                if name:
+                    benefits[name] = True
+
+        return benefits
+
     def get_quote(self, payload: dict[str, Any]):
         started = time.perf_counter()
         _corrected_sum_insured: float | None = None

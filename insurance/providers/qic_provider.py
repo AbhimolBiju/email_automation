@@ -919,6 +919,38 @@ class QICProvider(BaseInsuranceProvider):
         )
         return self._ensure_success(response)
 
+    def _extract_benefits_from_raw(self, payload: dict[str, Any]) -> dict[str, bool]:
+        """QIC benefits come from ``tariff.schemes[].basicCovers[]`` and
+        ``tariff.schemes[].inclusiveCovers[]``.
+
+        Optional covers (``optionalCovers``) are EXCLUDED — those are add-ons.
+        """
+        benefits: dict[str, bool] = {}
+        tariff = payload.get("tariff")
+        if not isinstance(tariff, dict):
+            return benefits
+
+        schemes = tariff.get("schemes")
+        if not isinstance(schemes, list):
+            return benefits
+
+        cover_groups = ("basicCovers", "inclusiveCovers")
+        for scheme in schemes:
+            if not isinstance(scheme, dict):
+                continue
+            for group_key in cover_groups:
+                covers = scheme.get(group_key)
+                if not isinstance(covers, list):
+                    continue
+                for cover in covers:
+                    if not isinstance(cover, dict):
+                        continue
+                    name = str(cover.get("name") or "").strip()
+                    if name:
+                        benefits[name] = True
+
+        return benefits
+
     def get_quote(self, payload: dict[str, Any]):
         started = time.perf_counter()
         tariff = self.get_tariff(payload)

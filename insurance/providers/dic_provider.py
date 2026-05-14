@@ -314,6 +314,42 @@ class DICProvider(BaseInsuranceProvider):
         )
         return self._unwrap_response(response)
 
+    def _extract_benefits_from_raw(self, payload: dict[str, Any]) -> dict[str, bool]:
+        """DIC benefits come from ``products[].covers.mandatory[]``.
+
+        Optional covers (``covers.optional``) are EXCLUDED — those are sold
+        through the add-ons page, not part of base benefits.
+        """
+        benefits: dict[str, bool] = {}
+        products = payload.get("products")
+        if not isinstance(products, list):
+            return benefits
+
+        for product in products:
+            if not isinstance(product, dict):
+                continue
+            covers = product.get("covers")
+            if not isinstance(covers, dict):
+                continue
+            mandatory = covers.get("mandatory")
+            if not isinstance(mandatory, list):
+                continue
+
+            for cover in mandatory:
+                if not isinstance(cover, dict):
+                    continue
+                cover_name = cover.get("coverName")
+                name = ""
+                if isinstance(cover_name, dict):
+                    candidate = cover_name.get("en") or cover_name.get("ar")
+                    name = str(candidate or "").strip()
+                elif isinstance(cover_name, str):
+                    name = cover_name.strip()
+                if name:
+                    benefits[name] = True
+
+        return benefits
+
     def _build_scheme_request(self, product: dict[str, Any]) -> dict[str, Any]:
         covers = product.get("covers") or {}
         mandatory = covers.get("mandatory") or []

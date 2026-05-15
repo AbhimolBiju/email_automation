@@ -118,13 +118,29 @@ def policy_issuance_detail(request, pk: int):
 
     has_status = raw_status is not None and str(raw_status).strip() != ""
     has_payment = raw_payment is not None and str(raw_payment).strip() != ""
+    has_choose_scheme = "choose_scheme_response" in request.data
+    has_quotation_no = "quotation_no" in request.data
+    has_choose_scheme_error = "choose_scheme_error" in request.data
+    has_client_pay = "payment_url" in request.data
+    has_dic_scheme = "dic_scheme_payload" in request.data
 
-    if not has_status and not has_payment:
+    if (
+        not has_status
+        and not has_payment
+        and not has_choose_scheme
+        and not has_quotation_no
+        and not has_choose_scheme_error
+        and not has_client_pay
+        and not has_dic_scheme
+    ):
         return error_response(
-            message="Provide issuance_status and/or payment_status",
+            message="Provide at least one field to update",
             code=status.HTTP_400_BAD_REQUEST,
             errors={
-                "issuance_status": ["At least one of issuance_status or payment_status is required."],
+                "issuance_status": [
+                    "Provide issuance_status, payment_status, choose_scheme_response, "
+                    "quotation_no, payment_url, and/or choose_scheme_error."
+                ],
             },
         )
 
@@ -134,6 +150,23 @@ def policy_issuance_detail(request, pk: int):
         obj.payment_status = _normalize_payment_status(raw_payment)
     if has_status:
         obj.issuance_status = _normalize_issuance_status(raw_status)
+    if has_choose_scheme:
+        obj.choose_scheme_response = request.data.get("choose_scheme_response")
+        if not client_pay:
+            from_scheme = _extract_payment_url_from_nested(
+                obj.choose_scheme_response
+            )
+            if from_scheme:
+                obj.payment_url = from_scheme[:2048]
+    if has_quotation_no:
+        qn = request.data.get("quotation_no")
+        obj.quotation_no = str(qn or "")[:128]
+    if has_choose_scheme_error:
+        obj.choose_scheme_error = str(request.data.get("choose_scheme_error") or "")
+    if has_dic_scheme:
+        obj.dic_scheme_payload = request.data.get("dic_scheme_payload")
+    if client_pay:
+        obj.payment_url = client_pay
     obj.save()
     # #region agent log
     url_len_after_main = len((obj.payment_url or "").strip())

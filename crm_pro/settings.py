@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from datetime import timedelta
 
+from corsheaders.defaults import default_headers
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  
 FILE_UPLOAD_MAX_MEMORY_SIZE = 2 * 1024 * 1024  
 
@@ -66,6 +68,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
+# Custom headers used by insurer proxies (e.g. DIC choose-scheme).
+CORS_ALLOW_HEADERS = (
+    *default_headers,
+    "x-request-id",
+)
 
 CSRF_TRUSTED_ORIGINS = [
     o.strip()

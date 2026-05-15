@@ -140,6 +140,7 @@ class PolicyIssuanceCreateSerializer(serializers.Serializer):
     grand_total = serializers.FloatField(required=False, default=0)
     addon_line_items = serializers.ListField(child=serializers.DictField(), required=False, default=list)
 
+    dic_request_id = serializers.CharField(required=False, allow_blank=True, max_length=64)
     dic_scheme_payload = serializers.JSONField(required=False, allow_null=True)
     choose_scheme_response = serializers.JSONField(required=False, allow_null=True)
     quotation_no = serializers.CharField(required=False, allow_blank=True, max_length=128)
@@ -189,6 +190,9 @@ class PolicyIssuanceListSerializer(serializers.ModelSerializer):
             "plan_name",
             "quotation_no",
             "addon_line_items",
+            "provider_code",
+            "dic_request_id",
+            "dic_scheme_payload",
             "choose_scheme_response",
             "payment_status",
             "issuance_status",
@@ -321,6 +325,7 @@ def create_policy_issuance_from_payload(*, payload: dict, batch: QuoteBatch, quo
         base_premium=_to_decimal(payload.get("base_premium")),
         grand_total=_to_decimal(payload.get("grand_total")),
         addon_line_items=payload.get("addon_line_items") if isinstance(payload.get("addon_line_items"), list) else [],
+        dic_request_id=(payload.get("dic_request_id") or "")[:64],
         dic_scheme_payload=payload.get("dic_scheme_payload"),
         choose_scheme_response=payload.get("choose_scheme_response"),
         quotation_no=(payload.get("quotation_no") or "")[:128],

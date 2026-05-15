@@ -291,6 +291,7 @@ class PolicyIssuance(models.Model):
     grand_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     addon_line_items = models.JSONField(default=list, blank=True)
 
+    dic_request_id = models.CharField(max_length=64, blank=True)
     dic_scheme_payload = models.JSONField(null=True, blank=True)
     choose_scheme_response = models.JSONField(null=True, blank=True)
     quotation_no = models.CharField(max_length=128, blank=True)

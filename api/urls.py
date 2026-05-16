@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import include, path
 from .views import *
 from .token_views import CookieTokenRefreshView
 
 urlpatterns = [
+    path("ocr/", include("apps.ocr.urls")),
     path("auth/token/refresh/", CookieTokenRefreshView.as_view(), name="token_refresh"),
     path("test/",test_api),
     path('register/step1/', register_step1),

@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     'Task',
     'insurance',
     'documents.apps.DocumentsConfig',
+    'apps.ocr.apps.OcrConfig',
     'Quote',
     'invoice'
 ]
@@ -206,6 +207,25 @@ DOCUMENT_OCR_POLLING_TIMEOUT_SECONDS = int(
 )
 DOCUMENT_OCR_LOW_CONFIDENCE_THRESHOLD = float(
     os.environ.get("DOCUMENT_OCR_LOW_CONFIDENCE_THRESHOLD", "0.70")
+)
+
+# Azure Form Recognizer (apps.ocr microservice)
+AZURE_FORM_RECOGNIZER_ENDPOINT = os.environ.get(
+    "AZURE_FORM_RECOGNIZER_ENDPOINT",
+    os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT", ""),
+)
+AZURE_FORM_RECOGNIZER_KEY = os.environ.get(
+    "AZURE_FORM_RECOGNIZER_KEY",
+    os.environ.get("AZURE_DOCUMENT_INTELLIGENCE_KEY", ""),
+)
+OCR_CONFIDENCE_THRESHOLD = float(
+    os.environ.get("OCR_CONFIDENCE_THRESHOLD", "0.75")
+)
+OCR_POLLING_TIMEOUT_SECONDS = int(
+    os.environ.get("OCR_POLLING_TIMEOUT_SECONDS", "120")
+)
+OCR_MAX_UPLOAD_BYTES = int(
+    os.environ.get("OCR_MAX_UPLOAD_BYTES", str(10 * 1024 * 1024))
 )
 
 

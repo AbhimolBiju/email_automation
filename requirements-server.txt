@@ -1,5 +1,6 @@
 asgiref==3.11.1
 azure-ai-documentintelligence==1.0.2
+azure-ai-formrecognizer==3.3.3
 Django==6.0.3
 django-cors-headers==4.9.0
 djangorestframework==3.17.1

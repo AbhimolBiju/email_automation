@@ -51,7 +51,7 @@ load_local_env(BASE_DIR / ".env")
 SECRET_KEY = "django-insecure-k((b)6!9s(hu3ie@@k^b6l4$dc=bt%89kh*8e)r1$8hr^qmo+#"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,10.230.10.4,20.233.10.43").split(",")
 

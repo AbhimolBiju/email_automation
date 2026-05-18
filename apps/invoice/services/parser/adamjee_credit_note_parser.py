@@ -283,34 +283,70 @@ def parse_adamjee_credit_note(raw_text):
     # ---------------------------------------------------
 
     commission_items = []
-    for i, line in enumerate(lines):
-        if "COMMISSION" in line.upper():
-            percent_match = re.search(r"(\d+(?:\.\d+)?)\s*%", line)
+    commission_percentage = None
+    commission_amount = None
 
+    # "Being 15 % Own Damage Commission ... 1,855.61 92.78"
+    being_match = re.search(
+        r"Being\s+(\d+(?:\.\d+)?)\s*%\s+(.+?)\s+Commission[^\d]*"
+        r"([\d,]+\.\d{2})(?:\s+([\d,]+\.\d{2}))?",
+        clean_text,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if being_match:
+        commission_percentage = being_match.group(1)
+        commission_amount = clean_amount(being_match.group(3))
+        commission_items.append(
+            {
+                "commission_type": being_match.group(2).strip().lower().replace(" ", "_"),
+                "commission_percentage": commission_percentage,
+                "commission_amount": commission_amount,
+            },
+        )
+
+    # Brokerage @ X% row (similar to QIC)
+    if not commission_amount:
+        for i, line in enumerate(lines):
+            upper = line.upper()
+            if "BROKERAGE" not in upper and "COMMISSION" not in upper:
+                continue
+            if any(skip in upper for skip in ("COMMISSION TYPE", "COMMISSION INVOICE")):
+                continue
+
+            percent_match = re.search(r"(\d+(?:\.\d+)?)\s*%", line)
             commission_percentage = (
-                percent_match.group(1)
-                if percent_match
-                else None
+                percent_match.group(1) if percent_match else commission_percentage
             )
 
-            amount = None
+            amounts_on_line = re.findall(r"[\d,]+\.\d{2}", line)
+            if amounts_on_line:
+                commission_amount = clean_amount(amounts_on_line[0])
+            else:
+                for nxt in lines[i + 1 : i + 8]:
+                    if is_amount(nxt):
+                        commission_amount = clean_amount(nxt)
+                        break
+                    inline_amounts = re.findall(r"[\d,]+\.\d{2}", nxt)
+                    if inline_amounts:
+                        commission_amount = clean_amount(inline_amounts[0])
+                        break
 
-            for nxt in lines[i:i + 5]:
-                if is_amount(nxt):
-                    amount = clean_amount(nxt)
-                    break
+            if commission_amount:
+                commission_items.append(
+                    {
+                        "commission_type": "brokerage"
+                        if "BROKERAGE" in upper
+                        else "commission",
+                        "commission_percentage": commission_percentage,
+                        "commission_amount": commission_amount,
+                    },
+                )
+                break
 
-            item = {
-                "commission_type": "commission",
-                "commission_percentage": commission_percentage,
-                "commission_amount": amount,
-            }
-            commission_items.append(item)
-
-            data["commission_percentage"] = commission_percentage
-            data["commission_amount"] = amount
-            break
-
+    if commission_percentage:
+        data["commission_percentage"] = commission_percentage
+    if commission_amount:
+        data["commission_amount"] = commission_amount
     data["commission_items"] = commission_items 
 
 

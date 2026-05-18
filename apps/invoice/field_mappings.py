@@ -48,6 +48,10 @@ CURRENCY_FIELDS: set[str] = {
     "total_amount",
     "amount_due",
     "premium_amount",
+    "net_premium",
+    "vat_amount",
+    "taxable_amount",
+    "commission_amount",
 }
 
 # CRM keys produced by invoice_parser enrichment (pass-through in field_mapper).
@@ -60,6 +64,23 @@ PARSER_ENRICHED_FIELDS: set[str] = {
     "premium_amount",
     "premium_currency",
     "invoice_no",
+    "invoice_number",
+    "policy_number",
+    "net_premium",
+    "vat_amount",
+    "taxable_amount",
+    "commission_amount",
+    "commission_percentage",
+    "own_damage_commission_amount",
+    "own_damage_commission_percentage",
+    "third_party_commission_amount",
+    "third_party_commission_percentage",
+    "due_date",
+    "customer_net_premium",
+    "customer_vat_amount",
+    "customer_total_premium",
+    "tax_invoice_number",
+    "commission_invoice_number",
 }
 
 DOCUMENT_TYPE_MODEL_MAP: dict[str, str] = {

@@ -239,37 +239,41 @@ def parse_al_sagr_credit_note(raw_text):
     # Commission extraction
     commission_items = []
 
-    m = re.search(
-        r"Being\s+(\d+(?:\.\d+)?)\s*%\s+(.+?)\s+Commission.*?(\d[\d,]*\.\d{2})\s+(\d[\d,]*\.\d{2})",
+    for match in re.finditer(
+        r"Being\s+(\d+(?:\.\d+)?)\s*%\s+(.+?)\s+Commission.*?(\d[\d,]*\.\d{2})",
         clean_text,
-        re.IGNORECASE,
-    )
-
-    if m:
-        commission_percentage = m.group(1)
-        commission_type_raw = m.group(2).strip().upper()
-        commission_amount = clean_amount(m.group(3))
-
+        re.IGNORECASE | re.DOTALL,
+    ):
+        commission_percentage = match.group(1)
+        commission_type_raw = match.group(2).strip().upper()
+        commission_amount = clean_amount(match.group(3))
         commission_type = commission_type_raw.lower().replace(" ", "_")
-
-        data["commission_percentage"] = commission_percentage
-        data["commission_amount"] = commission_amount
 
         if "OWN DAMAGE" in commission_type_raw:
             data["own_damage_commission_percentage"] = commission_percentage
             data["own_damage_commission_amount"] = commission_amount
             commission_type = "own_damage"
-
         elif "THIRD PARTY" in commission_type_raw:
             data["third_party_commission_percentage"] = commission_percentage
             data["third_party_commission_amount"] = commission_amount
             commission_type = "third_party"
 
-        commission_items.append({
-            "commission_type": commission_type,
-            "commission_percentage": commission_percentage,
-            "commission_amount": commission_amount,
-        })
+        commission_items.append(
+            {
+                "commission_type": commission_type,
+                "commission_percentage": commission_percentage,
+                "commission_amount": commission_amount,
+            },
+        )
+
+    if commission_items:
+        total_amount = sum(
+            float(str(item["commission_amount"]).replace(",", ""))
+            for item in commission_items
+            if item.get("commission_amount")
+        )
+        data["commission_amount"] = round(total_amount, 2)
+        data["commission_percentage"] = commission_items[0].get("commission_percentage")
 
     data["commission_items"] = commission_items
 

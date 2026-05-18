@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from apps.invoice.services.parser.commission_utils import resolve_commission_fields
 from apps.invoice.services.parser.adamjee_credit_note_parser import parse_adamjee_credit_note
 from apps.invoice.services.parser.adamjee_debit_note_parser import parse_adamjee_debit_note
 from apps.invoice.services.parser.al_sagr_credit_note_parser import parse_al_sagr_credit_note
@@ -100,6 +101,30 @@ def normalize_parser_output(raw: dict[str, Any]) -> dict[str, Any]:
     insurer = normalized.get("insurer_name")
     if insurer:
         normalized["vendor_name"] = insurer
+
+    net_premium = normalized.get("net_premium")
+    vat_amount = normalized.get("vat_amount")
+    total_amount = normalized.get("total_amount")
+
+    if net_premium is not None:
+        normalized.setdefault("customer_net_premium", net_premium)
+    if vat_amount is not None:
+        normalized.setdefault("customer_vat_amount", vat_amount)
+    if total_amount is not None:
+        normalized.setdefault("customer_total_premium", total_amount)
+
+    if normalized.get("tax_amount") and not normalized.get("vat_amount"):
+        normalized["vat_amount"] = normalized["tax_amount"]
+
+    normalized = resolve_commission_fields(normalized)
+
+    commission_amount = normalized.get("commission_amount")
+    if commission_amount and not normalized.get("vat_amount"):
+        try:
+            commission = float(str(commission_amount).replace(",", ""))
+            normalized["vat_amount"] = round(commission * 0.05, 2)
+        except (TypeError, ValueError):
+            pass
 
     return normalized
 

@@ -22,6 +22,7 @@ from apps.invoice.serializers import (
 from apps.invoice.serialization import to_json_safe_dict
 from apps.invoice.services.azure_invoice_service import AzureInvoiceService
 from apps.invoice.services.confidence_filter import filter_by_confidence
+from apps.invoice.services.billing_enrichment import enrich_extracted_fields
 from apps.invoice.services.field_mapper import map_invoice_fields
 
 logger = logging.getLogger(__name__)
@@ -59,7 +60,11 @@ def extract_document(request) -> Response:
         mapped = map_invoice_fields(invoice_result, target_schema)
         filtered = filter_by_confidence(mapped)
 
-        extracted_fields = to_json_safe_dict(filtered.high_confidence)
+        extracted_fields = enrich_extracted_fields(
+            to_json_safe_dict(filtered.high_confidence),
+            document_type=document_type,
+            raw_content=str(invoice_result.raw_fields.get("content") or ""),
+        )
         needs_review_fields = to_json_safe_dict(filtered.needs_review)
 
         job.mark_completed(

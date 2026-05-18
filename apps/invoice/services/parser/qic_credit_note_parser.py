@@ -297,7 +297,14 @@ def parse_qic_credit_note(raw_text):
     AMOUNT_RE = r"(?:\d+(?:,\d{3})*|\d*)\.\d{2}"
 
     for i, line in enumerate(lines):
-        if "BROKERAGE" in line.upper():
+        upper_line = line.upper()
+        if "BROKERAGE" not in upper_line and "COMMISSION" not in upper_line:
+            continue
+        if "COMMISSION TYPE" in upper_line or "COMMISSION INVOICE" in upper_line:
+            continue
+        if "BROKERAGE" in upper_line or (
+            "COMMISSION" in upper_line and "%" in line
+        ):
             percent_match = re.search(r"(\d+(?:\.\d+)?)\s*%", line)
 
             commission_percentage = (

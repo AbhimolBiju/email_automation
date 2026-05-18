@@ -303,6 +303,7 @@ source venv/bin/activate          # Windows: venv\Scripts\activate
 pip install -r requirements-server.txt
 python manage.py migrate
 python manage.py createsuperuser  # create first user (use email as username)
+python manage.py seed_insurance_providers 
 python manage.py runserver
 ```
 

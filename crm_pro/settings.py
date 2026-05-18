@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     'insurance',
     'documents.apps.DocumentsConfig',
     'apps.ocr.apps.OcrConfig',
+    'apps.invoice.apps.InvoiceConfig',
     'Quote',
     'invoice'
 ]
@@ -226,6 +227,17 @@ OCR_POLLING_TIMEOUT_SECONDS = int(
 )
 OCR_MAX_UPLOAD_BYTES = int(
     os.environ.get("OCR_MAX_UPLOAD_BYTES", str(10 * 1024 * 1024))
+)
+
+# Azure invoice extraction (apps.invoice microservice)
+INVOICE_CONFIDENCE_THRESHOLD = float(
+    os.environ.get("INVOICE_CONFIDENCE_THRESHOLD", "0.75")
+)
+INVOICE_POLLING_TIMEOUT_SECONDS = int(
+    os.environ.get("INVOICE_POLLING_TIMEOUT_SECONDS", "120")
+)
+INVOICE_MAX_UPLOAD_BYTES = int(
+    os.environ.get("INVOICE_MAX_UPLOAD_BYTES", str(10 * 1024 * 1024))
 )
 
 

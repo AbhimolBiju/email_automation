@@ -21,6 +21,7 @@ from .token_views import CookieTokenRefreshView
 
 urlpatterns = [
     path("ocr/", include("apps.ocr.urls")),
+    path("invoice/", include("apps.invoice.urls")),
     path("auth/token/refresh/", CookieTokenRefreshView.as_view(), name="token_refresh"),
     path("test/",test_api),
     path('register/step1/', register_step1),

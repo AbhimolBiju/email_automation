@@ -29,7 +29,7 @@ urlpatterns = [
     path("task/",include('Task.urls')),
     path("insurance/",include('insurance.urls')),
     path("documents/",include('documents.urls')),
-    path("ocr/",include('ocr.urls')),
+    path("ocr/", include("apps.ocr.urls")),
     path("quote/",include('Quote.urls')),
 ]
 

@@ -63,7 +63,7 @@ def parse_date(value: Any) -> str:
 
 def parse_plate_source(value: Any) -> str:
     """Translate Arabic place-of-issue text and normalize plate source labels."""
-    from apps.ocr.services.mulkiya_parser import normalize_plate_source
+    from apps.ocr.plate_utils import normalize_plate_source
 
     text = normalize_text(value)
     if not text:

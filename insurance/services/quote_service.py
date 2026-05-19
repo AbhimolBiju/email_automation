@@ -547,35 +547,89 @@ def _is_batch_fresh(batch: QuoteBatch | None) -> bool:
     )
 
 
-def get_best_quotes(
-    deal_id: int,
-    *,
-    force_refresh: bool = False,
-    triggered_by_id: int | None = None,
-) -> dict[str, Any]:
-    latest_batch = get_latest_quote_batch(deal_id)
-    if latest_batch and latest_batch.status == QuoteBatch.STATUS_PROCESSING and not force_refresh:
-        return _serialize_batch(latest_batch)
-    if _is_batch_fresh(latest_batch) and not force_refresh:
-        return _serialize_batch(latest_batch)
+def _reset_batch_for_refresh(batch: QuoteBatch) -> None:
+    """Clear prior results and reset batch metadata before re-fetching quotes."""
+    batch.results.all().delete()
+    QuoteRequestLog.objects.filter(batch=batch).delete()
+    batch.best_provider = None
+    batch.best_total = None
+    batch.status = QuoteBatch.STATUS_PROCESSING
+    batch.cache_expires_at = timezone.now() + timedelta(seconds=QUOTE_CACHE_TTL_SECONDS)
+    batch.save(
+        update_fields=[
+            "best_provider",
+            "best_total",
+            "status",
+            "cache_expires_at",
+            "updated_at",
+        ]
+    )
 
-    deal = Deal.objects.select_related("lead", "lead__responsible").get(id=deal_id)
+
+def _attach_provider_statuses(
+    serialized: dict[str, Any],
+    *,
+    providers: list[InsuranceProvider],
+    quotes: list[dict[str, Any]],
+    failures: list[dict[str, Any]],
+) -> dict[str, Any]:
+    serialized["requested_provider_count"] = len(providers)
+    serialized["successful_provider_count"] = len(quotes)
+    serialized["failures"] = failures
+    results_by_provider: dict[str, dict[str, Any]] = {
+        str(item.get("provider") or "").upper(): item
+        for item in (serialized.get("results") or [])
+        if isinstance(item, dict)
+    }
+    provider_statuses: list[dict[str, Any]] = []
+    for provider in providers:
+        code = provider.code.upper()
+        result = results_by_provider.get(code)
+        if result:
+            provider_statuses.append(
+                {
+                    "provider": code,
+                    "provider_name": result.get("provider_name") or provider.name,
+                    "status": str(result.get("status") or "").lower() or "unknown",
+                    "result_id": result.get("id"),
+                    "error": result.get("error_message") or "",
+                }
+            )
+        else:
+            provider_statuses.append(
+                {
+                    "provider": code,
+                    "provider_name": provider.name,
+                    "status": "missing",
+                    "result_id": None,
+                    "error": "Provider did not produce a persisted result.",
+                }
+            )
+    serialized["providers"] = provider_statuses
+    return serialized
+
+
+def _run_quote_fetch_for_batch(
+    *,
+    deal: Deal,
+    batch: QuoteBatch,
+) -> dict[str, Any]:
     providers = list(get_active_provider_configs())
 
     if not providers:
-        batch = _create_batch(deal, triggered_by_id)
         batch.status = QuoteBatch.STATUS_FAILED
         batch.save(update_fields=["status", "updated_at"])
         return _serialize_batch(batch)
 
     payload = build_deal_quote_payload(deal)
-    batch = _create_batch(deal, triggered_by_id)
-
     quotes: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
     max_workers = min(max(len(providers), 1), 8)
 
-    with ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix=f"quote-batch-{deal.id}") as executor:
+    with ThreadPoolExecutor(
+        max_workers=max_workers,
+        thread_name_prefix=f"quote-batch-{deal.id}",
+    ) as executor:
         futures = [
             executor.submit(
                 _fetch_provider_quote,
@@ -610,40 +664,63 @@ def get_best_quotes(
 
     _rank_results(batch)
     serialized = _serialize_batch(batch)
-    serialized["requested_provider_count"] = len(providers)
-    serialized["successful_provider_count"] = len(quotes)
-    serialized["failures"] = failures
-    # Always include a per-provider status block so callers never have to infer
-    # "missing provider" vs "provider attempted but failed".
-    results_by_provider: dict[str, dict[str, Any]] = {
-        str(item.get("provider") or "").upper(): item for item in (serialized.get("results") or []) if isinstance(item, dict)
-    }
-    provider_statuses: list[dict[str, Any]] = []
-    for provider in providers:
-        code = provider.code.upper()
-        result = results_by_provider.get(code)
-        if result:
-            provider_statuses.append(
-                {
-                    "provider": code,
-                    "provider_name": result.get("provider_name") or provider.name,
-                    "status": str(result.get("status") or "").lower() or "unknown",
-                    "result_id": result.get("id"),
-                    "error": result.get("error_message") or "",
-                }
-            )
-        else:
-            provider_statuses.append(
-                {
-                    "provider": code,
-                    "provider_name": provider.name,
-                    "status": "missing",
-                    "result_id": None,
-                    "error": "Provider did not produce a persisted result.",
-                }
-            )
-    serialized["providers"] = provider_statuses
-    return serialized
+    return _attach_provider_statuses(
+        serialized,
+        providers=providers,
+        quotes=quotes,
+        failures=failures,
+    )
+
+
+def refresh_quote_batch(
+    batch_id: int,
+    *,
+    triggered_by_id: int | None = None,
+) -> dict[str, Any]:
+    """Re-fetch insurer quotes for an existing batch without creating a new list row."""
+    batch = (
+        QuoteBatch.objects.select_related("deal", "lead", "lead__responsible", "best_provider")
+        .filter(id=batch_id)
+        .first()
+    )
+    if not batch:
+        raise ValueError(f"Quote batch {batch_id} not found")
+
+    if triggered_by_id:
+        user_model = get_user_model()
+        triggered_by = user_model.objects.filter(pk=triggered_by_id).first()
+        if triggered_by:
+            batch.triggered_by = triggered_by
+            batch.save(update_fields=["triggered_by", "updated_at"])
+
+    _reset_batch_for_refresh(batch)
+    cache.set(_quote_cache_key(batch.deal_id), batch.id, timeout=QUOTE_CACHE_TTL_SECONDS)
+    return _run_quote_fetch_for_batch(deal=batch.deal, batch=batch)
+
+
+def get_best_quotes(
+    deal_id: int,
+    *,
+    force_refresh: bool = False,
+    triggered_by_id: int | None = None,
+) -> dict[str, Any]:
+    latest_batch = get_latest_quote_batch(deal_id)
+    if latest_batch and latest_batch.status == QuoteBatch.STATUS_PROCESSING and not force_refresh:
+        return _serialize_batch(latest_batch)
+    if _is_batch_fresh(latest_batch) and not force_refresh:
+        return _serialize_batch(latest_batch)
+
+    deal = Deal.objects.select_related("lead", "lead__responsible").get(id=deal_id)
+    providers = list(get_active_provider_configs())
+
+    if not providers:
+        batch = _create_batch(deal, triggered_by_id)
+        batch.status = QuoteBatch.STATUS_FAILED
+        batch.save(update_fields=["status", "updated_at"])
+        return _serialize_batch(batch)
+
+    batch = _create_batch(deal, triggered_by_id)
+    return _run_quote_fetch_for_batch(deal=deal, batch=batch)
 
 
 def list_quote_batches() -> list[QuoteBatch]:

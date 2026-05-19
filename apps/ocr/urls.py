@@ -1,9 +1,5 @@
-"""URL routes for the OCR microservice."""
+"""URL routes for the shared OCR app (deal extract is routed via ``api/urls``)."""
 
 from django.urls import path
 
-from apps.ocr import views
-
-urlpatterns = [
-    path("extract/", views.extract_document, name="ocr-extract"),
-]
+urlpatterns: list = []

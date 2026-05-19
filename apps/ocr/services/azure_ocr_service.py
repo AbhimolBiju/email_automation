@@ -11,8 +11,6 @@ from django.conf import settings
 from apps.ocr.exceptions import AzureOCRError, OCRConfigurationError
 from apps.ocr.field_mappings import resolve_model_id
 from apps.ocr.serialization import to_json_safe
-from apps.ocr.services.driving_license_parser import parse_driving_license_document
-from apps.ocr.services.mulkiya_parser import parse_mulkiya_document
 
 logger = logging.getLogger(__name__)
 
@@ -89,11 +87,6 @@ class AzureOCRService:
         layout = self._extract_layout(result)
         if layout.get("lines") or layout.get("words"):
             raw_fields["_azure_layout"] = layout
-        raw_fields = self._enrich_parsed_fields(
-            raw_fields,
-            confidence_scores,
-            document_type=document_type,
-        )
         page_count = len(getattr(result, "pages", []) or [])
 
         return OCRResult(
@@ -190,154 +183,6 @@ class AzureOCRService:
                 words.append({"content": content, "box": box})
 
         return {"lines": lines, "words": words}
-
-    def _enrich_parsed_fields(
-        self,
-        raw_fields: dict[str, Any],
-        confidence_scores: dict[str, float],
-        *,
-        document_type: str,
-    ) -> dict[str, Any]:
-        """Merge regex-parsed values for Emirates ID and Mulkiya uploads."""
-        doc_lower = (document_type or "").lower()
-        content = raw_fields.get("content")
-        text = content if isinstance(content, str) else ""
-        parsed: dict[str, Any] = {}
-
-        if "emirates_id" in doc_lower:
-            from apps.ocr.services.emirates_id_parser import (
-                extract_emirate_from_emirates_id_back,
-                extract_emirates_id_number,
-                extract_gender_from_emirates_id,
-                extract_nationality_from_emirates_id,
-            )
-
-            nationality = extract_nationality_from_emirates_id(
-                text,
-                existing_fields=raw_fields,
-            )
-            if nationality:
-                parsed["nationality"] = nationality
-                # Keep Azure key aligned so field_mapper does not prefer Arabic.
-                if "Nationality" in raw_fields:
-                    parsed["Nationality"] = nationality
-
-            if "emirates_id_front" in doc_lower or doc_lower == "emirates_id":
-                emirates_id = extract_emirates_id_number(
-                    text,
-                    existing_fields=raw_fields,
-                )
-                if emirates_id:
-                    parsed["emirates_id"] = emirates_id
-                    if "DocumentNumber" in raw_fields:
-                        parsed["DocumentNumber"] = emirates_id
-
-                gender = extract_gender_from_emirates_id(
-                    text,
-                    existing_fields=raw_fields,
-                )
-                if gender:
-                    parsed["gender"] = gender
-                    parsed["Sex"] = gender
-
-            if "emirates_id_back" in doc_lower:
-                emirate = extract_emirate_from_emirates_id_back(
-                    text,
-                    existing_fields=raw_fields,
-                )
-                if emirate:
-                    parsed["emirate"] = emirate
-                    if "IssuingPlace" in raw_fields:
-                        parsed["IssuingPlace"] = emirate
-
-        if doc_lower in {"driving_license_front", "driving_license"}:
-            parsed.update(
-                parse_driving_license_document(
-                    text,
-                    existing_fields=raw_fields,
-                    document_type=document_type,
-                )
-            )
-
-        if "mulkiya" in doc_lower and text.strip():
-            parsed.update(
-                parse_mulkiya_document(
-                    text,
-                    document_type=document_type,
-                    existing_fields=raw_fields,
-                )
-            )
-
-        if not parsed:
-            return raw_fields
-
-        base_confidence = float(confidence_scores.get("content", 0.75))
-        enriched = dict(raw_fields)
-
-        if doc_lower in {"driving_license_front", "driving_license"}:
-            if parsed.get("license_no"):
-                # DocumentNumber on licenses is the license no, not Emirates ID.
-                enriched.pop("DocumentNumber", None)
-            if parsed.get("license_from_date"):
-                enriched["DateOfIssue"] = parsed["license_from_date"]
-                confidence_scores.setdefault("DateOfIssue", base_confidence)
-            if parsed.get("license_to_date"):
-                enriched["DateOfExpiration"] = parsed["license_to_date"]
-                confidence_scores.setdefault("DateOfExpiration", base_confidence)
-
-        for key, value in parsed.items():
-            if key in {"document_type"}:
-                continue
-            safe_value = to_json_safe(value)
-            if safe_value in (None, ""):
-                continue
-            enriched[key] = safe_value
-            confidence_scores.setdefault(key, base_confidence)
-
-        if "mulkiya" in doc_lower and parsed.get("plate_source"):
-            plate_source = parsed["plate_source"]
-            for alias_key in (
-                "origin",
-                "PlaceOfIssue",
-                "place_of_issue",
-                "LicensingAuthority",
-                "licensing_authority",
-                "plate_source",
-            ):
-                enriched[alias_key] = plate_source
-                confidence_scores.setdefault(alias_key, base_confidence)
-
-        if "mulkiya" in doc_lower and parsed.get("plate_code"):
-            plate_code = parsed["plate_code"]
-            for alias_key in (
-                "plate_code",
-                "traffic_plate_no",
-                "plate_category",
-            ):
-                enriched[alias_key] = plate_code
-                confidence_scores.setdefault(alias_key, base_confidence)
-
-        if "mulkiya" in doc_lower and parsed.get("registration_date"):
-            registration_date = parsed["registration_date"]
-            for alias_key in (
-                "registration_date",
-                "RegDate",
-                "Reg_Date",
-                "reg_date",
-            ):
-                enriched[alias_key] = registration_date
-                confidence_scores.setdefault(alias_key, base_confidence)
-            for expiry_key in (
-                "expiry_date",
-                "ExpiryDate",
-                "DateOfExpiration",
-                "expiration_date",
-                "RegistrationDate",
-                "reg_dt",
-            ):
-                enriched.pop(expiry_key, None)
-
-        return enriched
 
     @staticmethod
     def _field_value(azure_field: Any) -> Any:

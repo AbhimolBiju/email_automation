@@ -39,7 +39,7 @@ class OCRExtractViewTests(TestCase):
             content_type="image/png",
         )
 
-    @patch("apps.ocr.views.AzureOCRService.analyze_document")
+    @patch("deals.services.ocr.pipeline.AzureOCRService.analyze_document")
     def test_extract_returns_mapped_fields(self, analyze_document: MagicMock) -> None:
         """Successful OCR should return job_id and extracted field payloads."""
         analyze_document.return_value = OCRResult(
@@ -89,7 +89,7 @@ class OCRExtractViewTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("file", response.data)
 
-    @patch("apps.ocr.views.AzureOCRService.analyze_document")
+    @patch("deals.services.ocr.pipeline.AzureOCRService.analyze_document")
     def test_azure_failure_returns_error_payload(
         self, analyze_document: MagicMock
     ) -> None:

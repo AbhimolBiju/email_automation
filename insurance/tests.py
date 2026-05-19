@@ -17,7 +17,7 @@ from insurance.providers.qic_masterdata import lookup_make_model_codes
 from insurance.providers.qic_masterdata import lookup_nationality_code
 from insurance.providers.qic_provider import QICProvider
 from insurance.providers.factory import build_provider, resolve_provider_class
-from insurance.services.quote_service import get_best_quotes
+from insurance.services.quote_service import get_best_quotes, refresh_quote_batch
 from leads.models import Lead
 
 
@@ -99,6 +99,18 @@ class InsuranceQuoteIntegrationTests(TestCase):
         self.assertEqual(QuoteBatch.objects.count(), 1)
         self.assertEqual(QuoteRequestLog.objects.count(), 3)
         self.assertEqual(QuoteResult.objects.count(), 3)
+
+    def test_refresh_quote_batch_reuses_existing_batch(self):
+        self._create_provider(name="NIA", code="NIA", priority=1, quote_total=1450)
+        self._create_provider(name="DIC", code="DIC", priority=2, quote_total=1180)
+
+        initial = get_best_quotes(self.deal.id)
+        batch_id = initial["batch"]["id"]
+
+        refresh_quote_batch(batch_id)
+
+        self.assertEqual(QuoteBatch.objects.count(), 1)
+        self.assertEqual(QuoteBatch.objects.first().id, batch_id)
 
     def test_get_best_quotes_allows_partial_success(self):
         self._create_provider(name="NIA", code="NIA", priority=1, quote_total=1450)

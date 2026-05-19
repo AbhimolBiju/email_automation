@@ -306,7 +306,7 @@ class MulkiyaParserTests(SimpleTestCase):
 
     def test_normalize_plate_source_never_returns_arabic(self) -> None:
         """Unknown Arabic text should not be returned as plate source."""
-        from apps.ocr.services.mulkiya_parser import normalize_plate_source
+        from apps.ocr.plate_utils import normalize_plate_source
 
         self.assertEqual(normalize_plate_source("دبي"), "DUBAI")
         self.assertEqual(normalize_plate_source("نص غير معروف"), "")

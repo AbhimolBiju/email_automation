@@ -16,7 +16,13 @@ from .serializers import (
     QuoteBatchListSerializer,
     QuoteResultSerializer,
 )
-from .services import get_best_quotes, get_latest_quote_batch, health_check_provider, list_quote_batches
+from .services import (
+    get_best_quotes,
+    get_latest_quote_batch,
+    health_check_provider,
+    list_quote_batches,
+    refresh_quote_batch,
+)
 from .tasks import enqueue_quote_generation
 
 logger = logging.getLogger(__name__)
@@ -151,18 +157,25 @@ def latest_quote_for_deal(request, deal_id):
 
 
 @api_view(["POST"])
-def refresh_quotes(request, deal_id):
-    try:
-        Deal.objects.only("id").get(id=deal_id)
-    except Deal.DoesNotExist:
-        raise NotFound("Deal not found")
-
-    triggered_by_id = getattr(request.user, "id", None) if getattr(request.user, "is_authenticated", False) else None
-    payload = get_best_quotes(
-        deal_id,
-        force_refresh=True,
-        triggered_by_id=triggered_by_id,
+def refresh_quote_batch_view(request, batch_id):
+    batch = (
+        QuoteBatch.objects.select_related("deal")
+        .filter(id=batch_id)
+        .first()
     )
+    if not batch:
+        raise NotFound("Quote batch not found")
+
+    triggered_by_id = (
+        getattr(request.user, "id", None)
+        if getattr(request.user, "is_authenticated", False)
+        else None
+    )
+    try:
+        payload = refresh_quote_batch(batch_id, triggered_by_id=triggered_by_id)
+    except ValueError as exc:
+        raise NotFound(str(exc)) from exc
+
     return success_response(
         message="Quote refresh completed successfully",
         data=payload,

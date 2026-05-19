@@ -16,10 +16,14 @@ Including another URLconf
 """
 
 from django.urls import include, path
+
+from deals.ocr_views import extract_deal_document
+
 from .views import *
 from .token_views import CookieTokenRefreshView
 
 urlpatterns = [
+    path("ocr/extract/", extract_deal_document, name="ocr-extract"),
     path("ocr/", include("apps.ocr.urls")),
     path("invoice/", include("apps.invoice.urls")),
     path("auth/token/refresh/", CookieTokenRefreshView.as_view(), name="token_refresh"),

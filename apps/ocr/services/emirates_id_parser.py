@@ -7,7 +7,7 @@ from typing import Any
 
 from documents.ocr_parser import normalize_space
 
-from apps.ocr.services.mulkiya_parser import _detect_emirate
+from apps.ocr.plate_utils import _detect_emirate
 
 # Map short Latin codes printed on Emirates ID cards.
 # English country names that should match CRM nationality dropdown labels.

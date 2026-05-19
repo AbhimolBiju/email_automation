@@ -17,6 +17,7 @@ Including another URLconf
 
 from django.urls import include, path
 from .policy_issuance_views import policy_issuance_detail, policy_issuances
+from .qic_api_views import VehicleLookupView
 from .views import *
 
 urlpatterns = [
@@ -38,4 +39,5 @@ urlpatterns = [
     path("quotes/<int:batch_id>/results/", quote_batch_results),
     path("quotes/deal/<int:deal_id>/latest/", latest_quote_for_deal),
     path("quotes/<int:deal_id>/refresh/", refresh_quotes),
+    path("vehicle/lookup/", VehicleLookupView.as_view()),
 ]

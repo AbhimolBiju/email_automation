@@ -23,3 +23,13 @@ class QICDownloadQuoteDocumentSerializer(serializers.Serializer):
 
 class QICVinRequestSerializer(serializers.Serializer):
     vin = serializers.CharField(required=True, allow_blank=False)
+
+
+class VehicleLookupRequestSerializer(serializers.Serializer):
+    Vin = serializers.CharField(required=True, allow_blank=False, trim_whitespace=True)
+
+    def validate_Vin(self, value: str) -> str:
+        normalized = value.strip().upper()
+        if not normalized:
+            raise serializers.ValidationError("VIN is required.")
+        return normalized

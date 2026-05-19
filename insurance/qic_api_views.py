@@ -16,6 +16,7 @@ from .qic_api_serializers import (
     QICDownloadQuoteDocumentSerializer,
     QICLoosePayloadSerializer,
     QICVinRequestSerializer,
+    VehicleLookupRequestSerializer,
 )
 
 
@@ -344,6 +345,37 @@ class QICRenewPolicyView(APIView):
                 errors={"detail": str(exc)},
             )
         return success_response(message="QIC policy renewal quote fetched successfully", data=data)
+
+
+class VehicleLookupView(APIView):
+    """POST /insurance/vehicle/lookup/ — Bayanaty vehicle details by chassis/VIN."""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = VehicleLookupRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return error_response(
+                message="Invalid request payload",
+                code=status.HTTP_400_BAD_REQUEST,
+                errors=serializer.errors,
+            )
+        try:
+            provider = _get_qic_provider()
+            data = provider.bayanaty_vehicle_details(vin=serializer.validated_data["Vin"])
+        except LookupError as exc:
+            return error_response(
+                message=str(exc),
+                code=status.HTTP_404_NOT_FOUND,
+                errors={"provider": ["QIC not available"]},
+            )
+        except InsuranceProviderError as exc:
+            return error_response(
+                message="Vehicle lookup failed",
+                code=status.HTTP_400_BAD_REQUEST,
+                errors={"detail": str(exc)},
+            )
+        return success_response(message="Vehicle details fetched successfully", data=data)
 
 
 class QICBayanatyVehicleDetailsView(APIView):

@@ -50,6 +50,20 @@ def enrich_raw_fields_for_deal(
         enriched[key] = safe_value
         confidence_scores.setdefault(key, base_confidence)
 
+    if parsed.get("name"):
+        full_name = to_json_safe(parsed["name"])
+        enriched["name"] = full_name
+        enriched["customer_name"] = full_name
+        confidence_scores.setdefault("name", base_confidence)
+        confidence_scores.setdefault("customer_name", base_confidence)
+
+    if parsed.get("tcf_number") or parsed.get("traffic_code"):
+        tcf = to_json_safe(parsed.get("tcf_number") or parsed.get("traffic_code"))
+        enriched["tcf_number"] = tcf
+        enriched["traffic_code"] = tcf
+        enriched["tcf_no"] = tcf
+        confidence_scores.setdefault("tcf_number", base_confidence)
+
     if "mulkiya" in doc_lower and parsed.get("plate_source"):
         plate_source = parsed["plate_source"]
         for alias_key in (
@@ -67,6 +81,12 @@ def enrich_raw_fields_for_deal(
         plate_code = parsed["plate_code"]
         for alias_key in ("plate_code", "traffic_plate_no", "plate_category"):
             enriched[alias_key] = plate_code
+            confidence_scores.setdefault(alias_key, base_confidence)
+
+    if "mulkiya" in doc_lower and parsed.get("nationality"):
+        nationality = parsed["nationality"]
+        for alias_key in ("nationality", "Nationality"):
+            enriched[alias_key] = nationality
             confidence_scores.setdefault(alias_key, base_confidence)
 
     if "mulkiya" in doc_lower and parsed.get("registration_date"):

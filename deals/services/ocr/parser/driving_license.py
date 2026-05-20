@@ -929,23 +929,21 @@ def parse_driving_license(text,document_type="driving_license_front",key_values=
     lower_text = cleaned_text.lower()
 
 
-    # AUTO SIDE DETECTION
+    # SIDE DETECTION — explicit upload type wins; avoid front-only keywords
+    # ("light vehicle", "automatic gear") that also appear on license fronts.
+    doc_lower = document_type.lower()
 
-    side = "front"
-
-    back_keywords = [
-
-        "traffic code",
-        "traffic code no",
-        "permitted vehicles",
-        "vehicle types",
-        "light vehicle",
-        "automatic gear"
-
-    ]
-
-    if ("back" in document_type.lower()or any(k in lower_text for k in back_keywords)):
+    if doc_lower.endswith("_back"):
         side = "back"
+    elif doc_lower.endswith("_front"):
+        side = "front"
+    elif re.search(r"traffic\s*code", lower_text) and not re.search(
+        r"\b(license|licence)\s*(no|number)\b",
+        lower_text,
+    ):
+        side = "back"
+    else:
+        side = "front"
 
 
     # BACK SIDE

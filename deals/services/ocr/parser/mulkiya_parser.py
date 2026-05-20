@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 
+from apps.ocr.services.emirates_id_parser import extract_nationality_from_emirates_id
+
 
 def normalize_date(date_value):
     if not date_value:
@@ -540,7 +542,7 @@ def parse_mulkiya(text, key_values=None, tables=None, document_type=None):
         if m:
             data["plate_code"] = m.group(1)
             data["plate_number"] = m.group(2)
-            data["registration_no"] = m.group(2)
+            data["registration_no"] = f"{m.group(1)}/{m.group(2)}"
 
 
     # 🔹 Place of Issue
@@ -577,13 +579,13 @@ def parse_mulkiya(text, key_values=None, tables=None, document_type=None):
         if len(owner_clean.split()) >= 2:
             data["owner"] = owner_clean.title()
     
-    # 🔹 Nationality
-    nationality_value = get_kv_value([
-        "nationality"
-        ])
-
+    # 🔹 Nationality — Nationality / الجنسية label (same patterns as Emirates ID)
+    nationality_value = extract_nationality_from_emirates_id(
+        full_text,
+        existing_fields=key_values,
+    )
     if nationality_value:
-        data["nationality"] = nationality_value.title()
+        data["nationality"] = nationality_value
 
 
     # 🔹 Registration Date
@@ -772,15 +774,6 @@ def parse_mulkiya(text, key_values=None, tables=None, document_type=None):
         if owner:
             data["owner"] = owner.title()
 
-
-    #nationality
-    if "nationality" not in data:
-        nationality = get_value_before_label(lines, "Nationality")
-        if not nationality:
-            nationality = get_value_after_label(lines, "Nationality")
-
-        if nationality and re.match(r"^[A-Za-z]+$", nationality):
-            data["nationality"] = nationality.title()
 
     # Dates
 

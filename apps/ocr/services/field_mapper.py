@@ -11,6 +11,7 @@ from apps.ocr.field_mappings import (
     DATE_FIELDS,
     GENDER_FIELDS,
     PLATE_SOURCE_FIELDS,
+    all_crm_fields_for_schema,
     get_schema_mapping,
     get_secondary_schema_mapping,
     schema_exists,
@@ -116,8 +117,12 @@ def map_ocr_fields(ocr_result: OCRResult, target_schema: str) -> MappedFields:
     for azure_field, crm_field in secondary_mapping.items():
         append_mapped_field(azure_field, crm_field, track_unmapped=False)
 
-    # Parser-enriched keys (e.g. ``nationality``) are already CRM names.
-    crm_targets = set(schema_mapping.values()) | set(secondary_mapping.values())
+    # Parser-enriched keys (e.g. ``name``, ``nationality``) are already CRM names.
+    crm_targets = (
+        all_crm_fields_for_schema(target_schema)
+        | set(schema_mapping.values())
+        | set(secondary_mapping.values())
+    )
     for crm_field in crm_targets:
         append_mapped_field(crm_field, crm_field, track_unmapped=False)
 

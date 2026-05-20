@@ -10,6 +10,8 @@ from __future__ import annotations
 FIELD_MAPPING_SCHEMAS: dict[str, dict[str, dict[str, str]]] = {
     "deal_create": {
         "prebuilt-idDocument": {
+            "name": "name",
+            "customer_name": "name",
             "FirstName": "first_name",
             "LastName": "last_name",
             "DateOfBirth": "date_of_birth",
@@ -21,6 +23,10 @@ FIELD_MAPPING_SCHEMAS: dict[str, dict[str, dict[str, str]]] = {
             "LicenseNumber": "license_no",
             "license_no": "license_no",
             "licence_no": "license_no",
+            "tcf_number": "tcf_number",
+            "traffic_code": "tcf_number",
+            "TCFNumber": "tcf_number",
+            "traffic_file_no": "tcf_number",
             "Nationality": "nationality",
             "nationality": "nationality",
             "Sex": "gender",
@@ -146,6 +152,47 @@ DOCUMENT_TYPE_MODEL_MAP: dict[str, str] = {
 }
 
 DEFAULT_AZURE_MODEL = "prebuilt-document"
+
+# CRM keys written by deal parsers (enrichment) that may not appear in Azure schema maps.
+DEAL_CREATE_PARSER_CRM_FIELDS: frozenset[str] = frozenset(
+    {
+        "name",
+        "first_name",
+        "last_name",
+        "customer_name",
+        "owner",
+        "emirates_id",
+        "license_no",
+        "license_from_date",
+        "license_to_date",
+        "date_of_birth",
+        "id_expiry_date",
+        "nationality",
+        "gender",
+        "emirate",
+        "registration_no",
+        "registration_date",
+        "plate_code",
+        "plate_source",
+        "tcf_number",
+        "chassis_no",
+        "make_id",
+        "model_id",
+        "model_year",
+        "body_type_id",
+        "traffic_code",
+    }
+)
+
+
+def all_crm_fields_for_schema(target_schema: str) -> set[str]:
+    """Union of CRM targets across every Azure model map for a schema."""
+    schema = FIELD_MAPPING_SCHEMAS.get(target_schema, {})
+    fields: set[str] = set(DEAL_CREATE_PARSER_CRM_FIELDS)
+    for model_map in schema.values():
+        if isinstance(model_map, dict):
+            fields.update(model_map.values())
+    return fields
 
 
 def resolve_model_id(document_type: str) -> str:

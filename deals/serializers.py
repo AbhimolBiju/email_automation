@@ -137,6 +137,8 @@ class DealDetailSerializer(serializers.ModelSerializer):
             "id": obj.lead.id,
             "name": obj.lead.name,
             "email": obj.lead.email,
+            "address": obj.lead.address,
+            "occupation": obj.lead.occupation,
             "mobile_number": obj.lead.mobile_number,
             "phone_number": obj.lead.phone_number,
             "product_type": obj.lead.product_type,

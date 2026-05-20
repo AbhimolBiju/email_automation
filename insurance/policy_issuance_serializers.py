@@ -283,10 +283,9 @@ class PolicyIssuanceListSerializer(serializers.ModelSerializer):
 
 
 def deal_product_label(deal: Deal) -> str:
-    try:
-        return deal.get_sub_type_display() or deal.get_insurance_type_display() or deal.insurance_type or "Motor"
-    except Exception:
-        return deal.insurance_type or "Motor"
+    from insurance.product_labels import deal_product_type_label
+
+    return deal_product_type_label(deal)
 
 
 def create_policy_issuance_from_payload(*, payload: dict, batch: QuoteBatch, quote_result: QuoteResult | None) -> PolicyIssuance:

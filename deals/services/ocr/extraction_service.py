@@ -13,6 +13,10 @@ from deals.services.ocr.parser.mulkiya_parser import parse_mulkiya
 from deals.services.ocr.validator.driving_license_val import validate_driving_license
 from deals.services.ocr.validator.emirate_validator import validate_emirates_id
 from deals.services.ocr.validator.mulkiya_validator import validate_mulkiya
+from deals.services.ocr.validation_maps import (
+    VALIDATION_ERROR_CASCADE,
+    VALIDATION_ERROR_TO_CRM,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -103,26 +107,25 @@ def _apply_validation(
     mapped: dict[str, Any],
     validation: dict[str, Any],
 ) -> dict[str, Any]:
-    """Drop mapped fields that failed validation when status is not VERIFIED."""
+    """Drop mapped fields that failed format validation when status is not VERIFIED."""
     if validation.get("status") in {None, "VERIFIED", "SKIPPED"}:
         return mapped
     errors = validation.get("errors") or {}
     if not isinstance(errors, dict):
         return mapped
 
-    field_error_map = {
-        "emirates_id_number": "emirates_id",
-        "license_no": "license_no",
-        "registration_no": "registration_no",
-        "tcf_no": "tcf_number",
-        "chassis_no": "chassis_no",
-        "plate_code": "plate_code",
-        "place_of_issue": "plate_source",
-    }
+    for error_field, message in errors.items():
+        # Keep extracted values when the only issue is a missing optional/combined field.
+        if message == "Missing field":
+            continue
 
-    for error_field in errors:
-        crm_key = field_error_map.get(error_field, error_field)
-        mapped.pop(crm_key, None)
+        keys_to_remove = set(VALIDATION_ERROR_CASCADE.get(error_field, ()))
+        crm_key = VALIDATION_ERROR_TO_CRM.get(error_field, error_field)
+        keys_to_remove.add(crm_key)
+        keys_to_remove.add(error_field)
+
+        for key in keys_to_remove:
+            mapped.pop(key, None)
 
     return mapped
 

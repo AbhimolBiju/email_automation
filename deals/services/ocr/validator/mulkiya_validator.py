@@ -1,3 +1,22 @@
+import re
+
+
+def _is_valid_registration_no(values: dict) -> bool:
+    """Accept digits-only plate number or ``CODE/NUMBER`` (as on the card)."""
+    registration_no = str(values.get("registration_no") or "").strip().upper()
+    if not registration_no:
+        return False
+
+    plate_number = str(values.get("plate_number") or "").strip()
+    if plate_number and registration_no == plate_number.upper():
+        return bool(re.fullmatch(r"\d{3,6}", registration_no))
+
+    if "/" in registration_no:
+        return bool(re.fullmatch(r"[A-Z0-9]{1,3}/\d{3,6}", registration_no))
+
+    return bool(re.fullmatch(r"\d{3,6}", registration_no))
+
+
 def validate_mulkiya(data):
     errors = {}
 
@@ -45,7 +64,7 @@ def validate_mulkiya(data):
         if not values.get(field):
             errors[field] = "Missing field"
 
-    if values.get("registration_no") and "/" not in values["registration_no"]:
+    if values.get("registration_no") and not _is_valid_registration_no(values):
         errors["registration_no"] = "Invalid registration number format"
 
     if values.get("tcf_no") and not values["tcf_no"].isdigit():

@@ -41,3 +41,5 @@ urlpatterns = [
     path("quotes/batch/<int:batch_id>/refresh/", refresh_quote_batch_view),
     path("vehicle/lookup/", VehicleLookupView.as_view()),
 ]
+
+

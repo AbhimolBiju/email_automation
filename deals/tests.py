@@ -199,6 +199,8 @@ class DealDetailEditTests(TestCase):
         lead = Lead.objects.create(
             name="Edit Customer",
             email="edit@example.com",
+            address="Dubai Marina, UAE",
+            occupation="Engineer",
             mobile_number="+971501234567",
             phone_number="+971501234567",
             status="QUALIFIED",
@@ -239,6 +241,8 @@ class DealDetailEditTests(TestCase):
         self.assertEqual(payload["id"], deal.id)
         self.assertEqual(payload["lead"]["id"], lead.id)
         self.assertEqual(payload["lead"]["name"], "Edit Customer")
+        self.assertEqual(payload["lead"]["address"], "Dubai Marina, UAE")
+        self.assertEqual(payload["lead"]["occupation"], "Engineer")
         self.assertEqual(len(payload["documents"]), 1)
         self.assertEqual(payload["documents"][0]["id"], document.id)
         self.assertEqual(payload["documents"][0]["document_type"], "driving_license_front")

@@ -102,7 +102,9 @@ class QuoteBatchListSerializer(serializers.ModelSerializer):
         return " ".join(parts) or (deal.reg_number or "")
 
     def get_product(self, obj):
-        return obj.deal.get_sub_type_display() or obj.deal.get_insurance_type_display() or obj.deal.insurance_type or "Motor"
+        from insurance.product_labels import deal_product_type_label
+
+        return deal_product_type_label(obj.deal)
 
     class Meta:
         model = QuoteBatch
@@ -137,7 +139,9 @@ class QuoteBatchDetailSerializer(serializers.ModelSerializer):
         return obj.lead.name if obj.lead else ""
 
     def get_product(self, obj):
-        return obj.deal.get_sub_type_display() or obj.deal.get_insurance_type_display() or obj.deal.insurance_type or "Motor"
+        from insurance.product_labels import deal_product_type_label
+
+        return deal_product_type_label(obj.deal)
 
     def get_vehicle(self, obj):
         deal = obj.deal

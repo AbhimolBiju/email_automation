@@ -70,10 +70,18 @@ class Lead(models.Model):
         ("medical", "Medical"),
     ]
     INSURANCE_TYPE = [
-        ("car_insurance_new", "Car Insurance New"),
-        ("car_insance_renewal", "Car Insurance Renewal"),
-        ("fleet_new", "Fleet New"),
-        ("fleet_renewal", "Fleet Renewal"),
+        ("New Vehicle Registration", "New Vehicle Registration"),
+        ("Change Vehicle Ownership", "Change Vehicle Ownership"),
+        ("Vehicle Renewal", "Vehicle Renewal"),
+        ("Import Vehicle", "Import Vehicle"),
+        ("Export Certificate", "Export Certificate"),
+        ("Update Registration Information", "Update Registration Information"),
+        ("Issue Trade Plate", "Issue Trade Plate"),
+        ("Renewal Trade Plate", "Renewal Trade Plate"),
+        (
+            "Vehicle Renewal with Change Number",
+            "Vehicle Renewal with Change Number",
+        ),
     ]
 
     SUB_TYPE_CHOICES = [

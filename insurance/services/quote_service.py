@@ -16,6 +16,7 @@ from django.utils import timezone
 
 from deals.models import Deal
 from insurance.models import InsuranceProvider, QuoteBatch, QuoteRequestLog, QuoteResult
+from insurance.product_labels import deal_product_type_label
 from insurance.providers import build_provider
 from insurance.providers.exceptions import InsuranceProviderError
 
@@ -339,10 +340,7 @@ def _serialize_batch(batch: QuoteBatch) -> dict[str, Any]:
                 if value not in (None, "")
             )
             or (batch.deal.reg_number or ""),
-            "product": batch.deal.get_sub_type_display()
-            or batch.deal.get_insurance_type_display()
-            or batch.deal.insurance_type
-            or "Motor",
+            "product": deal_product_type_label(batch.deal),
             "requested_at": batch.requested_at.isoformat(),
             "status": batch.status,
             "stage": batch.deal.get_stage_id_display(),

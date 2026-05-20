@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from apps.ocr.services.emirates_id_parser import extract_nationality_from_emirates_id
+from apps.ocr.nationality import extract_nationality_from_ocr
 
 
 def normalize_date(date_value):
@@ -580,7 +580,7 @@ def parse_mulkiya(text, key_values=None, tables=None, document_type=None):
             data["owner"] = owner_clean.title()
     
     # 🔹 Nationality — Nationality / الجنسية label (same patterns as Emirates ID)
-    nationality_value = extract_nationality_from_emirates_id(
+    nationality_value = extract_nationality_from_ocr(
         full_text,
         existing_fields=key_values,
     )

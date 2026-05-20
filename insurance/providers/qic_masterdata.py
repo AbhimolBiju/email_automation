@@ -128,6 +128,23 @@ def load_regn_location_records() -> list[dict[str, str]]:
 
 
 # ---------------------------------------------------------------------------
+# Private shared helpers
+# ---------------------------------------------------------------------------
+
+def _bayanaty_code_list(raw_field: Any) -> list[str]:
+    """Parse comma-separated Bayanaty IDs from masterdata (e.g. ',500116,')."""
+    if raw_field in (None, ""):
+        return []
+    return [token.strip() for token in str(raw_field).split(",") if token.strip()]
+
+
+def _bayanaty_code_matches(raw_field: Any, code: Any) -> bool:
+    if code in (None, ""):
+        return False
+    return str(code).strip() in _bayanaty_code_list(raw_field)
+
+
+# ---------------------------------------------------------------------------
 # Private shared helper: fuzzy make+model matching
 # ---------------------------------------------------------------------------
 
@@ -150,8 +167,26 @@ def _match_make_model_record(
 
     Returns the first matched record dict, or None if no match found.
     """
+    raw_make = str(make_value).strip() if make_value not in (None, "") else ""
+    raw_model = str(model_value).strip() if model_value not in (None, "") else ""
     normalized_make = normalize_masterdata_value(make_value)
     normalized_model = normalize_masterdata_value(model_value)
+
+    # ── Pass 0: Bayanaty make/model IDs (e.g. 200075 / 300276) ───────────────
+    if raw_make and raw_model:
+        for record in records:
+            bayanaty_make = str(record.get("bayanaty_make_code", "")).strip()
+            bayanaty_model = str(record.get("bayanaty_model_code", "")).strip()
+            if bayanaty_make == raw_make and bayanaty_model == raw_model:
+                logger.info(
+                    "QIC make/model Bayanaty ID match: make=%r model=%r -> "
+                    "make_code=%s model_code=%s",
+                    make_value,
+                    model_value,
+                    record["make_code"],
+                    record["model_code"],
+                )
+                return record
 
     # ── Pass 1: exact match on both make and model ───────────────────────────
     for record in records:
@@ -235,23 +270,90 @@ def _match_make_model_record(
 
 
 # ---------------------------------------------------------------------------
+# Nationality aliases (form / OCR country names → QIC nationality_desc)
+# ---------------------------------------------------------------------------
+
+# Keys use normalize_masterdata_value() form (uppercase, no spaces/punctuation).
+# Do not map "Yemen" → "Yemeni": QIC masterdata uses nationality_desc "Yemen".
+NATIONALITY_INPUT_ALIASES: dict[str, str] = {
+    "INDIA": "Indian",
+    "PAKISTAN": "Pakistani",
+    "BANGLADESH": "Bangladeshi",
+    "PHILIPPINES": "Filipino",
+    "EGYPT": "Egyptian",
+    "UAE": "Emirati",
+    "UNITEDARABEMIRATES": "Emirati",
+    "SRILANKA": "Sri Lankan",
+    "NEPAL": "Nepalese",
+    "JORDAN": "Jordanian",
+    "LEBANON": "Lebanese",
+    "SYRIA": "Syrian",
+    "IRAQ": "Iraqi",
+    "IRAN": "Iranian",
+    "OMAN": "Omani",
+    "BAHRAIN": "Bahraini",
+    "KUWAIT": "Kuwaiti",
+    "QATAR": "Qatari",
+    "SAUDIARABIA": "Saudi",
+    # Repair incorrect demonyms saved on deals (e.g. frontend alias bug).
+    "YEMENI": "Yemen",
+}
+
+
+def _resolve_nationality_description(value: Any) -> str:
+    """Return a QIC nationality_desc candidate for lookup, or empty string."""
+    if value in (None, ""):
+        return ""
+
+    text = str(value).strip()
+    if not text:
+        return ""
+
+    normalized = normalize_masterdata_value(text)
+    alias = NATIONALITY_INPUT_ALIASES.get(normalized)
+    if alias:
+        return alias
+
+    for record in load_nationality_records():
+        if normalize_masterdata_value(record["nationality_desc"]) == normalized:
+            return record["nationality_desc"]
+
+    return text
+
+
+# ---------------------------------------------------------------------------
 # Public lookup functions
 # ---------------------------------------------------------------------------
 
 def lookup_nationality_code(value: Any) -> str:
     """
-    Map nationality input (QIC code or description) to QIC nationality_code.
+    Map nationality input (QIC code, description, or form/OCR country name) to QIC code.
     Returns the code if found, otherwise returns empty string (for validation to catch).
     """
-    normalized = normalize_masterdata_value(value)
+    if value in (None, ""):
+        return ""
+
+    resolved_desc = _resolve_nationality_description(value)
+    normalized = normalize_masterdata_value(resolved_desc)
     for record in load_nationality_records():
         if (
             normalize_masterdata_value(record["nationality_code"]) == normalized
             or normalize_masterdata_value(record["nationality_desc"]) == normalized
         ):
             return record["nationality_code"]
-    if value not in (None, ""):
-        logger.warning("QIC lookup_nationality_code: unable to map value=%r", value)
+
+    # Allow direct code match on original input (e.g. "082").
+    original_norm = normalize_masterdata_value(value)
+    if original_norm != normalized:
+        for record in load_nationality_records():
+            if normalize_masterdata_value(record["nationality_code"]) == original_norm:
+                return record["nationality_code"]
+
+    logger.warning(
+        "QIC lookup_nationality_code: unable to map value=%r (resolved=%r)",
+        value,
+        resolved_desc,
+    )
     return ""
 
 
@@ -293,9 +395,15 @@ def lookup_bayanaty_make_model_ids(make_value: Any, model_value: Any) -> tuple[s
 
 def lookup_body_type_code(value: Any) -> str:
     """
-    Map body type input (QIC code or description) to QIC body_type_code.
-    Returns the code if found, otherwise returns empty string (for validation to catch).
+    Map body type input to QIC body_type_code.
+
+    Accepts QIC code (e.g. '1001'), description (e.g. 'Saloon'), or Bayanaty ID
+    (e.g. '500116' from vehicle lookup / deal.body_type_id).
     """
+    if value in (None, ""):
+        return ""
+
+    raw = str(value).strip()
     normalized = normalize_masterdata_value(value)
     for record in load_body_type_records():
         if (
@@ -303,6 +411,15 @@ def lookup_body_type_code(value: Any) -> str:
             or normalize_masterdata_value(record["body_type_desc"]) == normalized
         ):
             return record["body_type_code"]
+        if _bayanaty_code_matches(record.get("bayanaty_body_type_code"), raw):
+            logger.info(
+                "QIC body type Bayanaty ID match: %r -> code=%s desc=%r",
+                value,
+                record["body_type_code"],
+                record["body_type_desc"],
+            )
+            return record["body_type_code"]
+
     logger.warning("QIC lookup_body_type_code: unable to map value=%r", value)
     return ""
 

@@ -13,8 +13,11 @@ from insurance.providers.dic_provider import DICProvider
 from insurance.providers.nia_masterdata import load_sheet_records as load_nia_sheet_records
 from insurance.providers.nia_masterdata import lookup_code as nia_lookup_code
 from insurance.providers.nia_provider import NIAProvider
-from insurance.providers.qic_masterdata import lookup_make_model_codes
-from insurance.providers.qic_masterdata import lookup_nationality_code
+from insurance.providers.qic_masterdata import (
+    lookup_body_type_code,
+    lookup_make_model_codes,
+    lookup_nationality_code,
+)
 from insurance.providers.qic_provider import QICProvider
 from insurance.providers.factory import build_provider, resolve_provider_class
 from insurance.services.quote_service import get_best_quotes, refresh_quote_batch
@@ -460,6 +463,27 @@ class NIAProviderTests(TestCase):
         self.assertEqual(data["plan_name"], "Motor Comprehensive –Non Agency")
 from pathlib import Path
 from django.conf import settings
+
+
+class QICMasterdataLookupTests(TestCase):
+    def test_lookup_body_type_code_maps_bayanaty_id(self):
+        self.assertEqual(lookup_body_type_code("500116"), "1001")
+        self.assertEqual(lookup_body_type_code("1001"), "1001")
+        self.assertEqual(lookup_body_type_code("Saloon"), "1001")
+
+    def test_lookup_make_model_codes_maps_bayanaty_ids(self):
+        make_code, model_code = lookup_make_model_codes("200075", "300276")
+        self.assertTrue(make_code.strip().isdigit())
+        self.assertTrue(model_code.strip().isdigit())
+
+    def test_lookup_nationality_code_maps_form_and_ocr_labels(self):
+        self.assertEqual(lookup_nationality_code("Yemen"), "207")
+        self.assertEqual(lookup_nationality_code("Yemeni"), "207")
+        self.assertEqual(lookup_nationality_code("Pakistan"), "136")
+        self.assertEqual(lookup_nationality_code("Indian"), "082")
+        self.assertEqual(lookup_nationality_code("UAE"), "056")
+
+
 class ProviderMasterdataBuildTests(TestCase):
     
     

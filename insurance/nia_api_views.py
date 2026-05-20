@@ -213,6 +213,7 @@ class NIAProposalSummaryView(APIView):
                 sorted(list(payload.keys())),
                 {
                     "PolRefNo": payload.get("PolRefNo"),
+                    "ReferenceNo": payload.get("ReferenceNo"),
                     "quotation_no": payload.get("quotation_no"),
                     "QuotNo": payload.get("QuotNo"),
                     "polRefNo": payload.get("polRefNo"),
@@ -233,7 +234,8 @@ class NIAProposalSummaryView(APIView):
                 message="NIA proposal summary failed",
                 code=status.HTTP_400_BAD_REQUEST,
                 errors={"detail": str(exc)},
-            )
+                )
+        
         return success_response(message="NIA proposal summary fetched successfully", data=data)
 
 

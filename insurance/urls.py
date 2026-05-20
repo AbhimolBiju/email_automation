@@ -26,12 +26,10 @@ urlpatterns = [
     path("providers/<int:provider_id>/health-check/", provider_health_check),
     path("deals/<int:deal_id>/quotes/", get_deal_quotes),
     path("deals/<int:deal_id>/compare-quotes/", compare_quotes),
-
-    
+    path("vehicle/lookup/", VehicleLookupView.as_view()),
     path("dic/", include("insurance.dic_urls")),
     path("qic/", include("insurance.qic_urls")),
-    path("nia/", include("insurance.nia_url")),
-    
+    path("nia/", include("insurance.nia_urls")),
     path("policy-issuances/", policy_issuances),
     path("policy-issuances/<int:pk>/", policy_issuance_detail),
     path("quotes/", list_quotes),
@@ -39,7 +37,4 @@ urlpatterns = [
     path("quotes/<int:batch_id>/results/", quote_batch_results),
     path("quotes/deal/<int:deal_id>/latest/", latest_quote_for_deal),
     path("quotes/batch/<int:batch_id>/refresh/", refresh_quote_batch_view),
-    path("vehicle/lookup/", VehicleLookupView.as_view()),
 ]
-
-

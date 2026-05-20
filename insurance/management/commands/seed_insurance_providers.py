@@ -59,6 +59,7 @@ PROVIDER_SEEDS = [
                 "party_code": "201001",
                 "division_code": "813",
                 "department_code": "10",
+                "default_sum_insured": "10000",
             },
         },
     },

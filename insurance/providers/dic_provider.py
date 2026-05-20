@@ -314,42 +314,6 @@ class DICProvider(BaseInsuranceProvider):
         )
         return self._unwrap_response(response)
 
-    def _extract_benefits_from_raw(self, payload: dict[str, Any]) -> dict[str, bool]:
-        """DIC benefits come from ``products[].covers.mandatory[]``.
-
-        Optional covers (``covers.optional``) are EXCLUDED — those are sold
-        through the add-ons page, not part of base benefits.
-        """
-        benefits: dict[str, bool] = {}
-        products = payload.get("products")
-        if not isinstance(products, list):
-            return benefits
-
-        for product in products:
-            if not isinstance(product, dict):
-                continue
-            covers = product.get("covers")
-            if not isinstance(covers, dict):
-                continue
-            mandatory = covers.get("mandatory")
-            if not isinstance(mandatory, list):
-                continue
-
-            for cover in mandatory:
-                if not isinstance(cover, dict):
-                    continue
-                cover_name = cover.get("coverName")
-                name = ""
-                if isinstance(cover_name, dict):
-                    candidate = cover_name.get("en") or cover_name.get("ar")
-                    name = str(candidate or "").strip()
-                elif isinstance(cover_name, str):
-                    name = cover_name.strip()
-                if name:
-                    benefits[name] = True
-
-        return benefits
-
     def _build_scheme_request(self, product: dict[str, Any]) -> dict[str, Any]:
         covers = product.get("covers") or {}
         mandatory = covers.get("mandatory") or []
@@ -361,113 +325,6 @@ class DICProvider(BaseInsuranceProvider):
                 "optional": ",".join(str(item.get("coverCode")) for item in optional if item.get("coverCode")),
             },
         }
-
-    def _product_display_name(self, product: dict[str, Any]) -> str:
-        prod_name = product.get("prodName")
-        if isinstance(prod_name, dict):
-            return str(prod_name.get("en") or prod_name.get("ar") or "").strip()
-        if isinstance(prod_name, str):
-            return prod_name.strip()
-        return str(product.get("prodCode") or "DIC Plan").strip()
-
-    def _extract_optional_addon_items(self, product: dict[str, Any]) -> list[dict[str, Any]]:
-        """Optional covers for add-ons UI (coverCode, name, premium)."""
-        covers = product.get("covers")
-        if not isinstance(covers, dict):
-            return []
-        optional = covers.get("optional")
-        if not isinstance(optional, list):
-            return []
-
-        items: list[dict[str, Any]] = []
-        for cover in optional:
-            if not isinstance(cover, dict):
-                continue
-            cover_code = str(cover.get("coverCode") or "").strip()
-            if not cover_code:
-                continue
-            cover_name = cover.get("coverName")
-            name = "Cover"
-            if isinstance(cover_name, dict):
-                name = str(cover_name.get("en") or cover_name.get("ar") or name).strip()
-            elif isinstance(cover_name, str) and cover_name.strip():
-                name = cover_name.strip()
-            try:
-                price = float(cover.get("premium") or 0)
-            except (TypeError, ValueError):
-                price = 0.0
-            items.append({"id": cover_code, "name": name, "price": price})
-        return items
-
-    def _sum_mandatory_premium(self, product: dict[str, Any]) -> float:
-        """Sum mandatory cover premiums from generate-quote product."""
-        covers = product.get("covers")
-        if not isinstance(covers, dict):
-            return 0.0
-        mandatory = covers.get("mandatory")
-        if not isinstance(mandatory, list):
-            return 0.0
-        total = 0.0
-        for cover in mandatory:
-            if not isinstance(cover, dict):
-                continue
-            try:
-                total += float(cover.get("premium") or 0)
-            except (TypeError, ValueError):
-                continue
-        return total
-
-    def _build_dic_plan_options(
-        self,
-        products: list[dict[str, Any]],
-        chosen_quotes: list[dict[str, Any]],
-    ) -> list[dict[str, Any]]:
-        quote_by_code: dict[str, dict[str, Any]] = {}
-        for entry in chosen_quotes:
-            code = str(entry.get("prodCode") or "").strip()
-            quote = entry.get("quote")
-            if code and isinstance(quote, dict):
-                quote_by_code[code] = quote
-
-        plan_options: list[dict[str, Any]] = []
-        for product in products:
-            if not isinstance(product, dict):
-                continue
-            prod_code = str(product.get("prodCode") or "").strip()
-            if not prod_code:
-                continue
-            quote = quote_by_code.get(prod_code) or {}
-            try:
-                total = float(
-                    quote.get("netToCustomer")
-                    or quote.get("grossPremium")
-                    or 0
-                )
-            except (TypeError, ValueError):
-                total = 0.0
-            try:
-                premium = float(
-                    quote.get("netPremium") or quote.get("grossPremium") or 0
-                )
-            except (TypeError, ValueError):
-                premium = 0.0
-            try:
-                vat = float(quote.get("vat") or 0)
-            except (TypeError, ValueError):
-                vat = 0.0
-
-            plan_options.append(
-                {
-                    "prodCode": prod_code,
-                    "plan_name": self._product_display_name(product),
-                    "total": total,
-                    "premium": premium,
-                    "vat": vat,
-                    "mandatory_premium": self._sum_mandatory_premium(product),
-                    "optional_addons": self._extract_optional_addon_items(product),
-                }
-            )
-        return plan_options
 
     def get_quote(self, payload: dict[str, Any]):
         started = time.perf_counter()
@@ -506,8 +363,6 @@ class DICProvider(BaseInsuranceProvider):
             key=lambda item: Decimal(str((item.get("quote") or {}).get("netToCustomer", "0"))),
         )
         scheme_data = best_quote["quote"]
-        plan_options = self._build_dic_plan_options(products, chosen_quotes)
-        selected_prod_code = str(best_quote.get("prodCode") or "").strip()
         return self.build_quote_from_mapping(
             {
                 "premium": scheme_data.get("netPremium", scheme_data.get("grossPremium", 0)),
@@ -521,8 +376,6 @@ class DICProvider(BaseInsuranceProvider):
                 "quotation_no": scheme_data.get("quotationNo"),
                 "products": products,
                 "selected_scheme": scheme_data,
-                "selected_prod_code": selected_prod_code,
-                "dic_plan_options": plan_options,
             },
             response_time_ms=int((time.perf_counter() - started) * 1000),
         )

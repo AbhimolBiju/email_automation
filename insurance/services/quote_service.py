@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import mimetypes
 import json
+import decimal
 from base64 import b64encode
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, timedelta
@@ -16,7 +17,6 @@ from django.utils import timezone
 
 from deals.models import Deal
 from insurance.models import InsuranceProvider, QuoteBatch, QuoteRequestLog, QuoteResult
-from insurance.product_labels import deal_product_type_label
 from insurance.providers import build_provider
 from insurance.providers.exceptions import InsuranceProviderError
 
@@ -26,6 +26,17 @@ logger = logging.getLogger(__name__)
 
 QUOTE_CACHE_TTL_SECONDS = 600
 QUOTE_BATCH_CACHE_KEY = "insurance:quote-batch:deal:{deal_id}"
+
+
+def _make_json_safe(obj):
+    """Recursively convert non-JSON-serializable types (Decimal etc.) to safe equivalents."""
+    if isinstance(obj, decimal.Decimal):
+        return float(obj)
+    if isinstance(obj, dict):
+        return {k: _make_json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_make_json_safe(i) for i in obj]
+    return obj
 
 
 def _quote_cache_key(deal_id: int) -> str:
@@ -340,7 +351,10 @@ def _serialize_batch(batch: QuoteBatch) -> dict[str, Any]:
                 if value not in (None, "")
             )
             or (batch.deal.reg_number or ""),
-            "product": deal_product_type_label(batch.deal),
+            "product": batch.deal.get_sub_type_display()
+            or batch.deal.get_insurance_type_display()
+            or batch.deal.insurance_type
+            or "Motor",
             "requested_at": batch.requested_at.isoformat(),
             "status": batch.status,
             "stage": batch.deal.get_stage_id_display(),
@@ -387,8 +401,8 @@ def _persist_success(
         deal=deal,
         provider=provider,
         batch=batch,
-        request_payload=payload,
-        response_payload=normalized_quote.raw_response,
+        request_payload=_make_json_safe(payload),
+        response_payload=_make_json_safe(normalized_quote.raw_response or {}),
         status=QuoteRequestLog.STATUS_SUCCESS,
         latency_ms=normalized_quote.response_time_ms,
         error_message="",
@@ -407,8 +421,8 @@ def _persist_success(
         response_time_ms=normalized_quote.response_time_ms,
         coverage_score=normalized_response["coverage_score"],
         status=QuoteResult.STATUS_SUCCESS,
-        normalized_response=normalized_response,
-        raw_response=normalized_quote.raw_response,
+        normalized_response=_make_json_safe(normalized_response),
+        raw_response=_make_json_safe(normalized_quote.raw_response or {}),
     )
     return {"result_id": result.id, **normalized_response}
 
@@ -457,9 +471,42 @@ def _fetch_provider_quote(
 ) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
     try:
         logger.info("Fetching quote for deal %s from provider %s", deal.id, provider.code)
+        payload = dict(payload)
+        payload["deal_id"] = deal.id
+        # Only override sum_insured from deal if it has a real positive value.
+        # If deal.sum_insured is missing/zero, keep whatever build_deal_quote_payload()
+        # already set (which uses _extract_sum_insured() with a safe 10000 default).
+        if deal.sum_insured is not None and float(deal.sum_insured or 0) > 0:
+            _si = float(deal.sum_insured)
+            payload["sum_insured"] = _si
+            if isinstance(payload.get("vehicle"), dict):
+                payload["vehicle"] = dict(payload["vehicle"])
+                payload["vehicle"]["sum_insured"] = _si
+        # else: do NOT touch payload["sum_insured"] — leave the default from
+        # build_deal_quote_payload() / _extract_sum_insured() intact
+
         _validate_payload_for_provider(provider.code, payload)
         provider_instance = build_provider(provider)
         normalized_quote = provider_instance.get_quote(payload)
+        try:
+            quote_dict = normalized_quote.as_dict(include_raw_response=False)
+            corrected_si = quote_dict.get("corrected_sum_insured")
+            if provider_instance.__class__.__name__ == "NIAProvider" or corrected_si:
+                if corrected_si:
+                    Deal.objects.filter(id=deal.id).update(
+                        sum_insured=Decimal(str(corrected_si))
+                    )
+                    logging.getLogger(__name__).info(
+                        "[quote_service] Persisted NIA corrected sum_insured=%.2f "
+                        "to deal %s",
+                        float(corrected_si),
+                        deal.id,
+                    )
+                    print(f"[quote_service] Saved corrected sum_insured={corrected_si} to deal {deal.id}")
+        except Exception as e:
+            logging.getLogger(__name__).warning(
+                "[quote_service] Could not persist corrected sum_insured: %s", e
+            )
         return {"provider": provider, "quote": normalized_quote}, None
     except InsuranceProviderError as exc:
         logger.warning(
@@ -545,89 +592,35 @@ def _is_batch_fresh(batch: QuoteBatch | None) -> bool:
     )
 
 
-def _reset_batch_for_refresh(batch: QuoteBatch) -> None:
-    """Clear prior results and reset batch metadata before re-fetching quotes."""
-    batch.results.all().delete()
-    QuoteRequestLog.objects.filter(batch=batch).delete()
-    batch.best_provider = None
-    batch.best_total = None
-    batch.status = QuoteBatch.STATUS_PROCESSING
-    batch.cache_expires_at = timezone.now() + timedelta(seconds=QUOTE_CACHE_TTL_SECONDS)
-    batch.save(
-        update_fields=[
-            "best_provider",
-            "best_total",
-            "status",
-            "cache_expires_at",
-            "updated_at",
-        ]
-    )
-
-
-def _attach_provider_statuses(
-    serialized: dict[str, Any],
+def get_best_quotes(
+    deal_id: int,
     *,
-    providers: list[InsuranceProvider],
-    quotes: list[dict[str, Any]],
-    failures: list[dict[str, Any]],
+    force_refresh: bool = False,
+    triggered_by_id: int | None = None,
 ) -> dict[str, Any]:
-    serialized["requested_provider_count"] = len(providers)
-    serialized["successful_provider_count"] = len(quotes)
-    serialized["failures"] = failures
-    results_by_provider: dict[str, dict[str, Any]] = {
-        str(item.get("provider") or "").upper(): item
-        for item in (serialized.get("results") or [])
-        if isinstance(item, dict)
-    }
-    provider_statuses: list[dict[str, Any]] = []
-    for provider in providers:
-        code = provider.code.upper()
-        result = results_by_provider.get(code)
-        if result:
-            provider_statuses.append(
-                {
-                    "provider": code,
-                    "provider_name": result.get("provider_name") or provider.name,
-                    "status": str(result.get("status") or "").lower() or "unknown",
-                    "result_id": result.get("id"),
-                    "error": result.get("error_message") or "",
-                }
-            )
-        else:
-            provider_statuses.append(
-                {
-                    "provider": code,
-                    "provider_name": provider.name,
-                    "status": "missing",
-                    "result_id": None,
-                    "error": "Provider did not produce a persisted result.",
-                }
-            )
-    serialized["providers"] = provider_statuses
-    return serialized
+    latest_batch = get_latest_quote_batch(deal_id)
+    if latest_batch and latest_batch.status == QuoteBatch.STATUS_PROCESSING and not force_refresh:
+        return _serialize_batch(latest_batch)
+    if _is_batch_fresh(latest_batch) and not force_refresh:
+        return _serialize_batch(latest_batch)
 
-
-def _run_quote_fetch_for_batch(
-    *,
-    deal: Deal,
-    batch: QuoteBatch,
-) -> dict[str, Any]:
+    deal = Deal.objects.select_related("lead", "lead__responsible").get(id=deal_id)
     providers = list(get_active_provider_configs())
 
     if not providers:
+        batch = _create_batch(deal, triggered_by_id)
         batch.status = QuoteBatch.STATUS_FAILED
         batch.save(update_fields=["status", "updated_at"])
         return _serialize_batch(batch)
 
     payload = build_deal_quote_payload(deal)
+    batch = _create_batch(deal, triggered_by_id)
+
     quotes: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
     max_workers = min(max(len(providers), 1), 8)
 
-    with ThreadPoolExecutor(
-        max_workers=max_workers,
-        thread_name_prefix=f"quote-batch-{deal.id}",
-    ) as executor:
+    with ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix=f"quote-batch-{deal.id}") as executor:
         futures = [
             executor.submit(
                 _fetch_provider_quote,
@@ -662,12 +655,40 @@ def _run_quote_fetch_for_batch(
 
     _rank_results(batch)
     serialized = _serialize_batch(batch)
-    return _attach_provider_statuses(
-        serialized,
-        providers=providers,
-        quotes=quotes,
-        failures=failures,
-    )
+    serialized["requested_provider_count"] = len(providers)
+    serialized["successful_provider_count"] = len(quotes)
+    serialized["failures"] = failures
+    # Always include a per-provider status block so callers never have to infer
+    # "missing provider" vs "provider attempted but failed".
+    results_by_provider: dict[str, dict[str, Any]] = {
+        str(item.get("provider") or "").upper(): item for item in (serialized.get("results") or []) if isinstance(item, dict)
+    }
+    provider_statuses: list[dict[str, Any]] = []
+    for provider in providers:
+        code = provider.code.upper()
+        result = results_by_provider.get(code)
+        if result:
+            provider_statuses.append(
+                {
+                    "provider": code,
+                    "provider_name": result.get("provider_name") or provider.name,
+                    "status": str(result.get("status") or "").lower() or "unknown",
+                    "result_id": result.get("id"),
+                    "error": result.get("error_message") or "",
+                }
+            )
+        else:
+            provider_statuses.append(
+                {
+                    "provider": code,
+                    "provider_name": provider.name,
+                    "status": "missing",
+                    "result_id": None,
+                    "error": "Provider did not produce a persisted result.",
+                }
+            )
+    serialized["providers"] = provider_statuses
+    return serialized
 
 
 def refresh_quote_batch(
@@ -675,7 +696,7 @@ def refresh_quote_batch(
     *,
     triggered_by_id: int | None = None,
 ) -> dict[str, Any]:
-    """Re-fetch insurer quotes for an existing batch without creating a new list row."""
+    """Re-fetch insurer quotes for the deal tied to an existing batch."""
     batch = (
         QuoteBatch.objects.select_related("deal", "lead", "lead__responsible", "best_provider")
         .filter(id=batch_id)
@@ -684,41 +705,349 @@ def refresh_quote_batch(
     if not batch:
         raise ValueError(f"Quote batch {batch_id} not found")
 
-    if triggered_by_id:
-        user_model = get_user_model()
-        triggered_by = user_model.objects.filter(pk=triggered_by_id).first()
-        if triggered_by:
-            batch.triggered_by = triggered_by
-            batch.save(update_fields=["triggered_by", "updated_at"])
-
-    _reset_batch_for_refresh(batch)
-    cache.set(_quote_cache_key(batch.deal_id), batch.id, timeout=QUOTE_CACHE_TTL_SECONDS)
-    return _run_quote_fetch_for_batch(deal=batch.deal, batch=batch)
+    return get_best_quotes(
+        batch.deal_id,
+        force_refresh=True,
+        triggered_by_id=triggered_by_id,
+    )
 
 
-def get_best_quotes(
-    deal_id: int,
-    *,
-    force_refresh: bool = False,
-    triggered_by_id: int | None = None,
-) -> dict[str, Any]:
-    latest_batch = get_latest_quote_batch(deal_id)
-    if latest_batch and latest_batch.status == QuoteBatch.STATUS_PROCESSING and not force_refresh:
-        return _serialize_batch(latest_batch)
-    if _is_batch_fresh(latest_batch) and not force_refresh:
-        return _serialize_batch(latest_batch)
+def _extract_covers_qic(raw_response: dict[str, Any]) -> list[dict[str, Any]]:
+    """Extract covers from QIC raw_response tariff.schemes[0]."""
+    covers = []
+    try:
+        tariff = raw_response.get("tariff") or {}
+        schemes = tariff.get("schemes") or []
+        if schemes:
+            scheme = schemes[0]
+            # Collect all covers: basicCovers + inclusiveCovers + optionalCovers
+            for cover_list in [
+                scheme.get("basicCovers") or [],
+                scheme.get("inclusiveCovers") or [],
+                scheme.get("optionalCovers") or [],
+            ]:
+                for cover in cover_list:
+                    if isinstance(cover, dict):
+                        covers.append(
+                            {
+                                "code": cover.get("code", ""),
+                                "name": cover.get("name", ""),
+                                "premium": float(cover.get("premium", 0) or 0),
+                            }
+                        )
+    except Exception as e:
+        logger.warning("Error extracting QIC covers: %s", e)
+    return covers
 
-    deal = Deal.objects.select_related("lead", "lead__responsible").get(id=deal_id)
-    providers = list(get_active_provider_configs())
 
-    if not providers:
-        batch = _create_batch(deal, triggered_by_id)
-        batch.status = QuoteBatch.STATUS_FAILED
-        batch.save(update_fields=["status", "updated_at"])
-        return _serialize_batch(batch)
+def _extract_covers_dic(raw_response: dict[str, Any]) -> list[dict[str, Any]]:
+    """Extract covers from DIC raw_response selected_scheme.covers."""
+    covers = []
+    try:
+        selected_scheme = raw_response.get("selected_scheme") or {}
+        scheme_covers = selected_scheme.get("covers") or {}
+        for cover_list in [
+            scheme_covers.get("mandatory") or [],
+            scheme_covers.get("optional") or [],
+        ]:
+            for cover in cover_list:
+                if isinstance(cover, dict):
+                    covers.append(
+                        {
+                            "code": cover.get("code", ""),
+                            "name": cover.get("name", ""),
+                            "premium": float(cover.get("premium", 0) or 0),
+                        }
+                    )
+    except Exception as e:
+        logger.warning("Error extracting DIC covers: %s", e)
+    return covers
 
-    batch = _create_batch(deal, triggered_by_id)
-    return _run_quote_fetch_for_batch(deal=deal, batch=batch)
+
+def _extract_covers_nia(raw_response: dict[str, Any]) -> list[dict[str, Any]]:
+    """Extract covers from NIA raw_response create_quote.Data.PlanDetails[0].Covers."""
+    covers = []
+    try:
+        create_quote = raw_response.get("create_quote") or {}
+        data = create_quote.get("Data") or {}
+        plan_details = data.get("PlanDetails") or []
+        if plan_details:
+            plan = plan_details[0]
+            for cover in plan.get("Covers") or []:
+                if isinstance(cover, dict):
+                    covers.append(
+                        {
+                            "code": cover.get("Code", ""),
+                            "name": cover.get("Description", ""),
+                            "premium": float(cover.get("CoverPremFc", 0) or 0),
+                        }
+                    )
+    except Exception as e:
+        logger.warning("Error extracting NIA covers: %s", e)
+    return covers
+
+
+def _cover_name_contains(cover_name: str, *patterns: str) -> bool:
+    """Case-insensitive substring match: returns True if cover_name contains any pattern."""
+    name_lower = str(cover_name or "").lower()
+    return any(str(p).lower() in name_lower for p in patterns)
+
+
+def _extract_benefits(covers: list[dict[str, Any]], plan_name: str = "") -> dict[str, Any]:
+    """Extract benefits from covers list based on cover name matching rules."""
+    benefits = {
+        "loss_or_damage": False,
+        "third_party_liability": "",
+        "blood_money": "",
+        "fire_theft": False,
+        "storm_flood": False,
+        "natural_perils": False,
+        "repairs": "",
+        "emergency_medical": False,
+        "personal_belongings": False,
+        "oman_cover": False,
+        "off_road_cover": False,
+        "guaranteed_repairs": False,
+        "breakdown_recovery": False,
+        "ambulance_cover": "",
+        "windscreen_damage": False,
+    }
+    
+    for cover in covers:
+        if not isinstance(cover, dict):
+            continue
+        cover_name = cover.get("name", "")
+        premium = cover.get("premium", 0)
+        
+        # loss_or_damage: "loss" AND ("damage" OR "vehicle") in cover name, AND premium > 0
+        if _cover_name_contains(cover_name, "loss") and _cover_name_contains(cover_name, "damage", "vehicle") and premium > 0:
+            benefits["loss_or_damage"] = True
+        
+        # third_party_liability: any cover with "third party" in name
+        if _cover_name_contains(cover_name, "third party"):
+            benefits["third_party_liability"] = "Included"
+        
+        # natural_perils: "natural" OR "calamity" OR "riot" OR "storm" OR "flood"
+        if _cover_name_contains(cover_name, "natural", "calamity", "riot", "storm", "flood"):
+            benefits["natural_perils"] = True
+        
+        # emergency_medical: "medical" OR "ambulance"
+        if _cover_name_contains(cover_name, "medical", "ambulance"):
+            benefits["emergency_medical"] = True
+        
+        # personal_belongings: "personal" AND ("effect" OR "belonging")
+        if _cover_name_contains(cover_name, "personal") and _cover_name_contains(cover_name, "effect", "belonging"):
+            benefits["personal_belongings"] = True
+        
+        # oman_cover: "oman" OR "orange card"
+        if _cover_name_contains(cover_name, "oman", "orange card"):
+            benefits["oman_cover"] = True
+        
+        # off_road_cover: "off road" OR "offroad"
+        if _cover_name_contains(cover_name, "off road", "offroad"):
+            benefits["off_road_cover"] = True
+        
+        # breakdown_recovery: "roadside" OR "breakdown" OR "towing"
+        if _cover_name_contains(cover_name, "roadside", "breakdown", "towing"):
+            benefits["breakdown_recovery"] = True
+        
+        # windscreen_damage: "windscreen"
+        if _cover_name_contains(cover_name, "windscreen"):
+            benefits["windscreen_damage"] = True
+        
+        # guaranteed_repairs: check for "guaranteed" + "repairs"
+        if _cover_name_contains(cover_name, "guaranteed") and _cover_name_contains(cover_name, "repairs"):
+            benefits["guaranteed_repairs"] = True
+        
+        # fire_theft: check for "fire" + "theft" or just fire/theft
+        if _cover_name_contains(cover_name, "fire", "theft"):
+            benefits["fire_theft"] = True
+        
+        # repairs: Agency/Non-Agency based on plan_name
+        if not benefits["repairs"]:
+            plan_name_lower = str(plan_name or "").lower()
+            if "agency" in plan_name_lower and "non" not in plan_name_lower:
+                benefits["repairs"] = "Agency"
+            elif "non" in plan_name_lower and "agency" in plan_name_lower:
+                benefits["repairs"] = "Non-Agency"
+    
+    return benefits
+
+
+def _extract_optional_covers(covers: list[dict[str, Any]]) -> dict[str, Any]:
+    """Extract optional covers from covers list."""
+    optional = {
+        "driver_cover": False,
+        "passenger_cover": False,
+        "hire_car_benefit": False,
+    }
+    
+    for cover in covers:
+        if not isinstance(cover, dict):
+            continue
+        cover_name = cover.get("name", "")
+        
+        # driver_cover: "pab" AND "driver" OR "personal accident" AND "driver"
+        if (_cover_name_contains(cover_name, "pab") or _cover_name_contains(cover_name, "personal accident")) and _cover_name_contains(cover_name, "driver"):
+            optional["driver_cover"] = True
+        
+        # passenger_cover: "pab" AND "passenger" OR "personal accident" AND "passenger"
+        if (_cover_name_contains(cover_name, "pab") or _cover_name_contains(cover_name, "personal accident")) and _cover_name_contains(cover_name, "passenger"):
+            optional["passenger_cover"] = True
+        
+        # hire_car_benefit: "rent" OR "hire car"
+        if _cover_name_contains(cover_name, "rent", "hire car"):
+            optional["hire_car_benefit"] = True
+    
+    return optional
+
+
+def _get_badge(result: QuoteResult) -> str:
+    """Determine badge based on result flags."""
+    if result.status != QuoteResult.STATUS_SUCCESS:
+        return "Error"
+    if result.is_best_value:
+        return "Best Value"
+    if result.is_cheapest:
+        return "Cheapest"
+    if result.is_recommended:
+        return "Recommended"
+    return ""
+
+
+def _extract_buy_now_url(provider_code: str, raw_response: dict[str, Any]) -> str:
+    """Extract buy_now_url from raw_response based on provider."""
+    try:
+        code = (provider_code or "").upper()
+        if code == "QIC":
+            # For QIC: use selected_premium or tariff quoteNo
+            tariff = raw_response.get("tariff") or {}
+            schemes = tariff.get("schemes") or []
+            if schemes:
+                quote_no = schemes[0].get("quoteNo") or raw_response.get("quote_no")
+                if quote_no:
+                    return f"qic-quote:{quote_no}"
+        elif code == "DIC":
+            # For DIC: use selected_scheme.paymentUrl
+            selected_scheme = raw_response.get("selected_scheme") or {}
+            payment_url = selected_scheme.get("paymentUrl")
+            if payment_url:
+                return str(payment_url)
+        # For NIA or others: return empty (manual payment flow)
+    except Exception as e:
+        logger.warning("Error extracting buy_now_url for %s: %s", provider_code, e)
+    return ""
+
+
+def _extract_vehicle_details(result: QuoteResult, covers: list[dict[str, Any]]) -> dict[str, Any]:
+    """Extract vehicle details from raw_response and covers."""
+    raw_response = result.raw_response or {}
+    details = {
+        "excess": "TBA",
+        "ancillary_excess": "TBA",
+        "vehicle_value": "N/A",
+    }
+    
+    try:
+        # Try to extract deductible/excess from raw_response
+        for key in ["deductible", "excess", "policy_deductible"]:
+            value = raw_response.get(key)
+            if value and str(value).strip():
+                details["excess"] = str(value)
+                break
+        
+        # Try to extract sum_insured/vehicle_value from raw_response
+        for key in ["sum_insured", "vehicle_value", "declared_value"]:
+            value = raw_response.get(key)
+            if value and str(value).strip():
+                details["vehicle_value"] = str(value)
+                break
+    except Exception as e:
+        logger.warning("Error extracting vehicle details: %s", e)
+    
+    return details
+
+
+def build_comparison_payload(batch: QuoteBatch) -> dict[str, Any]:
+    """
+    Build a structured comparison payload from a QuoteBatch.
+    
+    Returns a dict with:
+    - customer: { name, product, created_at }
+    - providers: list of provider comparison objects
+    - recommended_provider: name of recommended/best provider
+    """
+    # Ensure we have all related data
+    batch = (
+        QuoteBatch.objects.select_related("deal", "lead", "best_provider")
+        .prefetch_related("results__provider")
+        .get(pk=batch.pk)
+    )
+    
+    # Customer info
+    customer = {
+        "name": batch.lead.name if batch.lead else "",
+        "product": (
+            batch.deal.get_sub_type_display()
+            or batch.deal.get_insurance_type_display()
+            or batch.deal.insurance_type
+            or "Motor"
+        ),
+        "created_at": batch.requested_at.isoformat() if batch.requested_at else "",
+    }
+    
+    # Process each quote result
+    providers_data = []
+    recommended_provider_name = batch.best_provider.name if batch.best_provider else ""
+    
+    for result in batch.results.all():
+        if not result.provider:
+            continue
+        
+        raw_response = result.raw_response or {}
+        provider_code = result.provider.code.upper()
+        
+        # Extract covers based on provider type
+        if provider_code == "QIC":
+            covers = _extract_covers_qic(raw_response)
+        elif provider_code == "DIC":
+            covers = _extract_covers_dic(raw_response)
+        elif provider_code == "NIA":
+            covers = _extract_covers_nia(raw_response)
+        else:
+            covers = []
+        
+        # Extract benefits and optional covers
+        benefits = _extract_benefits(covers, result.plan_name or "")
+        optional_covers = _extract_optional_covers(covers)
+        
+        # Build provider object
+        provider_obj = {
+            "provider_name": result.provider.name,
+            "logo": (result.provider.extra_config or {}).get("logo_url", "") if isinstance(result.provider.extra_config, dict) else "",
+            "plan_name": result.plan_name or "",
+            "premium": float(result.premium) if result.premium else 0.0,
+            "base_price": float(result.premium - result.vat) if result.premium and result.vat else (float(result.premium) if result.premium else 0.0),
+            "vat": float(result.vat) if result.vat else 0.0,
+            "currency": result.currency or "AED",
+            "badge": _get_badge(result),
+            "buy_now_url": _extract_buy_now_url(result.provider.code, raw_response),
+            "vehicle_details": _extract_vehicle_details(result, covers),
+            "benefits": benefits,
+            "optional_covers": optional_covers,
+            "error": result.error_message if result.status != QuoteResult.STATUS_SUCCESS else "",
+        }
+        providers_data.append(provider_obj)
+        
+        # Update recommended_provider_name if this is the recommended one
+        if result.is_recommended and not recommended_provider_name:
+            recommended_provider_name = result.provider.name
+    
+    return {
+        "customer": customer,
+        "providers": providers_data,
+        "recommended_provider": recommended_provider_name,
+    }
 
 
 def list_quote_batches() -> list[QuoteBatch]:

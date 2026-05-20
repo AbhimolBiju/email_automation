@@ -706,7 +706,23 @@ class QICProvider(BaseInsuranceProvider):
             )
 
         # ========== LOOKUPS ==========
-        vehicle_type = lookup_body_type_code(payload.get("body_type_id") or vehicle.get("body_type_id"))
+        _body_type_raw = payload.get("body_type_id") or vehicle.get("body_type_id")
+        if _body_type_raw:
+            vehicle_type = lookup_body_type_code(_body_type_raw)
+        else:
+            from .nia_masterdata import lookup_body_code_from_model
+            from .qic_masterdata import lookup_body_type_code_from_desc
+            _, _nia_body_desc = lookup_body_code_from_model(
+                vehicle.get("model_id") or payload.get("model_id") or ""
+            )
+            if _nia_body_desc:
+                vehicle_type = lookup_body_type_code_from_desc(_nia_body_desc)
+                logger.info(
+                    "QIC: body_type_id missing; derived vehicleType=%r from model body desc=%r",
+                    vehicle_type, _nia_body_desc
+                )
+            else:
+                vehicle_type = ""
         
         # DEBUG: Log vehicle_usage resolution
         print(f"[QIC DEBUG] vehicle_usage raw: payload={payload.get('vehicle_usage')!r}, vehicle={vehicle.get('vehicle_usage')!r}")
@@ -759,7 +775,7 @@ class QICProvider(BaseInsuranceProvider):
         # ========== BUILD TARIFF REQUEST WITH EXACT SPECIFICATION FIELDS ==========
         tariff_request = {
             "insuredName": str(customer.get("name") or payload.get("insured_name") or "Insured"),
-            "policyFromDate": policy_from_date,
+            # "policyFromDate": policy_from_date,
             "makeCode": make_code,
             "modelCode": str(model_code)[:12],
             "modelYear": str(vehicle.get("model_year") or payload.get("model_year") or ""),
@@ -918,38 +934,6 @@ class QICProvider(BaseInsuranceProvider):
             json_payload=payload,
         )
         return self._ensure_success(response)
-
-    def _extract_benefits_from_raw(self, payload: dict[str, Any]) -> dict[str, bool]:
-        """QIC benefits come from ``tariff.schemes[].basicCovers[]`` and
-        ``tariff.schemes[].inclusiveCovers[]``.
-
-        Optional covers (``optionalCovers``) are EXCLUDED — those are add-ons.
-        """
-        benefits: dict[str, bool] = {}
-        tariff = payload.get("tariff")
-        if not isinstance(tariff, dict):
-            return benefits
-
-        schemes = tariff.get("schemes")
-        if not isinstance(schemes, list):
-            return benefits
-
-        cover_groups = ("basicCovers", "inclusiveCovers")
-        for scheme in schemes:
-            if not isinstance(scheme, dict):
-                continue
-            for group_key in cover_groups:
-                covers = scheme.get(group_key)
-                if not isinstance(covers, list):
-                    continue
-                for cover in covers:
-                    if not isinstance(cover, dict):
-                        continue
-                    name = str(cover.get("name") or "").strip()
-                    if name:
-                        benefits[name] = True
-
-        return benefits
 
     def get_quote(self, payload: dict[str, Any]):
         started = time.perf_counter()

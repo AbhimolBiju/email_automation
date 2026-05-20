@@ -17,6 +17,7 @@ from .serializers import (
     QuoteResultSerializer,
 )
 from .services import (
+    build_comparison_payload,
     get_best_quotes,
     get_latest_quote_batch,
     health_check_provider,
@@ -120,16 +121,24 @@ def quote_batch_detail(request, batch_id):
 @api_view(["GET"])
 def quote_batch_results(request, batch_id):
     batch = (
-        QuoteBatch.objects.prefetch_related("results__provider")
+        QuoteBatch.objects.select_related("deal", "lead", "best_provider")
+        .prefetch_related("results__provider")
         .filter(id=batch_id)
         .first()
     )
-    if not batch: 
+    if not batch:
         raise NotFound("Quote batch not found")
-    serializer = QuoteResultSerializer(batch.results.all().order_by("ranking", "provider__priority"), many=True)
+    serializer = QuoteResultSerializer(
+        batch.results.all().order_by("ranking", "provider__priority"),
+        many=True,
+    )
+    comparison_payload = build_comparison_payload(batch)
     return success_response(
         message="Quote results fetched successfully",
-        data=serializer.data,
+        data={
+            "results": serializer.data,
+            "comparison_payload": comparison_payload,
+        },
         status_code=status.HTTP_200_OK,
     )
 

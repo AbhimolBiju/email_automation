@@ -5,7 +5,9 @@ from typing import Any
 
 from .masterdata_json import ProviderJsonMasterdata, normalize_masterdata_value
 
-
+# normalize_masterdata_value strips, uppercases, and compares alphanumerics only — case-insensitive
+# for Latin text. It does not equate different words (e.g. "Yemen" vs sheet "YEMENI"); nationality
+# uses extra fuzzy matching in NIAProvider._resolve_nationality_code.
 from .xlsx_loader import load_workbook_rows
 
 
@@ -119,3 +121,17 @@ def lookup_plate_color_code(value: Any, reg_city: Any) -> str:
         ):
             return record.get("Code", "")
     return str(value).strip() if value not in (None, "") else ""
+
+
+def lookup_body_code_from_model(model_code: Any) -> tuple[str, str]:
+    text = str(model_code).strip() if model_code not in (None, "") else ""
+    if not text:
+        return "", ""
+    normalized = normalize_masterdata_value(text)
+    for record in load_sheet_records("VehModel"):
+        if record.get("MODEL CODE", "").strip() == text:
+            return record.get("BODY CODE", "").strip(), record.get("BODY DESC", "").strip()
+        if normalize_masterdata_value(record.get("MODE DESCRIPTION", "")) == normalized:
+            return record.get("BODY CODE", "").strip(), record.get("BODY DESC", "").strip()
+    return "", ""
+

@@ -1,5 +1,6 @@
 from .provider_service import get_active_provider_instances, health_check_provider
 from .quote_service import (
+    build_comparison_payload,
     get_best_quotes,
     get_latest_quote_batch,
     list_quote_batches,
@@ -13,4 +14,5 @@ __all__ = [
     "health_check_provider",
     "list_quote_batches",
     "refresh_quote_batch",
+    "build_comparison_payload",
 ]

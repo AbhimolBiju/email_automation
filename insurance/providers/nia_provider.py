@@ -660,6 +660,24 @@ class NIAProvider(BaseInsuranceProvider):
 
         _nationality_code = self._resolve_nationality_code(customer.get("nationality") or "")
         print(f"[NIA NATIONALITY] raw='{customer.get('nationality')}' resolved='{_nationality_code}'")
+        
+        _body_type_id = vehicle.get("body_type_id") or payload.get("body_type_id") or ""
+        if not _body_type_id:
+            from .nia_masterdata import lookup_body_code_from_model
+            _chassis_no = vehicle.get("chassis_no") or vehicle.get("chassis_number") or vehicle.get("vin") or payload.get("chassis_no") or ""
+            _model_id_for_body = vehicle.get("model_id") or payload.get("model_id") or ""
+            print(f"[NIA BODY DERIVE] chassis_no={_chassis_no!r} model_id={_model_id_for_body!r} vehicle_keys={list(vehicle.keys())}")
+            _body_code, _body_desc = lookup_body_code_from_model(_model_id_for_body)
+            if not _body_code and _chassis_no:
+                # fallback: try matching chassis prefix against VehModel records
+                for _rec in load_sheet_records("VehModel"):
+                    if _rec.get("CHASSIS NO", "").strip().startswith(_chassis_no[:8]):
+                        _body_code = _rec.get("BODY CODE", "").strip()
+                        _body_desc = _rec.get("BODY DESC", "").strip()
+                        break
+            _body_type_id = _body_code
+            print(f"[NIA BODY DERIVE RESULT] _body_type_id={_body_type_id!r} _body_desc={_body_desc!r}")
+        
         _odometer_value = (
             payload.get("odometer_reading")
             or vehicle.get("odometer_reading")
@@ -709,7 +727,7 @@ class NIAProvider(BaseInsuranceProvider):
             "VehUsage": lookup_code("VehUsage", vehicle.get("vehicle_usage") or "PRIVATE (Indiv./Comm.)"),
             "VehMake": lookup_code("VehMake", vehicle.get("make_id") or ""),
             "VehModel": lookup_code("VehModel", vehicle.get("model_id") or "", code_key="MODEL CODE", description_key="MODE DESCRIPTION"),
-            "VehBodyType": lookup_code("VehBodyType", vehicle.get("body_type_id") or ""),
+            "VehBodyType": lookup_code("VehBodyType", _body_type_id) if _body_type_id else "",
             "VehNoCylinder": lookup_code(
                 "VehNoCylinder",
                 vehicle.get("cylinder_count")
@@ -961,29 +979,86 @@ class NIAProvider(BaseInsuranceProvider):
         mock = self.get_extra_config().get("mock_proposal_summary_response")
         if isinstance(mock, dict):
             return mock
-        selected_quot_no = (
-            payload.get("PolRefNo")
-            or payload.get("quotation_no")
-            or payload.get("QuotNo")
-            or ""
-        )
+        logger.info("Incoming proposal summary payload: %s", payload)
+
+        # If client sends the same shape as direct NIA (nested section), forward it unchanged.
+        embedded = payload.get("ViewPolicySummaryData")
+        if isinstance(embedded, dict) and embedded:
+            nia_summary_section = dict(embedded)
+            logger.info("proposal_summary using pass-through ViewPolicySummaryData: %s", nia_summary_section)
+        else:
+            # ProposalSummary works on the *saved* quote (Q/… from SaveQuoteWithPlan),
+            # NOT the create-quote reference (R/…). Send only QuotNo when available.
+            # Only fall back to PolRefNo/ReferenceNo when there is no QuotNo at all.
+            # quot = str(
+            #     (
+            #         payload.get("QuotNo")
+            #         or payload.get("quotation_no")
+            #         or payload.get("quote_no")
+            #         or payload.get("polRefNo")
+            #         or ""
+            #     )
+            # ).strip()
+            # nia_summary_section: dict[str, Any] = {}
+            # # if quot:
+            # #     nia_summary_section["QuotNo"] = quot
+            # # else:
+            #     # No QuotNo supplied — fall back to the reference number fields.
+            # ref = str(
+            #         (
+            #             payload.get("PolRefNo")
+            #             or payload.get("ReferenceNo")
+            #             or payload.get("reference_no")
+            #             or payload.get("referenceNo")
+            #             or ""
+            #         )
+            #     ).strip()
+            # if ref:
+            #         nia_summary_section["PolRefNo"] = ref
+
+
+            nia_summary_section: dict[str, Any] = {}
+            ref = str(
+                    (
+                            payload.get("PolRefNo")
+                            or payload.get("ReferenceNo")
+                            or payload.get("reference_no")
+                            or payload.get("referenceNo")
+                            or ""
+                        )
+                ).strip()
+            if ref:
+                nia_summary_section["PolRefNo"] = ref
+
+
+            logger.info("ProposalSummary final payload: %s", nia_summary_section)
         logger.info(
-            "[NIA proposal_summary] payload_keys=%s candidates=%s selected_QuotNo=%r",
+            "[NIA proposal_summary] payload_keys=%s candidates=%s section=%s",
             sorted(list(payload.keys())),
             {
                 "PolRefNo": payload.get("PolRefNo"),
-                "quotation_no": payload.get("quotation_no"),
-                "QuotNo": payload.get("QuotNo"),
+                "ReferenceNo": payload.get("ReferenceNo"),
+                # "quotation_no": payload.get("quotation_no"),
+                # "QuotNo": payload.get("QuotNo"),
                 "polRefNo": payload.get("polRefNo"),
                 "reference_no": payload.get("reference_no"),
-                "quote_no": payload.get("quote_no"),
+                # "quote_no": payload.get("quote_no"),
             },
-            selected_quot_no,
+            nia_summary_section,
         )
-        response = self._post_with_auth_body(
+        logger.debug(
+            "[NIA proposal_summary] ViewPolicySummaryData=%s payload_keys=%s",
+            nia_summary_section,
+            list(payload.keys()),
+        )
+        # response = self._post_with_auth_body(
+        #     self.get_extra_config().get("proposal_summary_endpoint", self.PROPOSAL_SUMMARY_ENDPOINT),
+        #     "ViewPolicySummaryData",
+        #     nia_summary_section,
+        # )
+        response = self._post_flat(
             self.get_extra_config().get("proposal_summary_endpoint", self.PROPOSAL_SUMMARY_ENDPOINT),
-            "ViewPolicySummaryData",
-            {"QuotNo": selected_quot_no},
+            nia_summary_section,
         )
         return self._ensure_success(response)
 
@@ -1037,6 +1112,7 @@ class NIAProvider(BaseInsuranceProvider):
                     }
                 )
         return selected
+            
 
     def _nia_default_addl_info(self) -> dict[str, str]:
         import datetime as _dt
@@ -1057,7 +1133,7 @@ class NIAProvider(BaseInsuranceProvider):
             "PolAssrAddr1": "Dubai",
             "PolAssrProvince": "0001",
             "PolAssrOccup": "001",
-            "VehInsDrvSameYn": "Y",
+            "VehInsDrvSameYn": "N",
             "VehDriverName": "",
             "VehDriverCivilId": "",  # will be overridden by _build_additional_info_request
             "VehDriverLicNo": "123456",
@@ -1205,47 +1281,6 @@ class NIAProvider(BaseInsuranceProvider):
                 }
             )
         return {"polRefNo": quotation_no, "docUpload": doc_upload}
-
-    def _extract_benefits_from_raw(self, payload: dict[str, Any]) -> dict[str, bool]:
-        """NIA benefits come from ``create_quote.Data.PlanDetails[].Covers[]``.
-
-        We include every cover EXCEPT:
-          - ``CoverFlag == "OC"`` (Optional Cover -> add-on, sold separately)
-          - ``CoverFlag == "MC"`` (Mandatory Charge / Deductible -> not a benefit)
-        """
-        benefits: dict[str, bool] = {}
-        create_quote = payload.get("create_quote")
-        if not isinstance(create_quote, dict):
-            return benefits
-
-        data = create_quote.get("Data")
-        if not isinstance(data, dict):
-            return benefits
-
-        plan_details = data.get("PlanDetails")
-        if not isinstance(plan_details, list):
-            return benefits
-
-        excluded_flags = {"OC", "MC"}
-        for plan in plan_details:
-            if not isinstance(plan, dict):
-                continue
-            covers = plan.get("Covers")
-            if not isinstance(covers, list):
-                continue
-            for cover in covers:
-                if not isinstance(cover, dict):
-                    continue
-                flag = str(cover.get("CoverFlag") or "").strip().upper()
-                if flag in excluded_flags:
-                    continue
-                name = str(
-                    cover.get("Description") or cover.get("DescriptionL2") or ""
-                ).strip()
-                if name:
-                    benefits[name] = True
-
-        return benefits
 
     def get_quote(self, payload: dict[str, Any]):
         started = time.perf_counter()
@@ -1440,15 +1475,27 @@ class NIAProvider(BaseInsuranceProvider):
         )
 
     def issue_policy(self, payload: dict[str, Any]) -> dict[str, Any]:
-        quot_no = str(payload.get("quotation_no") or payload.get("quot_no") or "")
+        quot_no = str(payload.get("PolRefNo") or payload.get("quot_no") or "")
         return self.approve_policy({"PolRefNo": quot_no, "PayType": payload.get("pay_type") or "OA"})
 
     def renew_policy(self, payload: dict[str, Any]) -> dict[str, Any]:
         return self.create_quote(payload)
 
-    def fetch_policy(self, payload: dict[str, Any]) -> dict[str, Any]:
-        quotation_no = str(payload.get("quotation_no") or payload.get("quot_no") or payload.get("policy_no") or "")
-        return self.proposal_summary({"PolRefNo": quotation_no})
+    # def fetch_policy(self, payload: dict[str, Any]) -> dict[str, Any]:
+    #     quotation_no = str(payload.get("quotation_no") or payload.get("quot_no") or payload.get("PolRefNo") or "")
+    #     # Proposal summary uses QuotNo (save-quote response), not the create-quote ReferenceNo (R/…).
+    #     return self.proposal_summary({"quotation_no": quotation_no})
+
+    def fetch_policy(self, payload):
+        ref_no = str(
+            payload.get("PolRefNo")
+            or payload.get("QuotNo")
+            or payload.get("quote_no")
+            or payload.get("quotation_no")
+            or payload.get("reference_no")
+            or ""
+        ).strip()
+        return self.proposal_summary({"PolRefNo": ref_no})
 
     def health_check(self) -> dict[str, Any]:
         mock_payload = self.get_extra_config().get("mock_health_check")

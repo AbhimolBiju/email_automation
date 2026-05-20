@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import InsuranceInfo, InsuranceProvider, QuoteBatch, QuoteResult
+from .services import build_comparison_payload
 
 class InsuranceInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,9 +103,7 @@ class QuoteBatchListSerializer(serializers.ModelSerializer):
         return " ".join(parts) or (deal.reg_number or "")
 
     def get_product(self, obj):
-        from insurance.product_labels import deal_product_type_label
-
-        return deal_product_type_label(obj.deal)
+        return obj.deal.get_sub_type_display() or obj.deal.get_insurance_type_display() or obj.deal.insurance_type or "Motor"
 
     class Meta:
         model = QuoteBatch
@@ -134,14 +133,13 @@ class QuoteBatchDetailSerializer(serializers.ModelSerializer):
     stage = serializers.SerializerMethodField()
     best_provider = serializers.CharField(source="best_provider.name", read_only=True)
     results = QuoteResultSerializer(many=True, read_only=True)
+    comparison_payload = serializers.SerializerMethodField()
 
     def get_customer_name(self, obj):
         return obj.lead.name if obj.lead else ""
 
     def get_product(self, obj):
-        from insurance.product_labels import deal_product_type_label
-
-        return deal_product_type_label(obj.deal)
+        return obj.deal.get_sub_type_display() or obj.deal.get_insurance_type_display() or obj.deal.insurance_type or "Motor"
 
     def get_vehicle(self, obj):
         deal = obj.deal
@@ -150,6 +148,9 @@ class QuoteBatchDetailSerializer(serializers.ModelSerializer):
 
     def get_stage(self, obj):
         return obj.deal.get_stage_id_display()
+
+    def get_comparison_payload(self, obj):
+        return build_comparison_payload(obj)
 
     class Meta:
         model = QuoteBatch
@@ -168,4 +169,5 @@ class QuoteBatchDetailSerializer(serializers.ModelSerializer):
             "best_total",
             "cache_expires_at",
             "results",
+            "comparison_payload",
         ]

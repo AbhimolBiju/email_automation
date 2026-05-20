@@ -313,39 +313,12 @@ class BaseInsuranceProvider(ABC):
 
         raise ProviderRequestError(str(last_error or "Unknown provider request error"))
 
-    def _extract_benefits_from_raw(
-        self, payload: dict[str, Any]
-    ) -> dict[str, bool]:
-        """Provider-specific extraction of benefit covers from the raw quote payload.
-
-        Subclasses override this to walk their provider's response and return
-        ``{cover_name: True}`` for every benefit / mandatory / included cover
-        that the provider offers under this quote. Optional add-ons (sold
-        separately) and deductibles MUST NOT be included.
-
-        The frontend takes the union of these keys across providers and renders
-        a tick (True) when present, an untick (False / missing) when absent.
-        """
-        return {}
-
     def build_quote_from_mapping(
         self,
         payload: dict[str, Any],
         *,
         response_time_ms: int,
     ) -> NormalizedQuote:
-        payload_benefits = payload.get("benefits")
-        if not isinstance(payload_benefits, dict) or not payload_benefits:
-            try:
-                payload_benefits = self._extract_benefits_from_raw(payload) or {}
-            except Exception as exc:  # never let benefit extraction break a quote
-                logger.warning(
-                    "[%s] Failed to extract benefits from raw response: %s",
-                    self.provider_code,
-                    exc,
-                )
-                payload_benefits = {}
-
         return NormalizedQuote(
             provider=self.provider_config.code,
             premium=Decimal(str(payload.get("premium", 0))),
@@ -355,7 +328,7 @@ class BaseInsuranceProvider(ABC):
             plan_name=str(payload.get("plan_name", "Standard Plan")),
             response_time_ms=response_time_ms,
             status=str(payload.get("status", "SUCCESS")).upper(),
-            benefits=payload_benefits,
+            benefits=payload.get("benefits", {}) if isinstance(payload.get("benefits"), dict) else {},
             optional_covers=payload.get("optional_covers", {}) if isinstance(payload.get("optional_covers"), dict) else {},
             vehicle_details=payload.get("vehicle_details", {}) if isinstance(payload.get("vehicle_details"), dict) else {},
             coverage_amount=str(payload.get("coverage_amount")) if payload.get("coverage_amount") not in (None, "") else None,

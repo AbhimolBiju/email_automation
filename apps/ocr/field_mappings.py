@@ -11,7 +11,9 @@ FIELD_MAPPING_SCHEMAS: dict[str, dict[str, dict[str, str]]] = {
     "deal_create": {
         "prebuilt-idDocument": {
             "name": "name",
+            "Name": "name",
             "customer_name": "name",
+            "CustomerName": "name",
             "FirstName": "first_name",
             "LastName": "last_name",
             "DateOfBirth": "date_of_birth",

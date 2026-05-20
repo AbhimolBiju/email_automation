@@ -50,19 +50,49 @@ def enrich_raw_fields_for_deal(
         enriched[key] = safe_value
         confidence_scores.setdefault(key, base_confidence)
 
-    if parsed.get("name"):
-        full_name = to_json_safe(parsed["name"])
+    full_name = to_json_safe(
+        parsed.get("name") or parsed.get("customer_name") or parsed.get("owner")
+    )
+    if full_name in (None, "") and "emirates_id" in doc_lower:
+        azure_name = to_json_safe(raw_fields.get("Name") or raw_fields.get("name"))
+        if azure_name not in (None, ""):
+            full_name = azure_name
+        else:
+            first = to_json_safe(raw_fields.get("FirstName") or raw_fields.get("first_name"))
+            last = to_json_safe(raw_fields.get("LastName") or raw_fields.get("last_name"))
+            if first or last:
+                full_name = f"{first or ''} {last or ''}".strip()
+
+    if full_name not in (None, ""):
         enriched["name"] = full_name
         enriched["customer_name"] = full_name
+        enriched["Name"] = full_name
         confidence_scores.setdefault("name", base_confidence)
         confidence_scores.setdefault("customer_name", base_confidence)
+        confidence_scores.setdefault("Name", base_confidence)
 
-    if parsed.get("tcf_number") or parsed.get("traffic_code"):
-        tcf = to_json_safe(parsed.get("tcf_number") or parsed.get("traffic_code"))
+    tcf = to_json_safe(
+        parsed.get("tcf_number")
+        or parsed.get("traffic_code")
+        or parsed.get("tcf_no")
+        or parsed.get("traffic_code_no")
+    )
+    if tcf not in (None, ""):
         enriched["tcf_number"] = tcf
         enriched["traffic_code"] = tcf
         enriched["tcf_no"] = tcf
         confidence_scores.setdefault("tcf_number", base_confidence)
+
+    for source_key, target_key in (
+        ("make_id", "make_id"),
+        ("model_id", "model_id"),
+        ("body_type_id", "body_type_id"),
+    ):
+        value = to_json_safe(parsed.get(source_key))
+        if value in (None, ""):
+            continue
+        enriched[target_key] = value
+        confidence_scores.setdefault(target_key, base_confidence)
 
     if "mulkiya" in doc_lower and parsed.get("plate_source"):
         plate_source = parsed["plate_source"]

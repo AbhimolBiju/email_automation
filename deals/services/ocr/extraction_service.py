@@ -5,20 +5,25 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from deals.services.ocr.mapper.base import parser_data
-from deals.services.ocr.mapper.deal_create_mapper import map_parser_result_to_deal_create
-from deals.services.ocr.parser.driving_license import parse_driving_license
-from deals.services.ocr.parser.emirates_id import parse_emirates_id
-from deals.services.ocr.parser.mulkiya_parser import parse_mulkiya
-from deals.services.ocr.validator.driving_license_val import validate_driving_license
-from deals.services.ocr.validator.emirate_validator import validate_emirates_id
-from deals.services.ocr.validator.mulkiya_validator import validate_mulkiya
+from deals.services.ocr.mappers.mapper import map_document_to_form
+from deals.services.ocr.parsers.parser import parse_document
 from deals.services.ocr.validation_maps import (
     VALIDATION_ERROR_CASCADE,
     VALIDATION_ERROR_TO_CRM,
 )
+from deals.services.ocr.validators.validator import validate_document
 
 logger = logging.getLogger(__name__)
+
+MULKIYA_UPLOAD_ALIASES = {
+    "mulkiya_id_front": "mulkiya_front",
+    "mulkiya_id_back": "mulkiya_back",
+}
+
+
+def _normalize_document_type(document_type: str) -> str:
+    doc = (document_type or "").lower()
+    return MULKIYA_UPLOAD_ALIASES.get(doc, doc)
 
 
 def _string_key_values(raw_fields: dict[str, Any] | None) -> dict[str, str]:
@@ -63,43 +68,27 @@ def _run_parser(
     raw_fields: dict[str, Any] | None = None,
     layout: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    doc_lower = (document_type or "").lower()
+    normalized_type = _normalize_document_type(document_type)
     key_values = _string_key_values(raw_fields)
     azure_json = _layout_as_azure_json(layout)
 
-    if "emirates_id" in doc_lower:
-        return parse_emirates_id(text, document_type=document_type)
-
-    if "driving_license" in doc_lower:
-        return parse_driving_license(
-            text,
-            document_type=document_type,
-            key_values=key_values,
-            azure_json=azure_json,
-        )
-
-    if "mulkiya" in doc_lower:
-        return parse_mulkiya(text, key_values=key_values, document_type=document_type)
-
-    return {"document_type": document_type, "data": {}}
+    return parse_document(
+        text,
+        document_type=normalized_type,
+        key_values=key_values,
+        azure_json=azure_json,
+    )
 
 
 def _run_validator(parsed: dict[str, Any]) -> dict[str, Any]:
-    doc_type = str(parsed.get("document_type") or "").lower()
     try:
-        if "emirates_id" in doc_type:
-            return validate_emirates_id(parsed)
-        if "driving_license" in doc_type:
-            side = str(parsed.get("side") or parsed.get("driving_license_side") or "front")
-            result = validate_driving_license(parser_data(parsed), side=side)
-            return {
-                "status": "VERIFIED" if not result else "PENDING",
-                "errors": result,
-            }
-        if "mulkiya" in doc_type:
-            return validate_mulkiya(parsed)
+        return validate_document(parsed)
     except Exception as exc:
-        logger.warning("OCR validation failed for %s: %s", doc_type, exc)
+        logger.warning(
+            "OCR validation failed for %s: %s",
+            parsed.get("document_type"),
+            exc,
+        )
     return {"status": "SKIPPED", "errors": {}}
 
 
@@ -115,7 +104,6 @@ def _apply_validation(
         return mapped
 
     for error_field, message in errors.items():
-        # Keep extracted values when the only issue is a missing optional/combined field.
         if message == "Missing field":
             continue
 
@@ -152,12 +140,17 @@ def extract_document_fields(
         layout=layout,
     )
     validation = _run_validator(parsed)
-    mapped = map_parser_result_to_deal_create(parsed, document_type=document_type)
+    mapped = map_document_to_form(parsed)
     mapped = _apply_validation(mapped, validation)
 
     if validation.get("errors"):
         mapped["_validation_errors"] = validation["errors"]
-    if parsed.get("confidence_score") is not None:
+    confidence = parsed.get("confidence")
+    if isinstance(confidence, dict):
+        overall = confidence.get("overall_confidence")
+        if overall is not None:
+            mapped["_parser_confidence"] = overall
+    elif parsed.get("confidence_score") is not None:
         mapped["_parser_confidence"] = parsed["confidence_score"]
 
     return {key: value for key, value in mapped.items() if not key.startswith("_")}

@@ -3,40 +3,106 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from typing import Any
 
-from apps.invoice.services.parser.commission_utils import resolve_commission_fields
 from apps.invoice.services.parser.adamjee_credit_note_parser import parse_adamjee_credit_note
 from apps.invoice.services.parser.adamjee_debit_note_parser import parse_adamjee_debit_note
 from apps.invoice.services.parser.al_sagr_credit_note_parser import parse_al_sagr_credit_note
 from apps.invoice.services.parser.al_sagr_debit_note_parser import parse_al_sagr_debit_note
+from apps.invoice.services.parser.alliance_credit_note_parser import parse_alliance_credit_note
+from apps.invoice.services.parser.alliance_debit_note_parser import parse_alliance_debit_note
+from apps.invoice.services.parser.arabia_credit_note_parser import parse_arabia_credit_note
+from apps.invoice.services.parser.arabia_debit_note_parser import parse_arabia_debit_note
+from apps.invoice.services.parser.commission_utils import resolve_commission_fields
+from apps.invoice.services.parser.dni_credit_note_parser import parse_dni_credit_note
+from apps.invoice.services.parser.dni_debit_note_parser import parse_dni_debit_note
+from apps.invoice.services.parser.fidelity_credit_note_parser import parse_fidelity_credit_note
+from apps.invoice.services.parser.fidelity_debit_note_parser import parse_fidelity_debit_note
+from apps.invoice.services.parser.methaq_credit_note_parser import parse_methaq_credit_note
+from apps.invoice.services.parser.methaq_debit_note_parser import parse_methaq_debit_note
+from apps.invoice.services.parser.nia_credit_note_parser import parse_nia_credit_note
+from apps.invoice.services.parser.nia_debit_note_parser import parse_nia_debit_note
 from apps.invoice.services.parser.qic_credit_note_parser import parse_qic_credit_note
 from apps.invoice.services.parser.qic_debit_note_parser import parse_qic_debit_note
+from apps.invoice.services.parser.rak_credit_note_parser import parse_rak_credit_note
+from apps.invoice.services.parser.rak_debit_note_parser import parse_rak_debit_note
+from apps.invoice.services.parser.sharjah_credit_note_parser import parse_sharjah_credit_note
+from apps.invoice.services.parser.sharjah_debit_note_parser import parse_sharjah_debit_note
+from apps.invoice.services.parser.watania_credit_note_parser import parse_watania_credit_note
+from apps.invoice.services.parser.watania_debit_note_parser import parse_watania_debit_note
 
 logger = logging.getLogger(__name__)
 
-InsurerKey = str  # qic | al_sagr | adamjee
+InsurerKey = str
+
+# Order matters: more specific tokens before generic substrings.
+_INSURER_DETECTORS: list[tuple[InsurerKey, tuple[str, ...]]] = [
+    (
+        "qic",
+        (" QIC ", "QATAR INSURANCE", "QATAR INSURANCE COMPANY"),
+    ),
+    ("al_sagr", ("AL SAGR", "ASNIC", "AL SAGR NATIONAL")),
+    ("adamjee", ("ADAMJEE",)),
+    ("watania", ("WATANIA TAKAFUL", "WATANIA")),
+    ("sharjah", ("SHARJAH INSURANCE",)),
+    ("rak", ("RAK INSURANCE",)),
+    (
+        "nia",
+        (
+            "THE NEW INDIA ASSURANCE",
+            "NEW INDIA ASSURANCE",
+            " NIA INSURANCE",
+        ),
+    ),
+    ("methaq", ("METHAQ TAKAFUL", "METHAQ")),
+    (
+        "fidelity",
+        ("UNITED FIDELITY INSURANCE", "FIDELITY"),
+    ),
+    ("dni", ("DUBAI NATIONAL INSURANCE", " DNI ")),
+    ("arabia", ("ARABIA INSURANCE",)),
+    ("alliance", ("ALLIANCE INSURANCE", "ALLIANCE")),
+]
+
+_CREDIT_PARSERS: dict[InsurerKey, Callable[[str], dict[str, Any]]] = {
+    "qic": parse_qic_credit_note,
+    "al_sagr": parse_al_sagr_credit_note,
+    "adamjee": parse_adamjee_credit_note,
+    "alliance": parse_alliance_credit_note,
+    "arabia": parse_arabia_credit_note,
+    "dni": parse_dni_credit_note,
+    "fidelity": parse_fidelity_credit_note,
+    "methaq": parse_methaq_credit_note,
+    "nia": parse_nia_credit_note,
+    "rak": parse_rak_credit_note,
+    "sharjah": parse_sharjah_credit_note,
+    "watania": parse_watania_credit_note,
+}
+
+_DEBIT_PARSERS: dict[InsurerKey, Callable[..., dict[str, Any]]] = {
+    "qic": parse_qic_debit_note,
+    "al_sagr": parse_al_sagr_debit_note,
+    "adamjee": parse_adamjee_debit_note,
+    "alliance": parse_alliance_debit_note,
+    "arabia": parse_arabia_debit_note,
+    "dni": parse_dni_debit_note,
+    "fidelity": parse_fidelity_debit_note,
+    "methaq": parse_methaq_debit_note,
+    "nia": parse_nia_debit_note,
+    "rak": parse_rak_debit_note,
+    "sharjah": parse_sharjah_debit_note,
+    "watania": parse_watania_debit_note,
+}
 
 
 def detect_insurer(text: str) -> InsurerKey | None:
     """Detect insurer from OCR content."""
     upper = f" {text.upper()} "
 
-    if any(
-        token in upper
-        for token in (
-            " QIC ",
-            "QATAR INSURANCE",
-            "QATAR INSURANCE COMPANY",
-        )
-    ):
-        return "qic"
-
-    if any(token in upper for token in ("AL SAGR", "ASNIC", "AL SAGR NATIONAL")):
-        return "al_sagr"
-
-    if "ADAMJEE" in upper:
-        return "adamjee"
+    for insurer_key, tokens in _INSURER_DETECTORS:
+        if any(token in upper for token in tokens):
+            return insurer_key
 
     return None
 
@@ -79,6 +145,9 @@ def normalize_parser_output(raw: dict[str, Any]) -> dict[str, Any]:
         coerced = _coerce_value(value)
         if coerced is not None:
             normalized[key] = coerced
+
+    if normalized.get("company_name") and not normalized.get("insurer_name"):
+        normalized["insurer_name"] = normalized["company_name"]
 
     if normalized.get("period_from") and not normalized.get("policy_start_date"):
         normalized["policy_start_date"] = normalized["period_from"]
@@ -129,6 +198,21 @@ def normalize_parser_output(raw: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def _run_parser(
+    insurer: InsurerKey,
+    *,
+    credit: bool,
+    text: str,
+    tables: list[dict[str, Any]] | None,
+) -> dict[str, Any]:
+    if credit:
+        parser_fn = _CREDIT_PARSERS.get(insurer)
+        return parser_fn(text) if parser_fn else {}
+
+    parser_fn = _DEBIT_PARSERS.get(insurer)
+    return parser_fn(text, tables=tables) if parser_fn else {}
+
+
 def parse_insurance_document(
     text: str,
     *,
@@ -151,26 +235,7 @@ def parse_insurance_document(
     credit = is_credit_note(text, document_type)
 
     try:
-        if insurer == "qic":
-            raw = (
-                parse_qic_credit_note(text)
-                if credit
-                else parse_qic_debit_note(text, tables=tables)
-            )
-        elif insurer == "al_sagr":
-            raw = (
-                parse_al_sagr_credit_note(text)
-                if credit
-                else parse_al_sagr_debit_note(text, tables=tables)
-            )
-        elif insurer == "adamjee":
-            raw = (
-                parse_adamjee_credit_note(text)
-                if credit
-                else parse_adamjee_debit_note(text, tables=tables)
-            )
-        else:
-            raw = {}
+        raw = _run_parser(insurer, credit=credit, text=text, tables=tables)
     except Exception:
         logger.exception(
             "Insurer parser failed insurer=%s credit=%s document_type=%s",

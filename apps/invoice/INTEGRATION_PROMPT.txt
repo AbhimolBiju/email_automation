@@ -1,0 +1,88 @@
+I've added 9 insurer-specific credit/debit note parsers and validators under promise_backend/apps/invoice/services/. They exist on disk but are NOT integrated into the extraction pipeline yet. Only qic, al_sagr, and adamjee are wired in parser/router.py.
+
+Wire these new parsers and validators into the invoice app, following the same patterns as the existing insurers.
+
+NEW FILES (36):
+
+promise_backend/apps/invoice/services/parser/alliance_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/alliance_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/arabia_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/arabia_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/dni_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/dni_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/fidelity_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/fidelity_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/methaq_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/methaq_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/nia_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/nia_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/rak_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/rak_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/sharjah_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/sharjah_debit_note_parser.py
+promise_backend/apps/invoice/services/parser/watania_credit_note_parser.py
+promise_backend/apps/invoice/services/parser/watania_debit_note_parser.py
+promise_backend/apps/invoice/services/validator/alliance_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/alliance_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/arabia_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/arabia_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/dni_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/dni_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/fidelity_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/fidelity_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/methaq_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/methaq_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/nia_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/nia_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/rak_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/rak_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/sharjah_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/sharjah_debit_note_validator.py
+promise_backend/apps/invoice/services/validator/watania_credit_note_validator.py
+promise_backend/apps/invoice/services/validator/watania_debit_note_validator.py
+
+INSURERS: alliance, arabia, dni, fidelity, methaq, nia, rak, sharjah, watania
+
+Each insurer has:
+- parse_{insurer}_credit_note / parse_{insurer}_debit_note
+- validate_{insurer}_credit_note / validate_{insurer}_debit_note
+
+CURRENT PIPELINE:
+1. azure_invoice_service.py calls parse_insurance_document() in parser/router.py (insurer detect, parser dispatch, normalize_parser_output)
+2. views.py calls map_invoice_fields() then enrich_extracted_fields() in billing_enrichment.py (is_credit_note + map_credit_note_to_form / map_debit_note_to_form)
+3. Validators are not called anywhere yet
+
+IMPLEMENT:
+
+1. parser/router.py
+   - Extend detect_insurer() with OCR tokens for all 9 insurers (read each parser for company names/branding)
+   - Import and dispatch all 18 new parse functions in parse_insurance_document() (credit vs debit; pass tables= for debit parsers like qic/adamjee)
+   - Keep normalize_parser_output() and _parser_meta behavior
+
+2. Validator routing
+   - Add validator/router.py (or equivalent) that selects validate_{insurer}_{credit|debit}_note using insurer key + is_credit_note (from _parser_meta or detect_insurer)
+   - Call it from the invoice extraction flow (e.g. views.py after enrichment)
+   - Surface is_valid, missing_fields, message in API response or needs_review_fields when validation fails
+
+3. Mappers (mappers/debit_note_mapper.py, mappers/credit_note_mapper.py)
+   - Review each new parser output keys vs mapper expectations (insurer_name, invoice_number, net_premium, commission_amount, third_party_commission_amount, etc.)
+   - Extend mappers only where parsers use different key names; prefer normalizing in normalize_parser_output() when possible
+
+4. Tests
+   - Extend tests/test_parser_router.py for insurer detection and parsing for new insurers
+   - Add validator router tests if you add a validator router
+
+REFERENCE FILES:
+- promise_backend/apps/invoice/services/parser/router.py
+- promise_backend/apps/invoice/services/billing_enrichment.py
+- promise_backend/apps/invoice/services/mappers/debit_note_mapper.py
+- promise_backend/apps/invoice/services/mappers/credit_note_mapper.py
+- promise_backend/apps/invoice/views.py
+- promise_backend/apps/invoice/services/azure_invoice_service.py
+- promise_backend/apps/invoice/tests/test_parser_router.py
+
+CONSTRAINTS:
+- Match existing qic / al_sagr / adamjee code style
+- Minimal diff; no unrelated refactors
+- Do not change Azure SDK integration unless required
+- Run relevant invoice tests when done

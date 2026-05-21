@@ -24,6 +24,10 @@ from apps.invoice.services.azure_invoice_service import AzureInvoiceService
 from apps.invoice.services.confidence_filter import filter_by_confidence
 from apps.invoice.services.billing_enrichment import enrich_extracted_fields
 from apps.invoice.services.field_mapper import map_invoice_fields
+from apps.invoice.services.validator.router import (
+    apply_validation_to_review_fields,
+    validate_insurance_document,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -60,12 +64,24 @@ def extract_document(request) -> Response:
         mapped = map_invoice_fields(invoice_result, target_schema)
         filtered = filter_by_confidence(mapped)
 
+        raw_content = str(invoice_result.raw_fields.get("content") or "")
         extracted_fields = enrich_extracted_fields(
             to_json_safe_dict(filtered.high_confidence),
             document_type=document_type,
-            raw_content=str(invoice_result.raw_fields.get("content") or ""),
+            raw_content=raw_content,
         )
         needs_review_fields = to_json_safe_dict(filtered.needs_review)
+
+        validation = validate_insurance_document(
+            extracted_fields,
+            raw_content=raw_content,
+            document_type=document_type,
+        )
+        extracted_fields, needs_review_fields = apply_validation_to_review_fields(
+            extracted_fields,
+            needs_review_fields,
+            validation,
+        )
 
         job.mark_completed(
             model_used=invoice_result.model_used,

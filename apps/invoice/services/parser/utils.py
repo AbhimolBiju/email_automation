@@ -48,3 +48,28 @@ def clean_amount(value) -> float | None:
 
 def is_amount(line: str) -> bool:
     return bool(re.fullmatch(r"[\d,]+\.\d{2}", line.strip()))
+
+
+def get_value_after_label(
+    lines: list[str],
+    label: str,
+    lookahead: int = 4,
+) -> str | None:
+    """Return the value on the same line as label or the next non-empty line."""
+    label_lower = label.lower()
+
+    for index, line in enumerate(lines):
+        if label_lower not in line.lower():
+            continue
+
+        if ":" in line:
+            value = line.split(":", 1)[1].strip()
+            if value:
+                return value
+
+        for next_line in lines[index + 1 : index + 1 + lookahead]:
+            cleaned = next_line.replace(":", "").strip()
+            if cleaned:
+                return cleaned
+
+    return None

@@ -325,6 +325,22 @@ def lookup_body_type_code_from_desc(body_desc: str) -> str:
     return ""
 
 
+def lookup_body_type_code_from_bayanaty(value: Any) -> str:
+    """Map a Bayanaty body type code (e.g. '500116') to a QIC body_type_code (e.g. '1001').
+    The bayanaty_body_type_code column stores comma-delimited values like ',500116,500134,'
+    so we check for substring containment."""
+    if value in (None, ""):
+        return ""
+    search = f",{str(value).strip()},"
+    for record in load_body_type_records():
+        bayanaty_field = record.get("bayanaty_body_type_code", "")
+        if search in bayanaty_field:
+            return record["body_type_code"]
+    logger.warning("QIC lookup_body_type_code_from_bayanaty: unable to map value=%r", value)
+    return ""
+
+
+
 def lookup_cylinder_code(value: Any) -> str:
     """
     Map cylinder input (QIC code, internal ID, or displacement) to QIC cylinder_code.

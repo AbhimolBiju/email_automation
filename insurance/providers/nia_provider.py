@@ -14,6 +14,7 @@ from .nia_masterdata import (
     load_sheet_records,
     lookup_code,
     lookup_description,
+    lookup_body_code_from_model,
     lookup_plate_color_code,
 )
 
@@ -502,6 +503,39 @@ class NIAProvider(BaseInsuranceProvider):
         )
         return ""
 
+    def _resolve_nia_body_type(self, vehicle: dict, body_type_id: str) -> str:
+        """
+        Resolve a body_type_id (which may be a Bayanaty internal ID like '500116')
+        to a valid NIA VehBodyType code.
+        
+        Strategy:
+        1. Check if body_type_id directly matches a code or description in VehBodyType sheet
+        2. If not found (unmapped Bayanaty ID), resolve via VehModel sheet using model_id
+        """
+        # Step 1: check if body_type_id directly matches a NIA VehBodyType Code or Description
+        nia_sheet_records = load_sheet_records("VehBodyType")
+        direct_match = ""
+        for rec in nia_sheet_records:
+            if rec.get("Code", "").strip() == str(body_type_id).strip():
+                direct_match = rec["Code"].strip()
+                break
+            if rec.get("Description", "").strip().upper() == str(body_type_id).strip().upper():
+                direct_match = rec["Code"].strip()
+                break
+
+        if direct_match:
+            print(f"[NIA BODY TYPE] raw={body_type_id!r} resolved={direct_match!r} (direct match)")
+            return direct_match
+
+        # Step 2: body_type_id is an unmapped Bayanaty ID — resolve via VehModel sheet
+        nia_model_code = lookup_code(
+            "VehModel", vehicle.get("model_id") or "",
+            code_key="MODEL CODE", description_key="MODE DESCRIPTION"
+        )
+        body_code, body_desc = lookup_body_code_from_model(nia_model_code)
+        print(f"[NIA BODY TYPE] raw={body_type_id!r} nia_model={nia_model_code!r} resolved={body_code!r} ({body_desc})")
+        return body_code or ""
+
     def _build_create_quote_request(self, payload: dict[str, Any]) -> dict[str, Any]:
         import datetime as _dt
 
@@ -678,6 +712,8 @@ class NIAProvider(BaseInsuranceProvider):
             _body_type_id = _body_code
             print(f"[NIA BODY DERIVE RESULT] _body_type_id={_body_type_id!r} _body_desc={_body_desc!r}")
         
+
+        
         _odometer_value = (
             payload.get("odometer_reading")
             or vehicle.get("odometer_reading")
@@ -727,7 +763,7 @@ class NIAProvider(BaseInsuranceProvider):
             "VehUsage": lookup_code("VehUsage", vehicle.get("vehicle_usage") or "PRIVATE (Indiv./Comm.)"),
             "VehMake": lookup_code("VehMake", vehicle.get("make_id") or ""),
             "VehModel": lookup_code("VehModel", vehicle.get("model_id") or "", code_key="MODEL CODE", description_key="MODE DESCRIPTION"),
-            "VehBodyType": lookup_code("VehBodyType", _body_type_id) if _body_type_id else "",
+            "VehBodyType": self._resolve_nia_body_type(vehicle, _body_type_id),
             "VehNoCylinder": lookup_code(
                 "VehNoCylinder",
                 vehicle.get("cylinder_count")

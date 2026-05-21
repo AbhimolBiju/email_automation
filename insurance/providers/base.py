@@ -130,6 +130,7 @@ class BaseInsuranceProvider(ABC):
             path=auth_endpoint,
             json_payload={"username": username, "password": password},
             authenticated=False,
+            is_auth_request=True,
         )
         token = response.get("access_token") or response.get("token")
         if not token:
@@ -169,6 +170,7 @@ class BaseInsuranceProvider(ABC):
         params: dict[str, Any] | None = None,
         extra_headers: dict[str, str] | None = None,
         authenticated: bool = True,
+        is_auth_request: bool = False,
     ) -> dict[str, Any]:
         self._check_circuit()
 
@@ -266,6 +268,25 @@ class BaseInsuranceProvider(ABC):
 
                     raise ProviderAuthenticationError(
                         f"{self.provider_code} forbidden (HTTP 403). {body}".strip()
+                    )
+
+                # Bug 3 fix: Handle 500 on auth endpoint with skip_on_auth_failure flag
+                if (status_code == 500 and is_auth_request and 
+                    self.get_extra_config().get("skip_on_auth_failure", False)):
+                    self._record_failure()
+                    body = ""
+                    try:
+                        body = (exc.response.text or "")[:2000] if exc.response is not None else ""
+                    except Exception:
+                        body = ""
+                    logger.warning(
+                        "Provider %s auth endpoint returned HTTP 500 and skip_on_auth_failure is enabled; "
+                        "immediately opening circuit breaker. body=%s",
+                        self.provider_code,
+                        body,
+                    )
+                    raise ProviderCircuitOpenError(
+                        f"{self.provider_code} auth endpoint returned HTTP 500; circuit breaker opened. {body}".strip()
                     )
 
                 # For other 4xx errors, don't retry unless explicitly allowed (429/408).

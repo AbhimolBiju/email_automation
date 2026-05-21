@@ -449,6 +449,8 @@ from .qic_masterdata import (
     load_nationality_records,
     load_regn_location_records,
     lookup_body_type_code,
+    lookup_body_type_code_from_bayanaty,
+    lookup_body_type_code_from_desc,
     lookup_cylinder_code,
     lookup_make_model_codes,
     lookup_nationality_code,
@@ -706,23 +708,15 @@ class QICProvider(BaseInsuranceProvider):
             )
 
         # ========== LOOKUPS ==========
-        _body_type_raw = payload.get("body_type_id") or vehicle.get("body_type_id")
-        if _body_type_raw:
-            vehicle_type = lookup_body_type_code(_body_type_raw)
-        else:
-            from .nia_masterdata import lookup_body_code_from_model
-            from .qic_masterdata import lookup_body_type_code_from_desc
-            _, _nia_body_desc = lookup_body_code_from_model(
-                vehicle.get("model_id") or payload.get("model_id") or ""
+        # Bug 2 fix: 3-step fallback for vehicle_type
+        body_type_id = payload.get("body_type_id") or vehicle.get("body_type_id") or ""
+        vehicle_type = lookup_body_type_code(body_type_id)
+        if not vehicle_type:
+            vehicle_type = lookup_body_type_code_from_bayanaty(body_type_id)
+        if not vehicle_type:
+            vehicle_type = lookup_body_type_code_from_desc(
+                str(payload.get("body_type") or vehicle.get("body_type") or "")
             )
-            if _nia_body_desc:
-                vehicle_type = lookup_body_type_code_from_desc(_nia_body_desc)
-                logger.info(
-                    "QIC: body_type_id missing; derived vehicleType=%r from model body desc=%r",
-                    vehicle_type, _nia_body_desc
-                )
-            else:
-                vehicle_type = ""
         
         # DEBUG: Log vehicle_usage resolution
         print(f"[QIC DEBUG] vehicle_usage raw: payload={payload.get('vehicle_usage')!r}, vehicle={vehicle.get('vehicle_usage')!r}")

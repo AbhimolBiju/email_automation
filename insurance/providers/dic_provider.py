@@ -363,6 +363,24 @@ class DICProvider(BaseInsuranceProvider):
             key=lambda item: Decimal(str((item.get("quote") or {}).get("netToCustomer", "0"))),
         )
         scheme_data = best_quote["quote"]
+        dic_plan_options: list[dict[str, Any]] = []
+        for item in chosen_quotes:
+            quote = item.get("quote") or {}
+            prod_name = item.get("prodName")
+            if isinstance(prod_name, dict):
+                plan_name = prod_name.get("en") or prod_name.get("ar") or item.get("prodCode")
+            else:
+                plan_name = prod_name or item.get("prodCode")
+            dic_plan_options.append(
+                {
+                    "prodCode": item.get("prodCode"),
+                    "plan_name": plan_name,
+                    "premium": quote.get("netPremium", quote.get("grossPremium", 0)),
+                    "vat": quote.get("vat", 0),
+                    "total": quote.get("netToCustomer", quote.get("grossPremium", 0)),
+                }
+            )
+
         return self.build_quote_from_mapping(
             {
                 "premium": scheme_data.get("netPremium", scheme_data.get("grossPremium", 0)),
@@ -376,6 +394,8 @@ class DICProvider(BaseInsuranceProvider):
                 "quotation_no": scheme_data.get("quotationNo"),
                 "products": products,
                 "selected_scheme": scheme_data,
+                "selected_prod_code": best_quote.get("prodCode"),
+                "dic_plan_options": dic_plan_options,
             },
             response_time_ms=int((time.perf_counter() - started) * 1000),
         )

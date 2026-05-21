@@ -1,11 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Lead, LeadActivity
-from .serializers import (LeadListSerializer,LeadStatusUpdateSerializer,CreateLeadSerializer)
+from .serializers import (LeadListSerializer,LeadStatusUpdateSerializer,CreateLeadSerializer, LeadActivitySerializer)
 from rest_framework import status,viewsets
 from django.shortcuts import render
 from .serializers import LeadDetailsSerializer, LeadActivitySerializer,LeadstageUpdateSerializer
-
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
 
 @api_view(['GET'])
 def lead_list(request):
@@ -146,3 +147,13 @@ def update_lead_status(request, lead_id):
             "status": lead.stage
         })
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def notifications(request):
+
+    activities = LeadActivity.objects.all().order_by('-timestamp')[:20]
+
+    serializer = LeadActivitySerializer(activities, many=True)
+
+    return Response(serializer.data)

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import LeadActivity
 
 from .models import Lead
 class LeadListSerializer(serializers.ModelSerializer):
@@ -168,3 +169,10 @@ class LeadstageUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid stage")
 
         return value
+    
+
+class LeadActivitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LeadActivity
+        fields = "__all__"

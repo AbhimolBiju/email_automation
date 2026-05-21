@@ -27,6 +27,7 @@ urlpatterns = [
     path('<int:lead_id>/activities/create/', create_activity),
     path('<int:lead_id>/activities/', lead_activities),
     path('<int:id>/favorite/', ToggleFavoriteView.as_view(), name='toggle-favorite'),
+    path("notifications/", notifications),
     # path("<int:lead_id>/tasks/",create_task),
     # path("insurance/general-info/<int:lead_id>/",get_insurance_info),
 ]

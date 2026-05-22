@@ -1,3 +1,4 @@
+from pydoc import text
 import re
 from datetime import datetime
 
@@ -194,6 +195,14 @@ def parse_emirates_id_front(text, key_values=None):
 
     confidence = {}
 
+    # remove backside employer block if accidentally merged
+    text = re.sub(
+        r'Employer\s*:.*',
+        '',
+        text,
+        flags=re.IGNORECASE | re.DOTALL
+    )
+
     cleaned = re.sub(r'\s+', ' ', text.upper())
     full_text = cleaned 
 
@@ -208,26 +217,79 @@ def parse_emirates_id_front(text, key_values=None):
         )
 
     #name
+    # name_match = re.search(
+    #     r'NAME[:\s]*([A-Z\s]{3,}?)(?=NATIONALITY|DATE OF BIRTH|DOB|ISSUING|EXPIRY|SEX|$)',
+    #     cleaned
+    # )
+
+    # if name_match:
+    #     name = name_match.group(1)
+    #     name = re.split(
+    #         r'NATIONALITY|DATE OF BIRTH|DOB|ISSUING|EXPIRY|SEX',
+    #         name
+    #     )[0].strip()
+
+    #     data["name"] = clean_value(name.title())
+    #     confidence["name"] = confidence_score(data["name"], "name")
+
+    # if not data["name"]:
+    #     fallback = re.findall(r'\b[A-Z]{3,}\s[A-Z]{3,}\s[A-Z]{3,}', cleaned)
+    #     if fallback:
+    #         data["name"] = clean_value(fallback[0].title())
+    #         confidence["name"] = confidence_score(data["name"], "name")
+
+
+    # NAME EXTRACTION
     name_match = re.search(
-        r'NAME[:\s]*([A-Z\s]{3,}?)(?=NATIONALITY|DATE OF BIRTH|DOB|ISSUING|EXPIRY|SEX|$)',
-        cleaned
+        r'Name\s*:\s*(.+)',
+        text,
+        re.IGNORECASE
     )
 
     if name_match:
-        name = name_match.group(1)
-        name = re.split(
-            r'NATIONALITY|DATE OF BIRTH|DOB|ISSUING|EXPIRY|SEX',
-            name
-        )[0].strip()
 
-        data["name"] = clean_value(name.title())
-        confidence["name"] = confidence_score(data["name"], "name")
+        raw_name = name_match.group(1)
 
-    if not data["name"]:
-        fallback = re.findall(r'\b[A-Z]{3,}\s[A-Z]{3,}\s[A-Z]{3,}', cleaned)
-        if fallback:
-            data["name"] = clean_value(fallback[0].title())
-            confidence["name"] = confidence_score(data["name"], "name")
+        # stop before next fields
+        raw_name = re.split(
+            r'Date Of Birth|Nationality|Sex|Issuing Date|Expiry Date',
+            raw_name,
+            flags=re.IGNORECASE
+        )[0]
+
+        # remove arabic
+        raw_name = re.sub(
+            r'[\u0600-\u06FF]+',
+            ' ',
+            raw_name
+        )
+
+        # keep only alphabets/spaces
+        raw_name = re.sub(
+            r'[^A-Za-z\s]',
+            ' ',
+            raw_name
+        )
+
+        # normalize spaces
+        raw_name = re.sub(
+            r'\s+',
+            ' ',
+            raw_name
+        ).strip()
+
+        # validate
+        if len(raw_name.split()) >= 2:
+
+            data["name"] = raw_name.title()
+
+            confidence["name"] = confidence_score(
+                data["name"],
+                "name"
+            )
+
+    print("FINAL NAME:", data["name"])
+
 
     # DOB
     dob_match = re.search(r'(DOB|DATE OF BIRTH).*?(\d{2}[/-]\d{2}[/-]\d{4})',cleaned)
@@ -292,10 +354,38 @@ def parse_emirates_id_front(text, key_values=None):
             flags=re.IGNORECASE
         ).strip()
 
-    _apply_azure_name_fields(data, confidence, key_values)
+
+    # reject employer/company names
+    if data.get("name"):
+
+        invalid_words = {
+            "LLC",
+            "L.L.C",
+            "COMPANY",
+            "CONTRACTING",
+            "TRADING",
+            "SERVICES",
+            "STEEL",
+            "EMPLOYER",
+            "SPONSOR",
+            "CEC"
+        }
+
+        if any(
+            w.upper() in invalid_words
+            for w in data["name"].split()
+        ):
+            data["name"] = None
+
+    # _apply_azure_name_fields(data, confidence, key_values)
 
     overall_confidence = round(sum(confidence.values()) / len(confidence) if confidence else 0,2)
 
+    print("\n========== OCR TEXT ==========\n")
+    print(text)
+
+    print("\n========== KEY VALUES ==========\n")
+    print(key_values)
     return {
         "document_type": "emirates_id_front",
         "side": "front",
@@ -404,6 +494,10 @@ def parse_emirates_id(text, document_type=None, key_values=None, tables=None):
 
     if document_type == "emirates_id_front":
         return parse_emirates_id_front(text, key_values=key_values)
+    
+    # auto detect backside
+    if re.search(r'Employer|Occupation|Family Sponsor', text, re.IGNORECASE):
+        return parse_emirates_id_back(text)
 
     # default if frontend does not specify side
     return parse_emirates_id_front(text, key_values=key_values)

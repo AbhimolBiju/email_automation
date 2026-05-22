@@ -1,7 +1,11 @@
 def map_emirates_id_to_form(parsed_data):
     values = parsed_data.get("values") or parsed_data.get("data") or {}
     full_name = values.get("name")
+    print("\n========== MAPPED VALUES ==========\n")
+    print(values)
 
+    print("\n========== FULL NAME ==========\n")
+    print(full_name)
     return {
         "name": full_name,
         "customer_name": full_name,

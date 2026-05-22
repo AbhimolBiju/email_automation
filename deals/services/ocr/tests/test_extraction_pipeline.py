@@ -7,7 +7,7 @@ from django.test import SimpleTestCase
 from apps.ocr.services.azure_ocr_service import OCRResult
 from apps.ocr.services.field_mapper import map_ocr_fields
 from deals.services.ocr.extraction_service import _apply_validation
-from deals.services.ocr.validator.mulkiya_validator import validate_mulkiya
+from deals.services.ocr.validators.mulkiya_validator import validate_mulkiya
 
 
 class MulkiyaValidatorTests(SimpleTestCase):

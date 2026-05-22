@@ -81,12 +81,16 @@ def _extract_dates_from_line(line):
         return []
 
     patterns = [
-        r"\b\d{2}[/-]\d{2}[/-]\d{4}\b",
-        r"\b\d{2}[.]\d{2}[.]\d{4}\b",
+        r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b",
+        r"\b\d{1,2}[.]\d{1,2}[.]\d{2,4}\b",
+        r"\b\d{1,2}[/-][A-Za-z]{3,9}[/-]\d{2,4}\b",
     ]
+
     found = []
+
     for pattern in patterns:
-        found.extend(re.findall(pattern, line))
+        found.extend(re.findall(pattern, line, re.IGNORECASE))
+
     return found
 
 
@@ -105,7 +109,7 @@ def extract_date_near_keywords(lines, keywords, reject_keywords=None):
         line_lower = line.lower()
 
         if any(keyword in line_lower for keyword in keywords):
-            nearby = lines[max(0, i - 3): min(len(lines), i + 4)]
+            nearby = [line] + lines[max(0, i - 2): min(len(lines), i + 3)]
 
             for item in nearby:
                 item_lower = item.lower()
@@ -124,38 +128,79 @@ def extract_registration_date(lines):
     if not lines:
         return None
 
-    reg_label_patterns = [
-        r"\breg(?:istration)?\.?\s*(?:date|dt)?\b",
-        r"\bdate\s*of\s*registration\b",
-        r"\bregistration\b",
-    ]
-    exp_negative_pattern = r"\b(exp|expiry|ins|insurance)\b"
-    best = None
-    best_score = -1
+    best_date = None
+    best_score = -999
 
     for i, line in enumerate(lines):
+
         line_lower = line.lower()
-        if any(re.search(pattern, line_lower) for pattern in reg_label_patterns):
-            # Keep registration date tied to registration-region only.
-            for j in range(max(0, i - 2), min(len(lines), i + 4)):
-                candidate_line = lines[j]
-                candidate_lower = candidate_line.lower()
-                if re.search(exp_negative_pattern, candidate_lower):
+
+        # STRICT registration labels only
+        if not any(x in line_lower for x in [
+            "reg date",
+            "reg. date",
+            "registration date",
+        ]):
+            continue
+
+        nearby = lines[max(0, i - 1): min(len(lines), i + 2)]
+
+        for j, item in enumerate(nearby):
+
+            item_lower = item.lower()
+
+            # HARD reject expiry-related lines
+            if any(x in item_lower for x in [
+                "exp",
+                "expiry",
+                "insurance",
+                "ins exp",
+                "policy",
+            ]):
+                continue
+
+            matches = _extract_dates_from_line(item)
+
+            for raw_date in matches:
+
+                normalized = normalize_date(raw_date)
+
+                if not normalized:
                     continue
-                for raw_date in _extract_dates_from_line(candidate_line):
-                    normalized = normalize_date(raw_date)
-                    if not normalized:
-                        continue
-                    # Prefer same-line then nearest lines.
-                    score = 20 - abs(j - i) * 4
-                    if j == i:
-                        score += 8
-                    if "reg" in candidate_lower or "registration" in candidate_lower:
-                        score += 4
-                    if score > best_score:
-                        best = normalized
-                        best_score = score
-    return best
+
+                score = 0
+
+                # same line preference
+                if item == line:
+                    score += 50
+
+                # registration keywords
+                if "reg" in item_lower:
+                    score += 40
+
+                # expiry penalty
+                if "exp" in item_lower:
+                    score -= 100
+
+                # prefer older realistic registration dates
+                try:
+                    year = int(normalized[:4])
+
+                    if 1990 <= year <= datetime.now().year:
+                        score += 20
+
+                    # expiry dates are usually future
+                    if year > datetime.now().year:
+                        score -= 50
+
+                except:
+                    pass
+
+                if score > best_score:
+                    best_score = score
+                    best_date = normalized
+
+    return best_date
 
 
 def extract_plate_source(lines):
@@ -406,7 +451,7 @@ def validate_mulkiya_front(data):
         if not data.get(field):
             errors[field] = "Missing field"
 
-    if data.get("registration_no") and not re.fullmatch(r"[A-Z0-9]{1,3}/\d{3,6}", data["registration_no"]):
+    if data.get("registration_no") and not re.fullmatch(r"[A-Z]{1,3}/\d{3,6}", data["registration_no"]):
         errors["registration_no"] = "Invalid registration number format"
 
     if data.get("registration_date") and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", data["registration_date"]):
@@ -589,13 +634,30 @@ def parse_mulkiya(text,key_values=None):
 
     # 🔹 Registration Date
     reg_date_value = get_kv_value([
-        "reg date", "registration date","تاريخ الترخيص"
-        ])
+        "reg date",
+        "registration date",
+        "تاريخ الترخيص"
+    ])
 
     if reg_date_value:
-        m = re.search(r"\d{2}[/-]\d{2}[/-]\d{4}", reg_date_value)
+
+        # supports:
+        # 28-SEP-14
+        # 28/SEP/14
+        # 28-09-2014
+        # 28/09/2014
+
+        m = re.search(
+            r"\b\d{1,2}[/-](?:\d{1,2}|[A-Z]{3})[/-]\d{2,4}\b",
+            reg_date_value,
+            re.IGNORECASE
+        )
+
         if m:
-            data["registration_date"] = normalize_date(m.group())
+            parsed_date = normalize_date(m.group())
+
+            if parsed_date:
+                data["registration_date"] = parsed_date
 
 
     # 🔹 Expiry Date
@@ -634,13 +696,73 @@ def parse_mulkiya(text,key_values=None):
 
     # Registration / plate number: U / 19033
 
+    # ---------------- REGISTRATION NUMBER ----------------
+
     if "registration_no" not in data or "plate_number" not in data:
-        plate_match = re.search(r"\b([A-Z0-9]{1,3})\s*/\s*(\d{3,6})\b", compact_text)
-        if plate_match:
-            if not re.match(r"\d{2}/\d{4}", plate_match.group(0)):
-                data["plate_code"] = plate_match.group(1)
-                data["plate_number"] = plate_match.group(2)
-                data["registration_no"] = f"{plate_match.group(1)}/{plate_match.group(2)}"
+
+        registration_patterns = [
+            r"\b([A-Z]{1,3})\s*/\s*(\d{3,6})\b",
+            r"\b([A-Z]{1,3})[-\s]+(\d{3,6})\b",
+        ]
+
+        best_match = None
+        best_score = -1
+
+        for i, line in enumerate(lines):
+
+            line_lower = line.lower()
+
+            # Prefer lines related to plate number
+            score = 0
+
+            if any(x in line_lower for x in [
+                "traffic plate",
+                "plate no",
+                "plate number",
+                "رقم اللوحة"
+            ]):
+                score += 20
+
+            # Reject date/expiry lines
+            if any(x in line_lower for x in [
+                "exp",
+                "expiry",
+                "insurance",
+                "reg date",
+                "date"
+            ]):
+                score -= 50
+
+            for pattern in registration_patterns:
+
+                match = re.search(pattern, line.upper())
+
+                if not match:
+                    continue
+
+                code = match.group(1)
+                number = match.group(2)
+
+                # Reject invalid OCR matches
+                if code.isdigit():
+                    continue
+
+                # Reject date-like values
+                candidate = f"{code}/{number}"
+
+                if re.search(r"\d{2}/\d{2,4}", candidate):
+                    continue
+
+                current_score = score + 10
+
+                if current_score > best_score:
+                    best_score = current_score
+                    best_match = (code, number)
+
+        if best_match:
+            data["plate_code"] = best_match[0]
+            data["plate_number"] = best_match[1]
+            data["registration_no"] = f"{best_match[0]}/{best_match[1]}"
     
 
     # NEW FALLBACK: handles plate formats like 68297 W 68297
@@ -777,26 +899,120 @@ def parse_mulkiya(text,key_values=None):
         keywords=["exp. date", "exp date", "expiry date"],
         reject_keywords=["ins"]
         )
+    if "registration_expiry_date" not in data and registration_expiry_date:
+        data["registration_expiry_date"] = registration_expiry_date
 
-    registration_date = extract_date_near_keywords(
-        lines,
-        keywords=["reg. date", "reg date", "registration date", "تاريخ الترخيص"]
-        )
+    # ---------------- REGISTRATION DATE FIX ----------------
+    if "registration_date" not in data:
+
+        best_candidate = None
+        best_score = -999
+
+        for i, line in enumerate(lines):
+
+            line_lower = line.lower()
+
+            # STRICT reg labels only
+            if not any(x in line_lower for x in [
+                "reg. date",
+                "reg date",
+                "registration date",
+                "تاريخ الترخيص"
+            ]):
+                continue
+
+            # search current + nearby lines
+            nearby = lines[i:min(i + 3, len(lines))]
+
+            for idx, item in enumerate(nearby):
+
+                item_lower = item.lower()
+
+                date_matches = list(re.finditer(
+                    r"\b\d{1,2}[/-](?:\d{1,2}|[A-Za-z]{3,9})[/-]\d{2,4}\b",
+                    item,
+                    re.IGNORECASE
+                ))
+
+                if not date_matches:
+                    continue
+
+                reg_pos = item_lower.find("reg")
+
+                exp_pos = item_lower.find("exp")
+
+                for d_index, match_obj in enumerate(date_matches):
+
+                    raw_date = match_obj.group()
+
+                    parsed = normalize_date(raw_date)
+
+                    if not parsed:
+                        continue
+
+                    score = 0
+
+                    date_pos = match_obj.start()
+
+                    # same line as reg label
+                    if idx == 0:
+                        score += 50
+
+                    # next line preference
+                    if idx == 1:
+                        score += 40
+
+                    # reg keyword bonus
+                    if "reg" in item_lower:
+                        score += 60
+
+                    # POSITION-BASED FIX
+                    # if date appears AFTER reg label → strong bonus
+                    if reg_pos != -1 and date_pos > reg_pos:
+                        score += 220
+
+                    # if date appears BEFORE exp label → strong penalty
+                    if exp_pos != -1 and date_pos > exp_pos:
+                        score -= 180
+
+                    # if line has both exp and reg,
+                    # choose date closest AFTER reg
+                    if (
+                        reg_pos != -1
+                        and exp_pos != -1
+                        and date_pos > reg_pos
+                    ):
+                        score += 300
+
+                    try:
+                        year = int(parsed[:4])
+
+                        if year > datetime.now().year:
+                            score -= 100
+
+                        if 1990 <= year <= datetime.now().year:
+                            score += 25
+
+                    except:
+                        pass
+
+                    if score > best_score:
+                        best_score = score
+                        best_candidate = parsed
+
+        if best_candidate:
+            data["registration_date"] = best_candidate
 
     insurance_expiry_date = extract_date_near_keywords(
         lines,
         keywords=["ins. exp", "ins exp", "insurance"]
         )
-
-    if "registration_expiry_date" not in data and registration_expiry_date:
-        data["registration_expiry_date"] = registration_expiry_date
-
-    if "registration_date" not in data and registration_date:
-        data["registration_date"] = registration_date
-
     if "insurance_expiry_date" not in data and insurance_expiry_date:
         data["insurance_expiry_date"] = insurance_expiry_date
 
+#exp
+#reg
+#ins_exp
 
     # Policy No
     if "policy_no" not in data:
@@ -963,13 +1179,234 @@ def parse_mulkiya(text,key_values=None):
 
     
     # ---------------- CHASSIS NO ----------------
-    chassis_candidates = re.findall(r"\b[A-HJ-NPR-Z0-9]{17}\b", compact_text.upper())
+    # chassis_candidates = re.findall(r"\b[A-HJ-NPR-Z0-9]{17}\b", compact_text.upper())
 
-    for chassis in chassis_candidates:
-        if not chassis.startswith(("STMT", "EPM","UAE","RTA")):
-            data["chassis_no"] = chassis
-            break
+    # for chassis in chassis_candidates:
+    #     if not chassis.startswith(("STMT", "EPM","UAE","RTA")):
+    #         data["chassis_no"] = chassis
+    #         break
     
+    # ---------------- DIRECT CHASSIS EXTRACTION ----------------
+
+    if "chassis_no" not in data:
+
+        chassis_patterns = [
+
+            # Chassis No: XXXXX
+            r"chassis\s*(?:no)?\.?\s*[:\-]?\s*([A-Z0-9]{16,18})",
+
+            # VIN: XXXXX
+            r"vin\s*[:\-]?\s*([A-Z0-9]{16,18})",
+
+            # Arabic label
+            r"القاعدة\s*[:\-]?\s*([A-Z0-9]{16,18})",
+        ]
+
+        for line in lines:
+
+            line_upper = line.upper()
+
+            for pattern in chassis_patterns:
+
+                match = re.search(
+                    pattern,
+                    line_upper,
+                    re.IGNORECASE
+                )
+
+                if not match:
+                    continue
+
+                candidate = match.group(1).strip()
+
+                # must contain letters + digits
+                if not (
+                    re.search(r"[A-Z]", candidate)
+                    and re.search(r"\d", candidate)
+                ):
+                    continue
+
+                # reject garbage
+                if candidate.startswith((
+                    "UAE",
+                    "RTA",
+                    "WWW",
+                    "HTTP",
+                    "STMT",
+                    "EPM"
+                )):
+                    continue
+
+                # prefer exact VIN
+                if len(candidate) == 17:
+                    data["chassis_no"] = candidate
+                    break
+
+            if "chassis_no" in data:
+                break
+    # ---------------- CHASSIS LABEL PRIORITY ----------------
+
+    if "chassis_no" not in data:
+
+        for i, line in enumerate(lines):
+
+            line_lower = line.lower()
+
+            if (
+                "chassis" in line_lower
+                or "vin" in line_lower
+                or "رقم القاعدة" in line
+                or "القاعدة" in line
+            ):
+
+                nearby = lines[max(0, i - 2):min(len(lines), i + 5)]
+
+                for item in nearby:
+
+                    # extract possible VIN directly
+                    matches = re.findall(
+                        # r"\b[A-Z0-9]{16,18}\b",
+                        r"\b[A-HJ-NPR-Z0-9]{16,18}\b",
+                        item.upper()
+                    )
+
+                    for candidate in matches:
+
+                        candidate = candidate.strip()
+                        candidate = re.sub(r"[^A-Z0-9]", "", candidate)
+
+                        # VIN must contain letters + digits
+                        if not (
+                            re.search(r"[A-Z]", candidate)
+                            and re.search(r"\d", candidate)
+                        ):
+                            continue
+
+                        # reject garbage
+                        if candidate.startswith((
+                            "UAE",
+                            "RTA",
+                            "WWW",
+                            "HTTP",
+                            "STMT",
+                            "EPM"
+                        )):
+                            continue
+
+                        # prefer exact 17-char VIN
+                        if len(candidate) == 17:
+                            data["chassis_no"] = candidate
+                            break
+
+                    if "chassis_no" in data:
+                        break
+
+            if "chassis_no" in data:
+                break
+    # ---------------- CHASSIS NO ----------------
+    best_chassis = None
+    best_score = -999
+    # normalize compact text
+    normalized_text = compact_text.upper()
+    # allow spaces and hyphens inside VIN
+    candidate_patterns = [
+        r"[A-Z0-9\s-]{15,25}"
+    ]
+    for pattern in candidate_patterns:
+        matches = re.findall(pattern, normalized_text)
+        for raw in matches:
+            # remove spaces/hyphens
+            candidate = re.sub(r"[^A-Z0-9]", "", raw)
+            # # remove impossible VIN letters
+            # candidate = candidate.replace("I", "1")
+            # candidate = candidate.replace("O", "0")
+            # candidate = candidate.replace("Q", "0")
+
+            if not candidate:
+                continue
+            score = 0
+            # VIN usually 17 chars
+            if len(candidate) == 17:
+                score += 120
+            elif 16 <= len(candidate) <= 18:
+                score += 70
+            else:
+                continue
+            # must contain both letters and digits
+            if re.search(r"[A-Z]", candidate):
+                score += 20
+            if re.search(r"\d", candidate):
+                score += 20
+            # reject obvious invalid values
+            if candidate.startswith((
+                "UAE",
+                "RTA",
+                "WWW",
+                "HTTP",
+                "STMT",
+                "EPM"
+            )):
+                continue
+            # reject pure numeric
+            if candidate.isdigit():
+                continue
+            # # VINs rarely have many repeated chars
+            # unique_chars = len(set(candidate))
+            # if unique_chars >= 8:
+            #     score += 20
+
+            # VIN quality validation
+            unique_chars = len(set(candidate))
+            # good VIN diversity
+            if unique_chars >= 8:
+                score += 20
+            # reject too many vowels (OCR garbage)
+            vowel_count = len(re.findall(r"[AEIOU]", candidate))
+            if vowel_count > 6:
+                score -= 80
+            # reject long repeating sequences
+            if re.search(r"(.)\1{4,}", candidate):
+                score -= 120
+            # VIN usually starts with manufacturer chars
+            if re.match(r"^[A-HJ-NPR-Z0-9]{3}", candidate):
+                score += 25
+            # strong VIN structure bonus
+            if (
+                len(candidate) == 17
+                and re.search(r"[A-Z]", candidate)
+                and re.search(r"\d", candidate)
+            ):
+                score += 80
+            # reject suspicious OCR garbage patterns
+            bad_words = [
+                "QATAR",
+                "DUBAI",
+                "ABUDHABI",
+                "SHARJAH",
+                "MULKIYA",
+                "LICENSE",
+                "TRAFFIC",
+                "PLATE",
+                "REGISTRATION",
+            ]
+            if any(word in candidate for word in bad_words):
+                score -= 200
+            # prefer candidates near chassis label
+            for i, line in enumerate(lines):
+                if "chassis" in line.lower() or "القاعدة" in line:
+                    nearby = " ".join(
+                        lines[max(0, i-3):min(len(lines), i+4)]
+                    ).upper()
+                    nearby_clean = re.sub(r"[^A-Z0-9]", "", nearby)
+                    if candidate in nearby_clean:
+                        score += 150
+                        break
+            if score > best_score:
+                best_score = score
+                best_chassis = candidate
+    if best_chassis:
+        data["chassis_no"] = best_chassis
+
     #fallback : 
     if "chassis_no" not in data:
         for i, line in enumerate(lines):

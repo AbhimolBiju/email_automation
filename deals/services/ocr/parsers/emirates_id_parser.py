@@ -150,9 +150,16 @@ def _apply_azure_name_fields(
     if data.get("name"):
         return
 
+    # first = key_values.get("FirstName") or key_values.get("first_name") or ""
+    # last = key_values.get("LastName") or key_values.get("last_name") or ""
+    # combined = clean_value(f"{first} {last}".strip())
     first = key_values.get("FirstName") or key_values.get("first_name") or ""
     last = key_values.get("LastName") or key_values.get("last_name") or ""
-    combined = clean_value(f"{first} {last}".strip())
+
+    # Emirates IDs often reverse first/last incorrectly
+    # so prefer LAST + FIRST for Indian/UAE names
+    combined = clean_value(f"{last} {first}".strip())
+
     if combined:
         data["name"] = combined
         confidence["name"] = confidence_score(combined, "name")
@@ -239,69 +246,182 @@ def parse_emirates_id_front(text, key_values=None):
     #         confidence["name"] = confidence_score(data["name"], "name")
 
 
+    # # NAME EXTRACTION
+    # name_match = re.search(
+    #     r'Name\s*:\s*(.+)',
+    #     text,
+    #     re.IGNORECASE
+    # )
+
+    # if name_match:
+
+    #     raw_name = name_match.group(1)
+
+    #     # stop before next fields
+    #     raw_name = re.split(
+    #         r'Date Of Birth|Nationality|Sex|Issuing Date|Expiry Date',
+    #         raw_name,
+    #         flags=re.IGNORECASE
+    #     )[0]
+
+    #     # remove arabic
+    #     raw_name = re.sub(
+    #         r'[\u0600-\u06FF]+',
+    #         ' ',
+    #         raw_name
+    #     )
+
+    #     # keep only alphabets/spaces
+    #     raw_name = re.sub(
+    #         r'[^A-Za-z\s]',
+    #         ' ',
+    #         raw_name
+    #     )
+
+    #     # normalize spaces
+    #     raw_name = re.sub(
+    #         r'\s+',
+    #         ' ',
+    #         raw_name
+    #     ).strip()
+
+    #     # validate
+    #     if len(raw_name.split()) >= 2:
+
+    #         data["name"] = raw_name.title()
+
+    #         confidence["name"] = confidence_score(
+    #             data["name"],
+    #             "name"
+    #         )
+
+    # print("FINAL NAME:", data["name"])
+
+    # =========================
     # NAME EXTRACTION
-    name_match = re.search(
-        r'Name\s*:\s*(.+)',
+    # =========================
+
+    name = None
+
+    # CASE 1:
+    # Name: John Doe
+    forward_match = re.search(
+        r'Name\s*:\s*([A-Za-z\s]{5,})',
         text,
         re.IGNORECASE
     )
 
-    if name_match:
+    if forward_match:
 
-        raw_name = name_match.group(1)
+        candidate = forward_match.group(1)
 
-        # stop before next fields
-        raw_name = re.split(
+        candidate = re.split(
             r'Date Of Birth|Nationality|Sex|Issuing Date|Expiry Date',
-            raw_name,
+            candidate,
             flags=re.IGNORECASE
         )[0]
 
-        # remove arabic
-        raw_name = re.sub(
-            r'[\u0600-\u06FF]+',
-            ' ',
-            raw_name
+        candidate = re.sub(r'[\u0600-\u06FF]+', ' ', candidate)
+        candidate = re.sub(r'[^A-Za-z\s]', ' ', candidate)
+        candidate = re.sub(r'\s+', ' ', candidate).strip()
+
+        if len(candidate.split()) >= 2:
+            name = candidate.title()
+
+
+    # CASE 2:
+    # John Doe
+    # Name:
+    if not name:
+
+        reverse_match = re.search(
+            r'([A-Za-z\s]{5,})\s*Name\s*:',
+            text,
+            re.IGNORECASE
         )
 
-        # keep only alphabets/spaces
-        raw_name = re.sub(
-            r'[^A-Za-z\s]',
-            ' ',
-            raw_name
-        )
+        if reverse_match:
 
-        # normalize spaces
-        raw_name = re.sub(
-            r'\s+',
-            ' ',
-            raw_name
-        ).strip()
+            candidate = reverse_match.group(1)
 
-        # validate
-        if len(raw_name.split()) >= 2:
+            # take only last 2 lines worth
+            candidate = candidate.split("\n")[-2:]
 
-            data["name"] = raw_name.title()
+            candidate = " ".join(candidate)
 
-            confidence["name"] = confidence_score(
-                data["name"],
-                "name"
-            )
+            candidate = re.sub(r'[\u0600-\u06FF]+', ' ', candidate)
+            candidate = re.sub(r'[^A-Za-z\s]', ' ', candidate)
+            candidate = re.sub(r'\s+', ' ', candidate).strip()
+
+            # remove unwanted OCR labels
+            invalid_tokens = [
+                "RESIDENT",
+                "IDENTITY",
+                "CARD",
+                "UNITED",
+                "ARAB",
+                "EMIRATES",
+                "FEDERAL",
+                "AUTHORITY"
+            ]
+
+            words = [
+                w for w in candidate.split()
+                if w.upper() not in invalid_tokens
+            ]
+
+            candidate = " ".join(words)
+
+            if len(candidate.split()) >= 2:
+                name = candidate.title()
+
+
+    if name:
+        data["name"] = name
+        confidence["name"] = confidence_score(name, "name")
+
 
     print("FINAL NAME:", data["name"])
 
+    # # DOB
+    # dob_match = re.search(r'(DOB|DATE OF BIRTH).*?(\d{2}[/-]\d{2}[/-]\d{4})',cleaned)
 
+    # if not dob_match:
+    #     dob_match = re.search(r'\b\d{2}[/-]\d{2}[/-]\d{4}\b', cleaned)
+
+    # if dob_match:
+    #     date_str = dob_match.group(2) if dob_match.lastindex else dob_match.group(0)
+    #     data["date_of_birth"] = normalize_date(date_str)
+    #     confidence["date_of_birth"] = confidence_score(data["date_of_birth"], "date")
+
+    # =========================
     # DOB
-    dob_match = re.search(r'(DOB|DATE OF BIRTH).*?(\d{2}[/-]\d{2}[/-]\d{4})',cleaned)
+    # =========================
+
+    dob_match = re.search(
+        r'(DATE OF BIRTH|DOB)\s*[:\-]?\s*(\d{2}[/-]\d{2}[/-]\d{4})',
+        text,
+        re.IGNORECASE
+    )
 
     if not dob_match:
-        dob_match = re.search(r'\b\d{2}[/-]\d{2}[/-]\d{4}\b', cleaned)
+
+        dob_match = re.search(
+            r'(\d{2}[/-]\d{2}[/-]\d{4})\s*Date\s*Of\s*Birth',
+            text,
+            re.IGNORECASE
+        )
 
     if dob_match:
-        date_str = dob_match.group(2) if dob_match.lastindex else dob_match.group(0)
-        data["date_of_birth"] = normalize_date(date_str)
-        confidence["date_of_birth"] = confidence_score(data["date_of_birth"], "date")
 
+        date_str = dob_match.group(2) if dob_match.lastindex >= 2 else dob_match.group(1)
+
+        data["date_of_birth"] = normalize_date(date_str)
+
+        confidence["date_of_birth"] = confidence_score(
+            data["date_of_birth"],
+            "date"
+        )
 
     # NATIONALITY
     nat = re.search(r"NATIONALITY[:\s]+([A-Z\s]+)", full_text)
@@ -371,13 +491,23 @@ def parse_emirates_id_front(text, key_values=None):
             "CEC"
         }
 
-        if any(
-            w.upper() in invalid_words
-            for w in data["name"].split()
-        ):
-            data["name"] = None
+        # if any(
+        #     w.upper() in invalid_words
+        #     for w in data["name"].split()
+        # ):
+        #     data["name"] = None
 
-    # _apply_azure_name_fields(data, confidence, key_values)
+        if data.get("name"):
+
+            invalid_ratio = sum(
+                1 for w in data["name"].split()
+                if w.upper() in invalid_words
+            )
+
+            if invalid_ratio >= 2:
+                data["name"] = None
+
+    _apply_azure_name_fields(data, confidence, key_values)
 
     overall_confidence = round(sum(confidence.values()) / len(confidence) if confidence else 0,2)
 
@@ -472,6 +602,27 @@ def parse_emirates_id_back(text):
         sum(confidence.values()) / len(confidence) if confidence else 0,
         2
     )
+    # backside should never contain person name
+    if data.get("employer"):
+
+        invalid_company_words = {
+            "L.L.C",
+            "LLC",
+            "CONTRACTING",
+            "TRADING",
+            "COMPANY",
+            "SERVICES",
+            "STEEL",
+            "CEC",
+            "FZ",
+            "FZE"
+        }
+
+        if any(
+            w.upper() in invalid_company_words
+            for w in data["employer"].split()
+        ):
+            data["name"] = None
 
     return {
         "document_type": "emirates_id_back",

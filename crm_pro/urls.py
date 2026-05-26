@@ -30,6 +30,7 @@ urlpatterns = [
     path("insurance/",include('insurance.urls')),
     path("documents/",include('documents.urls')),
     path("quote/",include('Quote.urls')),
+    path("",include('email_integration.urls')),
 ]
 
 if settings.DEBUG:
